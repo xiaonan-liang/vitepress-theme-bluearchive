@@ -79,7 +79,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     ],
 
     //banner区配置
-    videoBanner: false,
+    videoBanner: true,
     name: "其实你们都是柔情猫娘吧QAQ",
     welcomeText: 'Hello World',
     motto: ['和你的日常，就是奇迹', '何気ない日常で、ほんの少しの奇跡を見つける物語。'],
