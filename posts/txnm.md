@@ -5,11 +5,11 @@ tags: [桶似你喵]
 pinned: true
 head:
   - - meta
-    - name:
-      content:
+    - name: description
+      content: 桶似你喵
   - - meta
-    - name: 
-      content:
+    - name: keywords
+      content: 桶似你喵
 ---
 
 桶似你喵
