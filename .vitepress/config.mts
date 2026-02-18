@@ -86,12 +86,12 @@ export default defineConfigWithTheme<ThemeConfig>({
     social: [
       { icon: 'github', url: 'https://github.com/xiaonan-liang' },
       { icon: 'bilibili', url: 'https://space.bilibili.com/1896313821' },
-      { icon: 'qq', url: 'https://im.qq.com/index/' },
-      { icon: 'wechat', url: 'https://weixin.qq.com/' },
+     // { icon: 'qq', url: 'https://im.qq.com/index/' },
+     //{ icon: 'wechat', url: 'https://weixin.qq.com/' },
     ],
 
     //spine语音配置，可选zh/jp
-    spineVoiceLang: 'jp',
+    spineVoiceLang: 'zh',
 
     //footer配置
     footerName: 'Sensei',
