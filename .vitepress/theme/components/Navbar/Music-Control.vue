@@ -25,7 +25,7 @@ onMounted(() => {
   music.value = document.getElementById('background-music') as HTMLAudioElement
   if (music.value) {
     music.value.volume = 0.3 // 设置音量为30%
-    music.value.play() // 初始状态为暂停
+    music.value.pause() // 初始状态为暂停 play为播放 pause为暂停
   }
 })
 </script>
