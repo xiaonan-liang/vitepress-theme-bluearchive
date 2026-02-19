@@ -52,7 +52,7 @@ const tools: Tool[] = [
   {
     id: 'crypto',
     name: '加解密工具',
-    description: '支持 Base64、MD5、SHA 等多种加密算法',
+    description: '支持 Base64、S7、MD5、SHA 等多种加密算法',
     icon: 'icon-pinned',
     component: defineAsyncComponent(() => import('./tools/Crypto-Tool.vue'))
   }

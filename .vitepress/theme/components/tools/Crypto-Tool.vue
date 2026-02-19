@@ -52,6 +52,15 @@
           readonly
         ></textarea>
       </div>
+
+      <div v-if="currentTab === 's7'" class="s7-info">
+        <p><strong>S7 加密说明：</strong></p>
+        <ul>
+          <li>S7 是一种自定义的 Base64 变体编码</li>
+          <li>S7T 值是通过 MD5(s7 + 编码结果) 计算的 5 位哈希值</li>
+          <li>解码时会自动计算原始的 S7T 值</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -66,6 +75,7 @@ const isEncode = ref(true)
 
 const tabs = [
   { id: 'base64', name: 'Base64', reversible: true },
+  { id: 's7', name: 'S7', reversible: true },
   { id: 'md5', name: 'MD5', reversible: false },
   { id: 'sha1', name: 'SHA-1', reversible: false },
   { id: 'sha256', name: 'SHA-256', reversible: false },
@@ -76,6 +86,81 @@ const currentTabInfo = computed(() => {
   const tab = tabs.find(tab => tab.id === currentTab.value)
   return tab
 })
+
+const S7_TABLE = "Vg21WQ5KdRt0yNpcr9m4O3PoHaZvsLeCY8FjSwiTkUbuEBIJlAG7fqXM6xDnzh-;"
+
+const s7encode = (inputStr: string): string => {
+  if (!inputStr) return ""
+  
+  const s64List: string[] = []
+  let index = 0
+  
+  while (inputStr.length >= index + 1) {
+    let buf = 0
+    let bytesNum = 0
+    
+    for (let i = 0; i < 3; i++) {
+      buf = buf * 256
+      if (inputStr.length >= index + 1) {
+        buf += inputStr.charCodeAt(index)
+        bytesNum++
+        index++
+      }
+    }
+    
+    for (let i = 0; i < bytesNum + 1; i++) {
+      const b64char = Math.floor(buf / 262144) % 64
+      s64List.push(S7_TABLE[b64char])
+      buf = buf * 64
+    }
+    
+    for (let i = 0; i < 3 - bytesNum; i++) {
+      s64List.push('_')
+    }
+  }
+  
+  return s64List.join('')
+}
+
+const s7decode = (encodedStr: string): string => {
+  const cleanedStr = encodedStr.replace(/_+$/, '')
+  const data: number[] = []
+  let index = 0
+  
+  while (index < cleanedStr.length) {
+    const chunk = cleanedStr.substring(index, index + 4)
+    const indices = chunk.split('').map(c => S7_TABLE.indexOf(c))
+    
+    if (chunk.length === 4) {
+      const num = (indices[0] << 18) | (indices[1] << 12) | (indices[2] << 6) | indices[3]
+      data.push((num >> 16) & 0xFF)
+      data.push((num >> 8) & 0xFF)
+      data.push(num & 0xFF)
+    } else if (chunk.length === 3) {
+      const num = (indices[0] << 12) | (indices[1] << 6) | indices[2]
+      data.push((num >> 10) & 0xFF)
+      data.push((num >> 2) & 0xFF)
+    } else if (chunk.length === 2) {
+      const num = (indices[0] << 6) | indices[1]
+      data.push((num >> 4) & 0xFF)
+    }
+    
+    index += chunk.length
+  }
+  
+  return String.fromCharCode(...data)
+}
+
+const generateS7t = (s7String: string): string => {
+  const combined = 's7' + s7String
+  const md5Hash = hashText(combined, 'MD5')
+  return md5Hash.substring(6, 11)
+}
+
+const getOriginalS7t = (decodedStr: string): string => {
+  const reEncoded = s7encode(decodedStr)
+  return generateS7t(reEncoded)
+}
 
 const processText = async () => {
   if (!inputText.value) {
@@ -90,6 +175,17 @@ const processText = async () => {
           outputText.value = btoa(unescape(encodeURIComponent(inputText.value)))
         } else {
           outputText.value = decodeURIComponent(escape(atob(inputText.value)))
+        }
+        break
+      case 's7':
+        if (isEncode.value) {
+          const encoded = s7encode(inputText.value)
+          const s7tValue = generateS7t(encoded)
+          outputText.value = `${encoded}\nS7T: ${s7tValue}`
+        } else {
+          const decoded = s7decode(inputText.value)
+          const originalS7t = getOriginalS7t(decoded)
+          outputText.value = `${decoded}\n原始S7T: ${originalS7t}`
         }
         break
       case 'md5':
@@ -264,6 +360,31 @@ const copyResult = async () => {
     &.active {
       background-color: var(--btn-hover);
       color: var(--font-color-gold);
+    }
+  }
+}
+
+.s7-info {
+  padding: 16px;
+  background-color: var(--btn-background);
+  border-radius: 8px;
+  border-left: 4px solid var(--font-color-gold);
+
+  p {
+    margin: 0 0 12px 0;
+    color: var(--font-color-grey);
+    font-size: 14px;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--font-color-grey);
+    font-size: 13px;
+    opacity: 0.8;
+
+    li {
+      margin-bottom: 4px;
     }
   }
 }
