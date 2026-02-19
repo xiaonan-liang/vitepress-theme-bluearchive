@@ -151,15 +151,15 @@ const s7decode = (encodedStr: string): string => {
   return String.fromCharCode(...data)
 }
 
-const generateS7t = (s7String: string): string => {
+const generateS7t = async (s7String: string): Promise<string> => {
   const combined = 's7' + s7String
-  const md5Hash = hashText(combined, 'MD5')
+  const md5Hash = await hashText(combined, 'MD5')
   return md5Hash.substring(6, 11)
 }
 
-const getOriginalS7t = (decodedStr: string): string => {
+const getOriginalS7t = async (decodedStr: string): Promise<string> => {
   const reEncoded = s7encode(decodedStr)
-  return generateS7t(reEncoded)
+  return await generateS7t(reEncoded)
 }
 
 const processText = async () => {
@@ -180,11 +180,11 @@ const processText = async () => {
       case 's7':
         if (isEncode.value) {
           const encoded = s7encode(inputText.value)
-          const s7tValue = generateS7t(encoded)
+          const s7tValue = await generateS7t(encoded)
           outputText.value = `${encoded}\nS7T: ${s7tValue}`
         } else {
           const decoded = s7decode(inputText.value)
-          const originalS7t = getOriginalS7t(decoded)
+          const originalS7t = await getOriginalS7t(decoded)
           outputText.value = `${decoded}\n原始S7T: ${originalS7t}`
         }
         break
