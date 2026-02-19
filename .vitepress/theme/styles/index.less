@@ -1,2 +1,39 @@
 @import url(./vars.less);
 @import url(./icons.less);
+
+// 鼠标指针样式
+* {
+  cursor: url('/cursor/pointer.ani'), auto;
+}
+
+a, button {
+  cursor: url('/cursor/link.ani'), pointer;
+}
+
+input, textarea {
+  cursor: url('/cursor/text.ani'), text;
+}
+
+.cursor-move {
+  cursor: url('/cursor/move.ani'), move;
+}
+
+.cursor-wait {
+  cursor: url('/cursor/busy.ani'), wait;
+}
+
+.cursor-crosshair {
+  cursor: url('/cursor/cross.ani'), crosshair;
+}
+
+.cursor-vertical-resize {
+  cursor: url('/cursor/vert.ani'), ns-resize;
+}
+
+.cursor-horizontal-resize {
+  cursor: url('/cursor/horz.ani'), ew-resize;
+}
+
+.cursor-not-allowed {
+  cursor: url('/cursor/unavailable.ani'), not-allowed;
+}
