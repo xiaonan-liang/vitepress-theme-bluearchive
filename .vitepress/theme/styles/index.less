@@ -14,38 +14,42 @@
   --cursor-not-allowed: url('/cursor/unavailable.ani'), not-allowed;
 }
 
-* {
-  cursor: var(--cursor-default);
+// 全局鼠标指针
+html, body, * {
+  cursor: var(--cursor-default) !important;
 }
 
-a, button {
-  cursor: var(--cursor-pointer);
+// 链接和按钮
+body a, body button {
+  cursor: var(--cursor-pointer) !important;
 }
 
-input, textarea {
-  cursor: var(--cursor-text);
+// 输入框和文本域
+body input, body textarea {
+  cursor: var(--cursor-text) !important;
 }
 
+// 特殊光标类
 .cursor-move {
-  cursor: var(--cursor-move);
+  cursor: var(--cursor-move) !important;
 }
 
 .cursor-wait {
-  cursor: var(--cursor-wait);
+  cursor: var(--cursor-wait) !important;
 }
 
 .cursor-crosshair {
-  cursor: var(--cursor-crosshair);
+  cursor: var(--cursor-crosshair) !important;
 }
 
 .cursor-vertical-resize {
-  cursor: var(--cursor-vertical-resize);
+  cursor: var(--cursor-vertical-resize) !important;
 }
 
 .cursor-horizontal-resize {
-  cursor: var(--cursor-horizontal-resize);
+  cursor: var(--cursor-horizontal-resize) !important;
 }
 
 .cursor-not-allowed {
-  cursor: var(--cursor-not-allowed);
+  cursor: var(--cursor-not-allowed) !important;
 }
