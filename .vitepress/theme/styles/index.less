@@ -2,38 +2,50 @@
 @import url(./icons.less);
 
 // 鼠标指针样式
+:root {
+  --cursor-default: url('/cursor/pointer.ani'), auto;
+  --cursor-pointer: url('/cursor/link.ani'), pointer;
+  --cursor-text: url('/cursor/text.ani'), text;
+  --cursor-move: url('/cursor/move.ani'), move;
+  --cursor-wait: url('/cursor/busy.ani'), wait;
+  --cursor-crosshair: url('/cursor/cross.ani'), crosshair;
+  --cursor-vertical-resize: url('/cursor/vert.ani'), ns-resize;
+  --cursor-horizontal-resize: url('/cursor/horz.ani'), ew-resize;
+  --cursor-not-allowed: url('/cursor/unavailable.ani'), not-allowed;
+}
+
 * {
-  cursor: url('/cursor/pointer.ani'), auto;
+  cursor: var(--cursor-default);
 }
 
 a, button {
-  cursor: url('/cursor/link.ani'), pointer;
+  cursor: var(--cursor-pointer);
 }
 
 input, textarea {
-  cursor: url('/cursor/text.ani'), text;
+  cursor: var(--cursor-text);
 }
 
 .cursor-move {
-  cursor: url('/cursor/move.ani'), move;
+  cursor: var(--cursor-move);
 }
 
 .cursor-wait {
-  cursor: url('/cursor/busy.ani'), wait;
+  cursor: var(--cursor-wait);
 }
 
 .cursor-crosshair {
-  cursor: url('/cursor/cross.ani'), crosshair;
+  cursor: var(--cursor-crosshair);
 }
 
 .cursor-vertical-resize {
-  cursor: url('/cursor/vert.ani'), ns-resize;
+  cursor: var(--cursor-vertical-resize);
 }
 
 .cursor-horizontal-resize {
-  cursor: url('/cursor/horz.ani'), ew-resize;
+  cursor: var(--cursor-horizontal-resize);
 }
 
 .cursor-not-allowed {
-  cursor: url('/cursor/unavailable.ani'), not-allowed;
+  cursor: var(--cursor-not-allowed);
 }
