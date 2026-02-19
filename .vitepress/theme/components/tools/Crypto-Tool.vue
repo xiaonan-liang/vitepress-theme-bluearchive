@@ -40,10 +40,18 @@
       </div>
 
       <div v-if="currentTabInfo?.reversible" class="mode-toggle">
-        <label class="toggle-label">
-          <input type="checkbox" v-model="isEncode" />
-          <span>{{ isEncode ? '编码模式' : '解码模式' }}</span>
-        </label>
+        <button
+          :class="['mode-btn', { active: isEncode }]"
+          @click="isEncode = true"
+        >
+          编码
+        </button>
+        <button
+          :class="['mode-btn', { active: !isEncode }]"
+          @click="isEncode = false"
+        >
+          解码
+        </button>
       </div>
     </div>
   </div>
@@ -66,7 +74,8 @@ const tabs = [
 ]
 
 const currentTabInfo = computed(() => {
-  return tabs.find(tab => tab.id === currentTab.value)
+  const tab = tabs.find(tab => tab.id === currentTab.value)
+  return tab
 })
 
 const processText = async () => {
@@ -233,21 +242,27 @@ const copyResult = async () => {
 
 .mode-toggle {
   display: flex;
-  align-items: center;
   gap: 8px;
 
-  .toggle-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
+  .mode-btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--btn-background);
     color: var(--font-color-grey);
+    cursor: pointer;
+    transition: all 0.3s;
     font-size: 14px;
+    font-weight: bold;
 
-    input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
+    &:hover {
+      background-color: var(--btn-hover);
+    }
+
+    &.active {
+      background-color: var(--btn-hover);
+      color: var(--font-color-gold);
     }
   }
 }
