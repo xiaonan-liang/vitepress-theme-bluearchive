@@ -12,21 +12,6 @@
     </div>
 
     <div class="crypto-content">
-      <div v-if="currentTabInfo?.reversible" class="mode-toggle">
-        <button
-          :class="['mode-btn', { active: isEncode }]"
-          @click="isEncode = true"
-        >
-          编码
-        </button>
-        <button
-          :class="['mode-btn', { active: !isEncode }]"
-          @click="isEncode = false"
-        >
-          解码
-        </button>
-      </div>
-
       <div class="input-section">
         <label>输入内容</label>
         <textarea
@@ -41,6 +26,20 @@
           {{ currentTabInfo?.reversible ? (isEncode ? '编码' : '解码') : '加密' }}
         </button>
         <button class="action-btn" @click="clearText">清空</button>
+        <div v-if="currentTabInfo?.reversible" class="mode-toggle-inline">
+          <button
+            :class="['mode-btn-small', { active: isEncode }]"
+            @click="isEncode = true"
+          >
+            编码
+          </button>
+          <button
+            :class="['mode-btn-small', { active: !isEncode }]"
+            @click="isEncode = false"
+          >
+            解码
+          </button>
+        </div>
         <button class="action-btn" @click="copyResult">复制结果</button>
       </div>
 
@@ -216,6 +215,7 @@ const copyResult = async () => {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .action-btn {
@@ -240,17 +240,17 @@ const copyResult = async () => {
   }
 }
 
-.mode-toggle {
+.mode-toggle-inline {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
+  gap: 4px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--btn-background);
 
-  .mode-btn {
-    flex: 1;
-    padding: 10px 20px;
+  .mode-btn-small {
+    padding: 10px 16px;
     border: none;
-    border-radius: 8px;
-    background-color: var(--btn-background);
+    background-color: transparent;
     color: var(--font-color-grey);
     cursor: pointer;
     transition: all 0.3s;
@@ -258,7 +258,7 @@ const copyResult = async () => {
     font-weight: bold;
 
     &:hover {
-      background-color: var(--btn-hover);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     &.active {
