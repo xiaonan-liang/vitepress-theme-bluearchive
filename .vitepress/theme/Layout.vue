@@ -7,6 +7,7 @@
         <transition name="fade" mode="out-in">
           <WelcomeBox v-if="!state.splashLoading && page.filePath === 'index.md'"></WelcomeBox>
           <Tags v-else-if="page.filePath === 'tags/index.md'"></Tags>
+          <ToolsWelcomeBox v-else-if="page.filePath === 'tools/index.md'"></ToolsWelcomeBox>
           <PostInnerBanner v-else></PostInnerBanner>
         </transition>
       </Banner>
@@ -14,7 +15,8 @@
         <PostsList
           v-if="page.filePath === 'index.md' || page.filePath === 'tags/index.md'"
         ></PostsList>
-        <PostViewer v-else></PostViewer>
+        <ToolsList v-else-if="page.filePath === 'tools/index.md'"></ToolsList>
+        <PostViewer v-else-if="page.filePath.startsWith('posts/')"></PostViewer>
       </transition>
     </main>
     <Footer></Footer>
@@ -43,6 +45,8 @@ import NotFound from './components/NotFound.vue'
 import ToTop from './components/ToTop.vue'
 import Fireworks from './components/Fireworks.vue'
 import Footer from './components/Footer.vue'
+import ToolsWelcomeBox from './components/Tools-Welcome-Box.vue'
+import ToolsList from './components/Tools-List.vue'
 // @ts-ignore
 import SpinePlayer from './components/Spine-Player/index.vue'
 // 路径切换
