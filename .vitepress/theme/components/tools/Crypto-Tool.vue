@@ -23,7 +23,7 @@
 
       <div class="action-buttons">
         <button class="action-btn primary" @click="processText">
-          {{ currentTab === 'base64' ? (isEncode ? '编码' : '解码') : '加密' }}
+          {{ currentTabInfo?.reversible ? (isEncode ? '编码' : '解码') : '加密' }}
         </button>
         <button class="action-btn" @click="clearText">清空</button>
         <button class="action-btn" @click="copyResult">复制结果</button>
@@ -39,10 +39,10 @@
         ></textarea>
       </div>
 
-      <div v-if="currentTab === 'base64'" class="mode-toggle">
+      <div v-if="currentTabInfo?.reversible" class="mode-toggle">
         <label class="toggle-label">
           <input type="checkbox" v-model="isEncode" />
-          <span>编码模式</span>
+          <span>{{ isEncode ? '编码模式' : '解码模式' }}</span>
         </label>
       </div>
     </div>
@@ -58,12 +58,16 @@ const outputText = ref('')
 const isEncode = ref(true)
 
 const tabs = [
-  { id: 'base64', name: 'Base64' },
-  { id: 'md5', name: 'MD5' },
-  { id: 'sha1', name: 'SHA-1' },
-  { id: 'sha256', name: 'SHA-256' },
-  { id: 'sha512', name: 'SHA-512' }
+  { id: 'base64', name: 'Base64', reversible: true },
+  { id: 'md5', name: 'MD5', reversible: false },
+  { id: 'sha1', name: 'SHA-1', reversible: false },
+  { id: 'sha256', name: 'SHA-256', reversible: false },
+  { id: 'sha512', name: 'SHA-512', reversible: false }
 ]
+
+const currentTabInfo = computed(() => {
+  return tabs.find(tab => tab.id === currentTab.value)
+})
 
 const processText = async () => {
   if (!inputText.value) {

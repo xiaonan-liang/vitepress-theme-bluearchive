@@ -23,7 +23,7 @@
           <div class="tool-header">
             <h2>{{ currentTool.name }}</h2>
             <button class="close-btn" @click="closeTool">
-              <i class="iconfont icon-stop"></i>
+              <span class="close-icon">×</span>
             </button>
           </div>
           <div class="tool-body">
@@ -181,13 +181,27 @@ const closeTool = () => {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 32px;
     color: var(--font-color-grey);
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--btn-background);
 
     &:hover {
       color: var(--font-color-gold);
+      background-color: var(--btn-hover);
       transform: rotate(90deg);
+    }
+
+    .close-icon {
+      display: inline-block;
+      line-height: 1;
+      font-weight: bold;
     }
   }
 }
