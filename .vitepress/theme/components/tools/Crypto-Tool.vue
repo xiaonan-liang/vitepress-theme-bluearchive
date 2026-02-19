@@ -7,7 +7,26 @@
         :class="['tab-btn', { active: currentTab === tab.id }]"
         @click="currentTab = tab.id"
       >
-        {{ tab.name }}
+        <template v-if="tab.id === 'base64'">
+          <span class="tab-name">{{ tab.name }}</span>
+          <div class="encode-decode-toggle">
+            <button
+              :class="['encode-btn', { active: isEncode }]"
+              @click.stop="isEncode = true"
+            >
+              编码
+            </button>
+            <button
+              :class="['encode-btn', { active: !isEncode }]"
+              @click.stop="isEncode = false"
+            >
+              解码
+            </button>
+          </div>
+        </template>
+        <template v-else>
+          {{ tab.name }}
+        </template>
       </button>
     </div>
 
@@ -37,21 +56,6 @@
           rows="6"
           readonly
         ></textarea>
-      </div>
-
-      <div v-if="currentTabInfo?.reversible" class="mode-toggle">
-        <button
-          :class="['mode-btn', { active: isEncode }]"
-          @click="isEncode = true"
-        >
-          编码
-        </button>
-        <button
-          :class="['mode-btn', { active: !isEncode }]"
-          @click="isEncode = false"
-        >
-          解码
-        </button>
       </div>
     </div>
   </div>
@@ -158,6 +162,9 @@ const copyResult = async () => {
   cursor: pointer;
   transition: all 0.3s;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
   &:hover {
     background-color: var(--btn-hover);
@@ -167,6 +174,34 @@ const copyResult = async () => {
     background-color: var(--btn-hover);
     color: var(--font-color-gold);
     font-weight: bold;
+  }
+
+  .encode-decode-toggle {
+    display: flex;
+    gap: 4px;
+    margin-left: 8px;
+
+    .encode-btn {
+      padding: 4px 10px;
+      border: none;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--font-color-grey);
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 12px;
+      font-weight: normal;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      &.active {
+        background-color: var(--font-color-gold);
+        color: var(--btn-background);
+        font-weight: bold;
+      }
+    }
   }
 }
 
@@ -237,33 +272,6 @@ const copyResult = async () => {
   &.primary {
     background-color: var(--btn-hover);
     color: var(--font-color-gold);
-  }
-}
-
-.mode-toggle {
-  display: flex;
-  gap: 8px;
-
-  .mode-btn {
-    flex: 1;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    background-color: var(--btn-background);
-    color: var(--font-color-grey);
-    cursor: pointer;
-    transition: all 0.3s;
-    font-size: 14px;
-    font-weight: bold;
-
-    &:hover {
-      background-color: var(--btn-hover);
-    }
-
-    &.active {
-      background-color: var(--btn-hover);
-      color: var(--font-color-gold);
-    }
   }
 }
 
