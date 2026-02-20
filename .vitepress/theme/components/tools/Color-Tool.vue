@@ -27,23 +27,23 @@
     <div class="function-buttons">
       <h3>快速插入:</h3>
       <div class="button-grid">
-        <button @click="insertFunction('#b2')" class="function-btn">
+        <button @click="result += '#b2'" class="function-btn">
           #b2
         </button>
-        <button @click="insertFunction('[i]')" class="function-btn">
+        <button @click="result += '[i]'" class="function-btn">
           [i] (斜体)
         </button>
-        <button @click="insertFunction('[u]')" class="function-btn">
+        <button @click="result += '[u]'" class="function-btn">
           [u] (下划线)
         </button>
-        <button @click="insertFunction('[b]')" class="function-btn">
+        <button @click="result += '[b]'" class="function-btn">
           [b] (粗体)
         </button>
-        <button @click="insertFunction('[color]')" class="function-btn">
+        <button @click="result += '[color]'" class="function-btn">
           [color] (颜色)
         </button>
-        <button @click="insertFunction('\\\\n')" class="function-btn">
-          \\n (换行)
+        <button @click="result += '\\\\n'" class="function-btn">
+          \n (换行)
         </button>
       </div>
     </div>
@@ -85,11 +85,6 @@ const updateColorFromCode = () => {
   if (/^#[0-9A-Fa-f]{6}$/.test(colorCode.value)) {
     selectedColor.value = colorCode.value
   }
-}
-
-// 插入功能性字符
-const insertFunction = (text: string) => {
-  result.value += text
 }
 
 // 复制结果
