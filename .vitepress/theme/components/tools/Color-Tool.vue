@@ -27,17 +27,23 @@
     <div class="function-buttons">
       <h3>快速插入:</h3>
       <div class="button-grid">
-        <button @click="insertFunction('{#b2}')" class="function-btn">
-          #b2 (颜色)
+        <button @click="insertFunction('#b2')" class="function-btn">
+          #b2
         </button>
         <button @click="insertFunction('[i]')" class="function-btn">
           [i] (斜体)
         </button>
-        <button @click="insertFunction('\\n')" class="function-btn">
-          \n (换行)
+        <button @click="insertFunction('[u]')" class="function-btn">
+          [u] (下划线)
         </button>
-        <button @click="insertFunction('{#b2}' + previewText + '{/}')" class="function-btn">
-          颜色文本
+        <button @click="insertFunction('[b]')" class="function-btn">
+          [b] (粗体)
+        </button>
+        <button @click="insertFunction('[color]')" class="function-btn">
+          [color] (颜色)
+        </button>
+        <button @click="insertFunction('\\\\n')" class="function-btn">
+          \\n (换行)
         </button>
       </div>
     </div>
@@ -72,34 +78,18 @@ const previewText = ref('预览文本')
 // 从颜色选择器更新颜色代码
 const updateColorCode = () => {
   colorCode.value = selectedColor.value
-  updateColorInResult()
 }
 
 // 从输入框更新颜色
 const updateColorFromCode = () => {
   if (/^#[0-9A-Fa-f]{6}$/.test(colorCode.value)) {
     selectedColor.value = colorCode.value
-    updateColorInResult()
-  }
-}
-
-// 更新结果中的颜色代码
-const updateColorInResult = () => {
-  // 如果结果中已经有颜色代码，更新它
-  if (result.value.includes('{#b2}')) {
-    result.value = result.value.replace(/\{#b2\}([^\{]*)\{\/\}/g, `{#b2}${previewText.value}{/}`)
   }
 }
 
 // 插入功能性字符
 const insertFunction = (text: string) => {
-  if (text === '{#b2}') {
-    // 插入颜色代码
-    result.value += `{#b2}${previewText.value}{/}`
-  } else {
-    // 插入其他功能性字符
-    result.value += text
-  }
+  result.value += text
 }
 
 // 复制结果
@@ -117,11 +107,6 @@ const copyResult = async () => {
 const clearResult = () => {
   result.value = ''
 }
-
-// 监听颜色变化，自动更新结果中的颜色代码
-watch(selectedColor, () => {
-  updateColorInResult()
-})
 </script>
 
 <style scoped lang="less">
