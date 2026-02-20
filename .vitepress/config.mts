@@ -71,23 +71,41 @@ export default defineConfigWithTheme<ThemeConfig>({
   // },
   title: "其实你们都是柔情猫娘吧QAQ",
   description: "其实你们都是柔情猫娘吧QAQ",
-  // 构建优化
+  // 构建压缩优化
   build: {
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
         drop_debugger: true,
+        passes: 2,
+        pure_funcs: ['console.log', 'console.warn', 'console.error']
       },
+      output: {
+        comments: false,
+        beautify: false
+      }
     },
-    // 启用图片压缩
-    // 注意：需要安装 sharp 依赖
-    // optimizeImages: true,
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue'],
+          crypto: ['md5']
+        }
+      }
+    }
   },
-  // 开发服务器优化
-  server: {
-    port: 3000,
-    open: true,
+  // Vite 配置，用于资源压缩
+  vite: {
+    build: {
+      // 启用图片压缩
+      assetsInlineLimit: 4096, // 小于 4KB 的资源内联
+      // 优化静态资源
+      assetsDir: 'assets',
+      // 生成 source map
+      sourcemap: false
+    }
   },
   themeConfig: {
     // navBar
