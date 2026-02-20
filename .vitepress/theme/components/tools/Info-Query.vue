@@ -84,6 +84,7 @@ const apis = [
     url: 'https://shequ.mini1.cn:8081/miniw/user_ext',
     params: {
       act: 'get_user_addr',
+      op_uin: '', // 保持原始位置
       time: '',
       auth: '0430d5cd7bced2150aa06986764988ec',
       s2t: '',
@@ -101,6 +102,7 @@ const apis = [
     url: 'https://shequ.mini1.cn:8081/miniw/profile/',
     params: {
       act: 'getProfileBatch3',
+      op_uin_list: '', // 保持原始位置
       time: '',
       auth: 'e1fbda1a1a805610567f270116a31e15',
       s2t: '',
@@ -119,6 +121,7 @@ const apis = [
     url: 'https://shequ.mini1.cn:8081//miniw/profile/',
     params: {
       act: 'getProfileBatch2',
+      op_uin_list: '', // 保持原始位置
       time: '',
       auth: 'd1548593844d679a6042145046366647',
       s2t: '',
@@ -336,7 +339,7 @@ const queryApi = async (apiId: number) => {
     params.s2t = (now - 345).toString() // 模拟 s2t 参数
     params.ver = version.value
 
-    // 根据接口类型设置 op_uin 参数
+    // 设置 op_uin 参数
     if (api.id === 1) {
       params.op_uin = opUin.value
     } else {
