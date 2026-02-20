@@ -57,11 +57,11 @@ const tools: Tool[] = [
     component: defineAsyncComponent(() => import('./tools/Crypto-Tool.vue'))
   },
   {
-    id: 'info-query',
-    name: '迷你世界查询工具',
-    description: '根据用户输入的数字查询迷你世界相关信息',
-    icon: 'icon-search',
-    component: defineAsyncComponent(() => import('./tools/Info-Query.vue'))
+    id: 'color',
+    name: '自定义颜色工具',
+    description: '选择颜色并插入功能性字符，如 #b2、[i]、\\n 等',
+    icon: 'icon-palette',
+    component: defineAsyncComponent(() => import('./tools/Color-Tool.vue'))
   }
 ]
 
