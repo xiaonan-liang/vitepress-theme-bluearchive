@@ -55,6 +55,13 @@ const tools: Tool[] = [
     description: '支持 Base64、S7、MD5、SHA 等多种加密算法',
     icon: 'icon-pinned',
     component: defineAsyncComponent(() => import('./tools/Crypto-Tool.vue'))
+  },
+  {
+    id: 'info-query',
+    name: '迷你世界查询工具',
+    description: '根据用户输入的数字查询迷你世界相关信息',
+    icon: 'icon-search',
+    component: defineAsyncComponent(() => import('./tools/Info-Query.vue'))
   }
 ]
 
