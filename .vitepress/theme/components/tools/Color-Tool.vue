@@ -89,7 +89,7 @@ const updateColorFromCode = () => {
 
 // 插入换行符
 const insertNewLine = () => {
-  result.value += '\n'
+  result.value += '\\n'
 }
 
 // 复制结果
