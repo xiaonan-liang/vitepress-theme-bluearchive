@@ -38,7 +38,23 @@
 
     <div v-if="result" class="result-section">
       <h3>查询结果:</h3>
-      <pre>{{ formattedResult }}</pre>
+      <!-- 特殊处理 user_ext 接口的结果 -->
+      <div v-if="isUserExtResult" class="user-ext-result">
+        <div class="user-ext-item">
+          <span class="label">地址:</span>
+          <span class="value">{{ combinedAddress }}</span>
+        </div>
+        <div class="user-ext-item">
+          <span class="label">用户ID:</span>
+          <span class="value">{{ result.msg.uin }}</span>
+        </div>
+        <div class="user-ext-item">
+          <span class="label">结果:</span>
+          <span class="value">{{ result.result === 0 ? '成功' : '失败' }}</span>
+        </div>
+      </div>
+      <!-- 其他接口的结果保持原样 -->
+      <pre v-else>{{ formattedResult }}</pre>
     </div>
 
     <div v-if="error" class="error-section">
@@ -357,6 +373,22 @@ const formattedResult = computed(() => {
   return JSON.stringify(result.value, null, 2)
 })
 
+// 判断是否是 user_ext 接口的结果
+const isUserExtResult = computed(() => {
+  return result.value && 
+         typeof result.value === 'object' && 
+         'msg' in result.value && 
+         'addr' in result.value.msg && 
+         'caddr' in result.value.msg && 
+         'result' in result.value
+})
+
+// 组合地址信息
+const combinedAddress = computed(() => {
+  if (!isUserExtResult.value) return ''
+  return `${result.value.msg.addr} ${result.value.msg.caddr}`
+})
+
 // 组件挂载时获取版本号
 onMounted(() => {
   fetchVersion()
@@ -508,6 +540,34 @@ onMounted(() => {
     color: var(--font-color-grey);
     white-space: pre-wrap;
     word-wrap: break-word;
+  }
+
+  .user-ext-result {
+    padding: 16px;
+    background-color: var(--general-background-color);
+    border-radius: 6px;
+
+    .user-ext-item {
+      display: flex;
+      margin-bottom: 12px;
+      align-items: center;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .label {
+        flex: 0 0 80px;
+        font-weight: bold;
+        color: var(--font-color-grey);
+      }
+
+      .value {
+        flex: 1;
+        color: var(--font-color-gold);
+        font-size: 16px;
+      }
+    }
   }
 }
 
