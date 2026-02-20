@@ -71,6 +71,24 @@ export default defineConfigWithTheme<ThemeConfig>({
   // },
   title: "其实你们都是柔情猫娘吧QAQ",
   description: "其实你们都是柔情猫娘吧QAQ",
+  // 构建优化
+  build: {
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+    // 启用图片压缩
+    // 注意：需要安装 sharp 依赖
+    // optimizeImages: true,
+  },
+  // 开发服务器优化
+  server: {
+    port: 3000,
+    open: true,
+  },
   themeConfig: {
     // navBar
     menuList: [
