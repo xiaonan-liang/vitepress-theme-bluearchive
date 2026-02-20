@@ -42,7 +42,7 @@
         <button @click="result += '[color]'" class="function-btn">
           [color] (颜色)
         </button>
-        <button @click="result += '\\\\n'" class="function-btn">
+        <button @click="insertNewLine" class="function-btn">
           \n (换行)
         </button>
       </div>
@@ -85,6 +85,11 @@ const updateColorFromCode = () => {
   if (/^#[0-9A-Fa-f]{6}$/.test(colorCode.value)) {
     selectedColor.value = colorCode.value
   }
+}
+
+// 插入换行符
+const insertNewLine = () => {
+  result.value += '\n'
 }
 
 // 复制结果
