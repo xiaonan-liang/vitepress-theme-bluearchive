@@ -52,15 +52,6 @@
           readonly
         ></textarea>
       </div>
-
-      <div v-if="currentTab === 's7'" class="s7-info">
-        <p><strong>S7 加密说明：</strong></p>
-        <ul>
-          <li>S7 是一种自定义的 Base64 变体编码</li>
-          <li>S7T 值是通过 MD5(s7 + 编码结果) 计算的 5 位哈希值</li>
-          <li>解码时会自动计算原始的 S7T 值</li>
-        </ul>
-      </div>
     </div>
   </div>
 </template>
@@ -567,31 +558,6 @@ const copyResult = async () => {
     &.active {
       background-color: var(--btn-hover);
       color: var(--font-color-gold);
-    }
-  }
-}
-
-.s7-info {
-  padding: 16px;
-  background-color: var(--btn-background);
-  border-radius: 8px;
-  border-left: 4px solid var(--font-color-gold);
-
-  p {
-    margin: 0 0 12px 0;
-    color: var(--font-color-grey);
-    font-size: 14px;
-  }
-
-  ul {
-    margin: 0;
-    padding-left: 20px;
-    color: var(--font-color-grey);
-    font-size: 13px;
-    opacity: 0.8;
-
-    li {
-      margin-bottom: 4px;
     }
   }
 }
