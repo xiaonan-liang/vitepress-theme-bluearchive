@@ -59,9 +59,16 @@ const tools: Tool[] = [
   {
     id: 'color',
     name: '自定义颜色工具',
-    description: '选择颜色并插入功能性字符，如 #b2、[i]、\\n 等',
+    description: '选择颜色并插入功能性字符，如 #b2、[i]、\n 等',
     icon: 'icon-palette',
     component: defineAsyncComponent(() => import('./tools/Color-Tool.vue'))
+  },
+  {
+    id: 'timestamp',
+    name: '时间戳转换工具',
+    description: '将时间戳转换为日期，或将日期转换为时间戳',
+    icon: 'icon-time',
+    component: defineAsyncComponent(() => import('./tools/Timestamp-Tool.vue'))
   }
 ]
 
