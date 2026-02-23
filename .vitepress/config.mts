@@ -129,19 +129,6 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
   // 构建优化配置
   build: {
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        passes: 2,
-        pure_funcs: ['console.log', 'console.warn', 'console.error']
-      },
-      output: {
-        comments: false,
-        beautify: false
-      }
-    },
     cssCodeSplit: true,
     rollupOptions: {
       output: {
@@ -161,8 +148,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   vite: {
     build: {
       assetsInlineLimit: 4096, // 4KB以下的资源内联
-      sourcemap: false,
-      cssMinify: 'lightningcss'
+      sourcemap: false
     },
     optimizeDeps: {
       include: ['vue', 'md5', 'minisearch', 'animejs'],
