@@ -31,6 +31,14 @@ export default defineConfigWithTheme<ThemeConfig>({
   lang: 'zh-CN',
   head: [
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
+    // 预连接
+    ['link', { rel: 'preconnect', href: 'https://unpkg.com' }],
+    ['link', { rel: 'preconnect', href: 'https://cdn.jsdelivr.net' }],
+    ['link', { rel: 'preconnect', href: 'https://github.com' }],
+    // 预加载关键资源
+    ['link', { rel: 'preload', href: '/font/Blueaka/Blueaka.css', as: 'style' }],
+    ['link', { rel: 'preload', href: '/font/Blueaka_Bold/Blueaka_Bold.css', as: 'style' }],
+    ['link', { rel: 'preload', href: '/assets/icon/iconfont.css', as: 'style' }],
     // gitalk
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/gitalk/dist/gitalk.css' }],
     ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js' }],
@@ -119,4 +127,46 @@ export default defineConfigWithTheme<ThemeConfig>({
       })
     },
   },
+  // 构建优化配置
+  build: {
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        passes: 2,
+        pure_funcs: ['console.log', 'console.warn', 'console.error']
+      },
+      output: {
+        comments: false,
+        beautify: false
+      }
+    },
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue'],
+          crypto: ['md5'],
+          search: ['minisearch'],
+          animation: ['animejs']
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+      }
+    }
+  },
+  // Vite 配置
+  vite: {
+    build: {
+      assetsInlineLimit: 4096, // 4KB以下的资源内联
+      sourcemap: false,
+      cssMinify: 'lightningcss'
+    },
+    optimizeDeps: {
+      include: ['vue', 'md5', 'minisearch', 'animejs'],
+      exclude: ['vitepress']
+    }
+  }
 })
