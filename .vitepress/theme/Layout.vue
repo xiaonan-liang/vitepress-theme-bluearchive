@@ -53,9 +53,6 @@ const { page } = useData()
 
 import { useStore } from './store'
 const { state } = useStore()
-
-// 图片懒加载指令
-import { vLazy } from './utils/lazyLoad'
 </script>
 
 <style lang="less">

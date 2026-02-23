@@ -31,14 +31,6 @@ export default defineConfigWithTheme<ThemeConfig>({
   lang: 'zh-CN',
   head: [
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
-    // 预连接
-    ['link', { rel: 'preconnect', href: 'https://unpkg.com' }],
-    ['link', { rel: 'preconnect', href: 'https://cdn.jsdelivr.net' }],
-    ['link', { rel: 'preconnect', href: 'https://github.com' }],
-    // 预加载关键资源
-    ['link', { rel: 'preload', href: '/font/Blueaka/Blueaka.css', as: 'style' }],
-    ['link', { rel: 'preload', href: '/font/Blueaka_Bold/Blueaka_Bold.css', as: 'style' }],
-    ['link', { rel: 'preload', href: '/assets/icon/iconfont.css', as: 'style' }],
     // gitalk
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/gitalk/dist/gitalk.css' }],
     ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js' }],
@@ -129,6 +121,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
   // 构建优化配置
   build: {
+    minify: true,
     cssCodeSplit: true,
     rollupOptions: {
       output: {
