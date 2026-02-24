@@ -1,96 +1,51 @@
 <template>
   <div class="color-tool-container">
-    <div class="input-section">
-      <label for="color-input">选择颜色:</label>
-      <div class="color-input-group">
-        <input 
-          type="color" 
-          id="color-input" 
-          v-model="selectedColor"
-          @change="updateColorCode"
-        >
-        <input 
-          type="text" 
-          v-model="colorCode"
-          placeholder="颜色代码"
-          @input="updateColorFromCode"
-        >
+    <!-- 颜色代码区域 -->
+    <div class="color-section">
+      <h3>颜色代码:</h3>
+      <div class="color-buttons">
+        <button @click="result += '#R'" class="color-btn">#R (红)</button>
+        <button @click="result += '#G'" class="color-btn">#G (绿)</button>
+        <button @click="result += '#B'" class="color-btn">#B (蓝)</button>
+        <button @click="result += '#Y'" class="color-btn">#Y (黄)</button>
+        <button @click="result += '#K'" class="color-btn">#K (黑)</button>
+        <button @click="result += '#W'" class="color-btn">#W (白)</button>
       </div>
     </div>
 
-    <div class="preview-section">
-      <div class="preview-label">预览效果:</div>
-      <div class="preview-box" :style="{ backgroundColor: selectedColor }"></div>
-      <div class="preview-text" :style="{ color: selectedColor }">{{ previewText }}</div>
-    </div>
-
-    <div class="function-buttons">
-      <h3>快速插入:</h3>
-      <div class="button-grid">
-        <button @click="result += '#b2'" class="function-btn">
-          #b2
-        </button>
-        <button @click="result += '[i]'" class="function-btn">
-          [i] (斜体)
-        </button>
-        <button @click="result += '[u]'" class="function-btn">
-          [u] (下划线)
-        </button>
-        <button @click="result += '[b]'" class="function-btn">
-          [b] (粗体)
-        </button>
-        <button @click="result += '[color]'" class="function-btn">
-          [color] (颜色)
-        </button>
-        <button @click="insertNewLine" class="function-btn">
-          \n (换行)
-        </button>
+    <!-- 功能代码区域 -->
+    <div class="function-section">
+      <h3>功能代码:</h3>
+      <div class="function-buttons">
+        <button @click="result += '#b2'" class="function-btn">#b2 (快闪字)</button>
+        <button @click="result += '[i]'" class="function-btn">[i] (斜体)</button>
+        <button @click="result += '[u]'" class="function-btn">[u] (下划线)</button>
+        <button @click="result += '[b]'" class="function-btn">[b] (粗体)</button>
+        <button @click="result += '[color]'" class="function-btn">[color] (颜色)</button>
+        <button @click="result += '\\n'" class="function-btn">\n (换行)</button>
       </div>
     </div>
 
+    <!-- 结果区域 -->
     <div class="result-section">
       <h3>生成结果:</h3>
       <textarea 
         v-model="result"
-        placeholder="生成的颜色代码将显示在这里"
+        placeholder="生成的代码将显示在这里"
         rows="4"
       ></textarea>
       <div class="result-actions">
-        <button @click="copyResult" class="action-btn">
-          复制结果
-        </button>
-        <button @click="clearResult" class="action-btn">
-          清空
-        </button>
+        <button @click="copyResult" class="action-btn">复制结果</button>
+        <button @click="clearResult" class="action-btn">清空</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
-const selectedColor = ref('#ffffff')
-const colorCode = ref('#ffffff')
 const result = ref('')
-const previewText = ref('预览文本')
-
-// 从颜色选择器更新颜色代码
-const updateColorCode = () => {
-  colorCode.value = selectedColor.value
-}
-
-// 从输入框更新颜色
-const updateColorFromCode = () => {
-  if (/^#[0-9A-Fa-f]{6}$/.test(colorCode.value)) {
-    selectedColor.value = colorCode.value
-  }
-}
-
-// 插入换行符
-const insertNewLine = () => {
-  result.value += '\\n'
-}
 
 // 复制结果
 const copyResult = async () => {
@@ -115,85 +70,7 @@ const clearResult = () => {
   margin: 0 auto;
 }
 
-.input-section {
-  margin-bottom: 24px;
-
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: var(--font-color-grey);
-  }
-
-  .color-input-group {
-    display: flex;
-    gap: 12px;
-
-    input[type="color"] {
-      flex: 0 0 60px;
-      height: 40px;
-      border: 2px solid var(--btn-background);
-      border-radius: 8px;
-      cursor: pointer;
-      padding: 2px;
-
-      &::-webkit-color-swatch-wrapper {
-        padding: 0;
-        border-radius: 6px;
-      }
-
-      &::-webkit-color-swatch {
-        border: none;
-        border-radius: 6px;
-      }
-    }
-
-    input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      border: 2px solid var(--btn-background);
-      border-radius: 8px;
-      font-size: 16px;
-      background-color: var(--foreground-color);
-      color: var(--font-color-grey);
-
-      &:focus {
-        outline: none;
-        border-color: var(--color-blue);
-        box-shadow: 0 0 0 2px rgba(var(--blue-shadow-color), 0.3);
-      }
-    }
-  }
-}
-
-.preview-section {
-  margin-bottom: 24px;
-  padding: 20px;
-  background-color: var(--foreground-color);
-  border-radius: 8px;
-  border: 1px solid var(--btn-background);
-
-  .preview-label {
-    margin-bottom: 12px;
-    font-weight: bold;
-    color: var(--font-color-grey);
-  }
-
-  .preview-box {
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    border: 2px solid var(--btn-background);
-    margin-bottom: 12px;
-  }
-
-  .preview-text {
-    font-size: 18px;
-    font-weight: bold;
-  }
-}
-
-.function-buttons {
+.color-section {
   margin-bottom: 24px;
 
   h3 {
@@ -201,17 +78,48 @@ const clearResult = () => {
     color: var(--font-color-grey);
   }
 
-  .button-grid {
+  .color-buttons {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
 
-    .function-btn {
-      padding: 12px;
+    .color-btn {
+      padding: 10px;
       background-color: var(--btn-background);
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+
+      &:hover {
+        background-color: var(--btn-hover);
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+.function-section {
+  margin-bottom: 24px;
+
+  h3 {
+    margin-bottom: 12px;
+    color: var(--font-color-grey);
+  }
+
+  .function-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+
+    .function-btn {
+      padding: 10px;
+      background-color: var(--btn-background);
+      color: white;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s;
       font-size: 14px;
@@ -273,16 +181,8 @@ const clearResult = () => {
 }
 
 @media (max-width: 768px) {
-  .color-input-group {
-    flex-direction: column;
-
-    input[type="color"] {
-      flex: none;
-      width: 100%;
-    }
-  }
-
-  .button-grid {
+  .color-buttons,
+  .function-buttons {
     grid-template-columns: 1fr;
   }
 
