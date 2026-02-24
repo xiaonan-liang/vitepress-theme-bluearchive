@@ -140,7 +140,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   // Vite 配置
   vite: {
     build: {
-      assetsInlineLimit: 16384, // 16KB以下的资源内联
+      assetsInlineLimit: 4096, // 4KB以下的资源内联
       sourcemap: false
     },
     optimizeDeps: {
