@@ -1,21 +1,19 @@
 <template>
   <div class="color-tool-container">
-    <!-- 颜色代码区域 -->
-    <div class="color-section">
-      <h3>颜色代码:</h3>
-      <div class="color-buttons">
-        <button @click="result += '#R'" class="color-btn">#R (红)</button>
-        <button @click="result += '#G'" class="color-btn">#G (绿)</button>
-        <button @click="result += '#B'" class="color-btn">#B (蓝)</button>
-        <button @click="result += '#Y'" class="color-btn">#Y (黄)</button>
-        <button @click="result += '#K'" class="color-btn">#K (黑)</button>
-        <button @click="result += '#W'" class="color-btn">#W (白)</button>
-      </div>
+    <!-- 颜色代码参考 -->
+    <div class="reference-section">
+      <h3>颜色代码参考:</h3>
+      <textarea 
+        class="reference-textarea" 
+        readonly
+        rows="10"
+        v-model="colorReference"
+      ></textarea>
     </div>
 
-    <!-- 功能代码区域 -->
+    <!-- 功能代码插入 -->
     <div class="function-section">
-      <h3>功能代码:</h3>
+      <h3>功能代码插入:</h3>
       <div class="function-buttons">
         <button @click="result += '#b2'" class="function-btn">#b2 (快闪字)</button>
         <button @click="result += '[i]'" class="function-btn">[i] (斜体)</button>
@@ -45,6 +43,43 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+// 颜色代码参考
+const colorReference = ref(`#R 红
+#G 绿
+#B 蓝
+#Y 黄
+#K 黑
+#W 白
+#c5C3317 朱古力
+#c8E2323 砖石红
+#caA016F 桃红
+#cFF0aFF 枚红
+#cFF4ca0 粉
+#cFF7aad 嫩粉
+#cD19275 长石
+#c871F78 暗紫
+#c6B238E 深紫
+#cA016dd 紫
+#cab66dd 淡紫
+#c016a00 深绿
+#cA0F16F 嫩绿
+#cFF4too 深蓝
+#ca016eh 暗蓝
+#c4D4DFF 霓虹蓝
+#cAFF0 淡蓝
+#cFFDA 青
+#c7093DB 松石
+#c5F9F9F 淡灰蓝
+#c4A766E 灰蓝
+#c42426F 深灰蓝
+#c4F4F2F 灰
+#cFF70FF 橙
+#ca16b00 淡橙
+#cB5A642 黄铜
+#c5C4033 深棕
+#cA67D3D 棕`)
+
+// 结果
 const result = ref('')
 
 // 复制结果
@@ -70,7 +105,7 @@ const clearResult = () => {
   margin: 0 auto;
 }
 
-.color-section {
+.reference-section {
   margin-bottom: 24px;
 
   h3 {
@@ -78,25 +113,20 @@ const clearResult = () => {
     color: var(--font-color-grey);
   }
 
-  .color-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
+  .reference-textarea {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid var(--btn-background);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    background-color: var(--foreground-color);
+    color: var(--font-color-grey);
+    resize: vertical;
+    line-height: 1.5;
 
-    .color-btn {
-      padding: 10px;
-      background-color: var(--btn-background);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 14px;
-
-      &:hover {
-        background-color: var(--btn-hover);
-        transform: translateY(-2px);
-      }
+    &:focus {
+      outline: none;
     }
   }
 }
@@ -181,7 +211,10 @@ const clearResult = () => {
 }
 
 @media (max-width: 768px) {
-  .color-buttons,
+  .reference-textarea {
+    font-size: 12px;
+  }
+
   .function-buttons {
     grid-template-columns: 1fr;
   }
