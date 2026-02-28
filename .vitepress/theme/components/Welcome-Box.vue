@@ -82,10 +82,18 @@ let randomMotto = ''
 // 从API获取随机一言
 const fetchRandomQuote = async () => {
   try {
+    // 设置请求超时（10秒）
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 10000)
+    
     // 使用公共CORS代理服务解决CORS错误
     const proxyUrl = 'https://api.allorigins.win/raw?url='
     const apiUrl = 'https://api-v2.cenguigui.cn/api/yiyan/'
-    const response = await fetch(proxyUrl + encodeURIComponent(apiUrl))
+    const response = await fetch(proxyUrl + encodeURIComponent(apiUrl), {
+      signal: controller.signal
+    })
+    
+    clearTimeout(timeoutId)
     
     if (response.ok) {
       const quote = await response.text()
@@ -96,15 +104,15 @@ const fetchRandomQuote = async () => {
         // 如果提取失败，使用默认文本
         randomMotto = '和你的日常，就是奇迹'
       }
-      addNextCharacter()
     } else {
       // 如果API请求失败，使用默认文本
       randomMotto = '和你的日常，就是奇迹'
-      addNextCharacter()
     }
   } catch (error) {
-    // 如果网络错误，使用默认文本
+    // 如果网络错误或超时，使用默认文本
     randomMotto = '和你的日常，就是奇迹'
+  } finally {
+    // 无论成功失败，都开始显示文本
     addNextCharacter()
   }
 }
