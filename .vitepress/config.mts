@@ -38,8 +38,8 @@ export default defineConfigWithTheme<ThemeConfig>({
     ['link', { rel: 'dns-prefetch', href: 'https://cdn.jsdelivr.net' }],
     ['link', { rel: 'preconnect', href: 'https://cdn.jsdelivr.net', crossorigin: '' }],
     // 预加载关键资源
-    ['link', { rel: 'preload', href: '/font/Blueaka/Blueaka.ttf', as: 'font', type: 'font/ttf', crossorigin: '' }],
-    ['link', { rel: 'preload', href: '/font/Blueaka_Bold/Blueaka_Bold.ttf', as: 'font', type: 'font/ttf', crossorigin: '' }],
+     ['link', { rel: 'preload', href: '/font/Blueaka/Blueaka-04963599723c63b7.woff2', as: 'font', type: 'font/woff2', crossorigin: '' }],
+     ['link', { rel: 'preload', href: '/font/Blueaka_Bold/Blueaka_Bold-0719faaf51e6146e.woff2', as: 'font', type: 'font/woff2', crossorigin: '' }],
     // gitalk
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/gitalk/dist/gitalk.css' }],
     ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js', defer: '' }],
