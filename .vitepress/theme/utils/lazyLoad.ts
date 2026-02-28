@@ -45,5 +45,3 @@ export const vLazy = {
   }
 }
 
-// 全局注册懒加载
-defineExpose({ vLazy })
