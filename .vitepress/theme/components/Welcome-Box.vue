@@ -83,16 +83,12 @@ let randomMotto = ''
 const fetchRandomQuote = async () => {
   try {
     console.log('开始请求一言API...')
-    const response = await fetch('https://api-v2.cenguigui.cn/api/yiyan/', {
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Accept': 'text/plain'
-      }
-    })
+    // 使用公共CORS代理服务解决CORS错误
+    const proxyUrl = 'https://api.allorigins.win/raw?url='
+    const apiUrl = 'https://api-v2.cenguigui.cn/api/yiyan/'
+    const response = await fetch(proxyUrl + encodeURIComponent(apiUrl))
     
     console.log('API响应状态:', response.status, response.statusText)
-    console.log('API响应头部:', response.headers)
     
     if (response.ok) {
       const quote = await response.text()
