@@ -82,36 +82,28 @@ let randomMotto = ''
 // 从API获取随机一言
 const fetchRandomQuote = async () => {
   try {
-    console.log('开始请求一言API...')
     // 使用公共CORS代理服务解决CORS错误
     const proxyUrl = 'https://api.allorigins.win/raw?url='
     const apiUrl = 'https://api-v2.cenguigui.cn/api/yiyan/'
     const response = await fetch(proxyUrl + encodeURIComponent(apiUrl))
     
-    console.log('API响应状态:', response.status, response.statusText)
-    
     if (response.ok) {
       const quote = await response.text()
-      console.log('API返回内容:', quote)
       
       if (quote && quote.trim()) {
         randomMotto = quote.trim()
-        console.log('提取的一言:', randomMotto)
       } else {
         // 如果提取失败，使用默认文本
-        console.log('提取失败，使用默认文本')
         randomMotto = '和你的日常，就是奇迹'
       }
       addNextCharacter()
     } else {
       // 如果API请求失败，使用默认文本
-      console.log('API请求失败，状态码:', response.status)
       randomMotto = '和你的日常，就是奇迹'
       addNextCharacter()
     }
   } catch (error) {
     // 如果网络错误，使用默认文本
-    console.error('网络错误:', error)
     randomMotto = '和你的日常，就是奇迹'
     addNextCharacter()
   }
