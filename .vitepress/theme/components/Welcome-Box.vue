@@ -82,9 +82,17 @@ let randomMotto = ''
 // 从API获取随机一言
 const fetchRandomQuote = async () => {
   try {
-    const response = await fetch('https://api-v2.cenguigui.cn/api/yiyan/')
+    const response = await fetch('https://api-v2.cenguigui.cn/api/yiyan/?code=js')
     if (response.ok) {
-      randomMotto = await response.text()
+      const jsCode = await response.text()
+      // 从JavaScript代码中提取一言内容
+      const match = jsCode.match(/document\.write\(["']([^"']+)["']\)/)
+      if (match && match[1]) {
+        randomMotto = match[1]
+      } else {
+        // 如果提取失败，使用默认文本
+        randomMotto = '和你的日常，就是奇迹'
+      }
       addNextCharacter()
     } else {
       // 如果API请求失败，使用默认文本
