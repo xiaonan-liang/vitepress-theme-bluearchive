@@ -20,7 +20,14 @@
     </main>
     <Footer></Footer>
     <Fireworks v-if="state.fireworksEnabled"></Fireworks>
-    <ClientOnly><SpinePlayer></SpinePlayer></ClientOnly>
+    <ClientOnly>
+      <Suspense>
+        <SpinePlayer></SpinePlayer>
+        <template #fallback>
+          <div style="display: none;"></div>
+        </template>
+      </Suspense>
+    </ClientOnly>
     <ToTop></ToTop>
     <!-- 背景音乐元素 -->
     <audio id="background-music" loop>
@@ -31,7 +38,8 @@
 </template>
 
 <script setup lang="ts">
-// 组件导入
+import { defineAsyncComponent } from 'vue'
+// 组件导入 - 核心组件同步加载
 import Splash from './components/Splash.vue'
 import Navbar from './components/Navbar/index.vue'
 import Banner from './components/Banner.vue'
@@ -44,9 +52,11 @@ import NotFound from './components/NotFound.vue'
 import ToTop from './components/ToTop.vue'
 import Fireworks from './components/Fireworks.vue'
 import Footer from './components/Footer.vue'
-import ToolsList from './components/Tools-List.vue'
-// @ts-ignore
-import SpinePlayer from './components/Spine-Player/index.vue'
+
+// 异步加载非核心组件
+const ToolsList = defineAsyncComponent(() => import('./components/Tools-List.vue'))
+const SpinePlayer = defineAsyncComponent(() => import('./components/Spine-Player/index.vue'))
+
 // 路径切换
 import { useData } from 'vitepress'
 const { page } = useData()

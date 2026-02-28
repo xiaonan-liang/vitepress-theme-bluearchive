@@ -9,7 +9,6 @@ export interface ThemeConfig {
   videoBanner: boolean
   name: string
   welcomeText: string
-  motto: string[]
   social: { icon: string; url: string }[]
 
   //spine
@@ -31,9 +30,19 @@ export default defineConfigWithTheme<ThemeConfig>({
   lang: 'zh-CN',
   head: [
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
+    // DNS预解析和预连接
+    ['link', { rel: 'dns-prefetch', href: 'https://v1.hitokoto.cn' }],
+    ['link', { rel: 'preconnect', href: 'https://v1.hitokoto.cn', crossorigin: '' }],
+    ['link', { rel: 'dns-prefetch', href: 'https://unpkg.com' }],
+    ['link', { rel: 'preconnect', href: 'https://unpkg.com', crossorigin: '' }],
+    ['link', { rel: 'dns-prefetch', href: 'https://cdn.jsdelivr.net' }],
+    ['link', { rel: 'preconnect', href: 'https://cdn.jsdelivr.net', crossorigin: '' }],
+    // 预加载关键资源
+    ['link', { rel: 'preload', href: '/font/Blueaka/Blueaka.ttf', as: 'font', type: 'font/ttf', crossorigin: '' }],
+    ['link', { rel: 'preload', href: '/font/Blueaka_Bold/Blueaka_Bold.ttf', as: 'font', type: 'font/ttf', crossorigin: '' }],
     // gitalk
     ['link', { rel: 'stylesheet', href: 'https://unpkg.com/gitalk/dist/gitalk.css' }],
-    ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js' }],
+    ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js', defer: '' }],
     // bluearchive font
     [
       'link',
@@ -83,7 +92,6 @@ export default defineConfigWithTheme<ThemeConfig>({
     videoBanner: true,
     name: "其实你们都是柔情猫娘吧QAQ",
     welcomeText: 'Hello World',
-    motto: ['和你的日常，就是奇迹', '何気ない日常で、ほんの少しの奇跡を見つける物語。'],
     social: [
       { icon: 'github', url: 'https://github.com/xiaonan-liang' },
       { icon: 'bilibili', url: 'https://space.bilibili.com/1896313821' },

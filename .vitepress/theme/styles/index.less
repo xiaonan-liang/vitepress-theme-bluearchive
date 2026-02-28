@@ -1,2 +1,34 @@
 @import url(./vars.less);
 @import url(./icons.less);
+
+// 懒加载图片样式
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  background-color: var(--foreground-color);
+  
+  &.lazy-loaded {
+    opacity: 1;
+  }
+}
+
+// 图片占位符
+img[data-src] {
+  min-height: 200px;
+  background: linear-gradient(90deg, 
+    var(--foreground-color) 25%, 
+    var(--background-color) 50%, 
+    var(--foreground-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
