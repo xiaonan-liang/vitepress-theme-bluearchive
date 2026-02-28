@@ -39,7 +39,6 @@ import { ref, onMounted } from 'vue'
 const themeConfig = useData().theme.value
 const name = themeConfig.name
 const welcomeText = themeConfig.welcomeText
-const motto = themeConfig.motto
 const social = themeConfig.social
 
 const multiple = 30
@@ -78,7 +77,26 @@ const reset = () => {
 
 let index = 0
 const mottoText = ref('')
-const randomMotto = motto[Math.floor(Math.random() * motto.length)]
+let randomMotto = ''
+
+// 从API获取随机一言
+const fetchRandomQuote = async () => {
+  try {
+    const response = await fetch('https://api-v2.cenguigui.cn/api/yiyan/')
+    if (response.ok) {
+      randomMotto = await response.text()
+      addNextCharacter()
+    } else {
+      // 如果API请求失败，使用默认文本
+      randomMotto = '和你的日常，就是奇迹'
+      addNextCharacter()
+    }
+  } catch (error) {
+    // 如果网络错误，使用默认文本
+    randomMotto = '和你的日常，就是奇迹'
+    addNextCharacter()
+  }
+}
 
 const addNextCharacter = () => {
   if (index < randomMotto.length) {
@@ -89,7 +107,7 @@ const addNextCharacter = () => {
 }
 
 onMounted(() => {
-  addNextCharacter()
+  fetchRandomQuote()
 })
 </script>
 
