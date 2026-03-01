@@ -9,6 +9,7 @@ export interface ThemeConfig {
   videoBanner: boolean
   name: string
   welcomeText: string
+  motto: string[]
   social: { icon: string; url: string }[]
 
   //spine
@@ -92,6 +93,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     videoBanner: true,
     name: "其实你们都是柔情猫娘吧QAQ",
     welcomeText: 'Hello World',
+    motto: ['和你的日常，就是奇迹', '何気ない日常で、ほんの少しの奇跡を見つける物語。'],
     social: [
       { icon: 'github', url: 'https://github.com/xiaonan-liang' },
       { icon: 'bilibili', url: 'https://space.bilibili.com/1896313821' },

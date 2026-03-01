@@ -89,7 +89,7 @@ const fetchRandomQuote = async () => {
       const data = await response.json()
       
       if (data.code === 200 && data.data && data.data.hitokoto) {
-        // 格式化：hitokoto内容 + from在下一行
+        // hitokoto在原本位置，from在下一行
         randomMotto = data.data.hitokoto
         if (data.data.from) {
           randomMotto += '\n' + data.data.from
