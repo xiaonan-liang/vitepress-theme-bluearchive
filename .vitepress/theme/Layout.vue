@@ -29,7 +29,6 @@
       </Suspense>
     </ClientOnly>
     <ToTop></ToTop>
-    <!-- 背景音乐元素 -->
     <audio id="background-music" loop>
       <source src="./assets/banner/bgm.mp3" type="audio/mpeg" />
     </audio>
@@ -39,25 +38,22 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
-// 组件导入 - 核心组件同步加载
 import Splash from './components/Splash.vue'
 import Navbar from './components/Navbar/index.vue'
 import Banner from './components/Banner.vue'
 import WelcomeBox from './components/Welcome-Box.vue'
 import PostsList from './components/Posts-List.vue'
-import Tags from './components/Tags.vue'
-import PostViewer from './components/Post-Viewer.vue'
-import PostInnerBanner from './components/Post-InnerBanner.vue'
-import NotFound from './components/NotFound.vue'
 import ToTop from './components/ToTop.vue'
-import Fireworks from './components/Fireworks.vue'
 import Footer from './components/Footer.vue'
 
-// 异步加载非核心组件
+const Tags = defineAsyncComponent(() => import('./components/Tags.vue'))
+const PostViewer = defineAsyncComponent(() => import('./components/Post-Viewer.vue'))
+const PostInnerBanner = defineAsyncComponent(() => import('./components/Post-InnerBanner.vue'))
+const NotFound = defineAsyncComponent(() => import('./components/NotFound.vue'))
+const Fireworks = defineAsyncComponent(() => import('./components/Fireworks.vue'))
 const ToolsList = defineAsyncComponent(() => import('./components/Tools-List.vue'))
 const SpinePlayer = defineAsyncComponent(() => import('./components/Spine-Player/index.vue'))
 
-// 路径切换
 import { useData } from 'vitepress'
 const { page } = useData()
 

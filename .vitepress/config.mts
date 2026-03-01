@@ -148,12 +148,16 @@ export default defineConfigWithTheme<ThemeConfig>({
   // Vite 配置
   vite: {
     build: {
-      assetsInlineLimit: 4096, // 4KB以下的资源内联
-      sourcemap: false
+      assetsInlineLimit: 4096,
+      sourcemap: false,
+      cssMinify: true
     },
     optimizeDeps: {
       include: ['vue', 'md5', 'minisearch', 'animejs'],
       exclude: ['vitepress']
+    },
+    css: {
+      devSourcemap: false
     }
   }
 })
