@@ -17,7 +17,7 @@
         <img @dragstart.prevent src="../assets/banner/avatar.webp" alt="" class="avatar" />
         <span class="name">{{ name }}</span>
         <span class="motto">
-          <span class="motto-content">{{ mottoText }}</span>
+          {{ mottoText }}
           <span class="pointer"></span>
         </span>
         <ul>
@@ -177,19 +177,7 @@ onMounted(() => {
       padding: 0 1vw;
       line-height: 1.4;
       min-height: 2.5vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       white-space: pre-line;
-
-      .motto-content {
-        display: block;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
 
       .pointer {
         display: inline-block;
@@ -258,10 +246,6 @@ onMounted(() => {
       .motto {
         font-size: 3vw;
         padding: 0 4vw;
-
-        .motto-content {
-          white-space: nowrap;
-        }
       }
 
       ul {
