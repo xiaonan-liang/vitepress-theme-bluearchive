@@ -17,7 +17,7 @@
         <img @dragstart.prevent src="../assets/banner/avatar.webp" alt="" class="avatar" />
         <span class="name">{{ name }}</span>
         <span class="motto">
-          {{ mottoText }}
+          <span class="motto-content">{{ mottoText }}</span>
           <span class="pointer"></span>
         </span>
         <ul>
@@ -33,48 +33,37 @@
 </template>
 
 <script setup lang="ts">
-import { useData } from 'vitepress'
 import { ref, onMounted } from 'vue'
+import { useData } from 'vitepress'
 
-const themeConfig = useData().theme.value
-const name = themeConfig.name
-const welcomeText = themeConfig.welcomeText
-const social = themeConfig.social
+const { theme } = useData()
+const { welcomeText, name, social } = theme.value
 
-const multiple = 30
+// 欢迎框视差效果
 const welcomeBoxRef = ref<HTMLElement | null>(null)
-const calcY = ref(0)
-const calcX = ref(0)
-const angle = ref(0)
+let calcX = ref(0)
+let calcY = ref(0)
+const angle = ref(135)
 
 const parallax = (e: MouseEvent) => {
-  if (welcomeBoxRef.value) {
-    window.requestAnimationFrame(() => {
-      const box = welcomeBoxRef.value!.getBoundingClientRect()
-      calcY.value = (e.clientX - box.x - box.width / 2) / multiple
-      calcX.value = -(e.clientY - box.y - box.height / 2) / multiple
-      angle.value = Math.floor(
-        getMouseAngle(e.clientY - box.y - box.height / 2, e.clientX - box.x - box.width / 2),
-      )
-    })
-  }
-}
-
-const getMouseAngle = (x: number, y: number) => {
-  const radians = Math.atan2(y, x)
-  let angle = radians * (180 / Math.PI)
-
-  if (angle < 0) {
-    angle += 360
-  }
-
-  return angle
+  if (!welcomeBoxRef.value) return
+  const rect = welcomeBoxRef.value.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+  const centerX = rect.width / 2
+  const centerY = rect.height / 2
+  calcX.value = (y - centerY) / 20
+  calcY.value = (centerX - x) / 20
+  angle.value = 135 + (x - centerX) / 10
 }
 
 const reset = () => {
-  calcX.value = calcY.value = angle.value = 0
+  calcX.value = 0
+  calcY.value = 0
+  angle.value = 135
 }
 
+// 打字机效果
 let index = 0
 const mottoText = ref('')
 let randomMotto = ''
@@ -86,18 +75,25 @@ const fetchRandomQuote = async () => {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 5000)
     
-    // 使用一言官方API，支持CORS，返回纯文本，速度更快
-    const response = await fetch('https://v1.hitokoto.cn/?encode=text&c=a&c=b&c=c&c=d&c=e&c=f&c=g&c=h&c=i&c=j&c=k&c=l', {
-      signal: controller.signal
+    // 使用codelife API获取一言
+    const response = await fetch('https://api.codelife.cc/yiyan/random?lang=cn', {
+      signal: controller.signal,
+      headers: {
+        'Accept': 'application/json'
+      }
     })
     
     clearTimeout(timeoutId)
     
     if (response.ok) {
-      const quote = await response.text()
+      const data = await response.json()
       
-      if (quote && quote.trim()) {
-        randomMotto = quote.trim()
+      if (data.code === 200 && data.data && data.data.hitokoto) {
+        // 格式化：hitokoto内容 + from在下一行
+        randomMotto = data.data.hitokoto
+        if (data.data.from) {
+          randomMotto += '\n' + data.data.from
+        }
       } else {
         randomMotto = '和你的日常，就是奇迹'
       }
@@ -127,146 +123,167 @@ onMounted(() => {
 <style scoped lang="less">
 .welcome-box {
   margin-top: 4.2vw;
+  margin-left: 10vw;
+  width: 21vw;
+  height: 21vw;
+  background: linear-gradient(135deg, var(--welcomebox-background-initial), var(--welcomebox-background-final));
+  border-radius: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  transition: transform 0.2s, color 0.5s, text-shadow 0.5s;
-}
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease-out;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 
-.welcome-text {
-  font-size: 4.5vw;
-  font-weight: bold;
-  color: var(--welcome-text-color);
-  text-shadow: var(--welcome-text-shadow);
-  text-align: center;
-  margin-bottom: 5vw;
-  user-select: none;
-}
-
-.info-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  padding: 6vh 2vw 3vh;
-  width: 40vw;
-  border-radius: 3vw;
-  box-shadow: var(--info-box-shadow);
-  backdrop-filter: var(--blur-val) saturate(120%);
-
-  .avatar {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 7.5vw;
-    height: 7.5vw;
-    border-radius: 50%;
-    border: solid 3px var(--infobox-border-color);
-    transition: transform 0.6s ease, box-shadow 0.4s ease, filter 0.5s;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-    cursor: pointer;
-    user-select: none;
-    filter: var(--img-brightness);
-
-    &:hover {
-      transform: translate(-50%, -50%) rotate(1turn) scale(1.1);
-      box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
-    }
-  }
-
-  .name {
-    font-size: 1.5vw;
-    margin-top: 3vh;
-  }
-  .motto {
-    font-size: 1vw;
-    font-weight: bold;
-    animation: color-change 0.8s linear infinite;
-    margin-top: 3vh;
-    text-align: center;
-    .pointer {
-      display: inline-block;
-      margin: -0.5vh 0 0;
-      padding: 0;
-      vertical-align: middle;
-      width: 2px;
-      height: 1vw;
-      animation: color-change 0.8s linear infinite;
-      background-color: var(--pointerColor);
-    }
-    @keyframes color-change {
-      0%,
-      40% {
-        --pointerColor: var(--font-color-grey);
-      }
-
-      60%,
-      100% {
-        --pointerColor: transparent;
-      }
-    }
-  }
-
-  ul {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 3.5vh;
-    width: 12vw;
-    padding: 0;
-
-    .social {
-      font-size: 1.5vw;
-      font-weight: 600;
-      transition: all 0.5s;
-      color: var(--font-color-grey);
-
-      &:hover {
-        filter: drop-shadow(0 0 5px var(--font-color-grey));
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
   .welcome-text {
-    font-size: 5vh;
-    margin-bottom: 10vh;
+    font-size: 2vw;
+    font-weight: bold;
+    color: var(--font-color-white);
+    margin-bottom: 1vw;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .info-box {
-    padding: 5vh 6vw 2vh;
-    width: 75vw;
-    border-radius: 4vh;
+    width: 18vw;
+    height: 18vw;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 
     .avatar {
-      width: 10vh;
-      height: 10vh;
+      width: 6vw;
+      height: 6vw;
+      border-radius: 50%;
+      margin-bottom: 0.8vw;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .name {
-      font-size: 2.5vh;
-      margin-top: 1.8vh;
+      font-size: 1.2vw;
+      font-weight: bold;
+      color: var(--font-color-white);
+      margin-bottom: 0.5vw;
     }
+
     .motto {
-      font-size: 1.5vh;
-      margin-top: 1.5vh;
+      font-size: 0.9vw;
+      color: var(--font-color-white);
+      text-align: center;
+      padding: 0 1vw;
+      line-height: 1.4;
+      min-height: 2.5vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      white-space: pre-line;
+
+      .motto-content {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .pointer {
-        height: 1.5vh;
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        background-color: var(--font-color-white);
+        margin-left: 2px;
+        animation: blink 1s infinite;
       }
     }
 
     ul {
-      margin-top: 1.8vh;
-      width: 32vw;
+      display: flex;
+      gap: 1vw;
+      margin-top: 0.8vw;
 
-      .social {
-        font-size: 2vh;
+      li {
+        a {
+          color: var(--font-color-white);
+          font-size: 1.2vw;
+          transition: transform 0.3s;
+
+          &:hover {
+            transform: scale(1.2);
+          }
+        }
       }
     }
   }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+// 响应式适配
+@media (max-width: 768px) {
+  .welcome-box {
+    margin-top: 10vw;
+    margin-left: 0;
+    width: 80vw;
+    height: 80vw;
+
+    .welcome-text {
+      font-size: 6vw;
+    }
+
+    .info-box {
+      width: 70vw;
+      height: 70vw;
+
+      .avatar {
+        width: 20vw;
+        height: 20vw;
+      }
+
+      .name {
+        font-size: 4vw;
+      }
+
+      .motto {
+        font-size: 3vw;
+        padding: 0 4vw;
+
+        .motto-content {
+          white-space: nowrap;
+        }
+      }
+
+      ul {
+        gap: 4vw;
+        margin-top: 2vw;
+
+        li a {
+          font-size: 5vw;
+        }
+      }
+    }
+  }
+}
+
+// 淡入动画
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
