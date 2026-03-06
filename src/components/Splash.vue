@@ -6,6 +6,9 @@
   </div>
 </template>
 
+<script setup lang="ts">
+</script>
+
 <style scoped lang="less">
 .splash {
   position: fixed;
