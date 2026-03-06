@@ -4,6 +4,22 @@ import PostViewer from '../../components/Post-Viewer.vue'
 import PostInnerBanner from '../../components/Post-InnerBanner.vue'
 import Navbar from '../../components/Navbar.vue'
 import '../../store'
+import matter from 'gray-matter'
+import fs from 'fs/promises'
+import path from 'path'
+
+export async function getStaticPaths() {
+  const postsDir = path.join(process.cwd(), 'posts')
+  const files = await fs.readdir(postsDir)
+  
+  const paths = files
+    .filter(file => file.endsWith('.md'))
+    .map(file => ({
+      params: { slug: file.replace('.md', '') }
+    }))
+  
+  return paths
+}
 
 const { slug } = Astro.params
 ---
