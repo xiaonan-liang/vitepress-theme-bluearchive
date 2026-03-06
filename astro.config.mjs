@@ -6,7 +6,7 @@ export default defineConfig({
   site: 'https://xiaonan-liang.github.io',
   integrations: [vue()],
   build: {
-    inlineStylesheets: false,
+    inlineStylesheets: 'never',
   },
   vite: {
     build: {
