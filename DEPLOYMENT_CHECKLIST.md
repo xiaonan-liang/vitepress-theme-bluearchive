@@ -32,14 +32,14 @@
 - [ ] 仓库设置 → Pages → Branch 设置为 `main` / `.vitepress/dist`
 - [ ] 仓库设置 → Actions → General → Workflow permissions 设置为 "Read and write permissions"
 
-### 依赖检查
+### 1. 依赖检查
 - [ ] 所有依赖都在 `package.json` 中
-- [ ] 没有使用 `pnpm-lock.yaml`（应该使用 `package-lock.json`）
+- [ ] 有 `pnpm-lock.yaml` 文件
 - [ ] 所有脚本都能正常执行
 
-### 构建测试
-- [ ] 本地运行 `npm install` 成功
-- [ ] 本地运行 `npm run build` 成功
+### 2. 构建测试
+- [ ] 本地运行 `pnpm install` 成功
+- [ ] 本地运行 `pnpm run build` 成功
 - [ ] 构建产物在 `.vitepress/dist` 目录
 
 ---
@@ -68,18 +68,20 @@ git push origin main
 ## ⚠️ 常见问题
 
 ### 问题 1: "pnpm: command not found"
-**原因**: GitHub Actions 配置使用 pnpm，但项目使用 npm
-**解决**: 已修复，现在使用 npm
+**原因**: GitHub Actions 环境中需要安装 pnpm
+**解决**: 已修复，在 GitHub Actions 中添加了 `npm install -g pnpm` 步骤
 
 ### 问题 2: "Dependencies lock file is not found"
-**原因**: 缺少 `package-lock.json`
+**原因**: 缺少 `pnpm-lock.yaml`
 **解决**: 
-```bash
-npm install
-git add package-lock.json
-git commit -m "添加 package-lock.json"
-git push
-```
+- 方案 1（本地）: 
+  ```bash
+  pnpm install
+  git add pnpm-lock.yaml
+  git commit -m "添加 pnpm-lock.yaml"
+  git push
+  ```
+- 方案 2（CI 自动）: 已在 GitHub Actions 中配置使用 pnpm
 
 ### 问题 3: 构建失败
 **原因**: 依赖问题或配置错误
