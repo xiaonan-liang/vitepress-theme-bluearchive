@@ -1,0 +1,15 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import PostViewer from '../../components/Post-Viewer.vue'
+import PostInnerBanner from '../../components/Post-InnerBanner.vue'
+import Navbar from '../../components/Navbar.vue'
+import '../../store'
+
+const { slug } = Astro.params
+---
+
+<Layout title="文章详情">
+  <Navbar client:load />
+  <PostInnerBanner client:load title="文章标题" />
+  <PostViewer client:load />
+</Layout>
