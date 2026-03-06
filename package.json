@@ -11,23 +11,27 @@
     "@types/md5": "^2.3.5",
     "@types/node": "^22.13.1",
     "less": "^4.2.2",
-    "vite-plugin-imagemin": "^0.6.1",
+    "markdown-it-mathjax3": "^4.3.2",
     "vitepress": "^1.6.3",
     "vue": "^3.5.13"
   },
   "scripts": {
-    "dev": "pnpm exec vitepress dev",
-    "build": "node scripts/build.js",
-    "build:vitepress": "pnpm exec vitepress build",
-    "build:compress": "node scripts/compress-build.js",
-    "preview": "pnpm exec vitepress preview",
-    "optimize-images": "node scripts/optimize-images.js",
-    "analyze-deps": "node scripts/analyze-dependencies.js"
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "build:analyze": "vitepress build --analyze",
+    "clean": "rimraf .vitepress/dist .vitepress/cache"
   },
   "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.2.8",
     "animejs": "^3.2.2",
     "gray-matter": "^4.0.3",
+    "markdown-it-custom-attrs": "^1.0.2",
     "md5": "^2.3.0",
-    "minisearch": "^7.1.1"
+    "minisearch": "^7.1.1",
+    "normalize.css": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

@@ -1,8 +1,6 @@
 import { defineConfigWithTheme } from 'vitepress'
 // @ts-ignore
 import mdItCustomAttrs from 'markdown-it-custom-attrs'
-import viteImagemin from 'vite-plugin-imagemin'
-
 export interface ThemeConfig {
   //navBar
   menuList: { name: string; url: string }[]
@@ -126,6 +124,8 @@ export default defineConfigWithTheme<ThemeConfig>({
       // use more markdown-it plugins!
       md.use(mdItCustomAttrs, 'image', {
         'data-fancybox': 'gallery',
+        'loading': 'lazy',
+        'decoding': 'async',
       })
     },
   },
@@ -135,56 +135,11 @@ export default defineConfigWithTheme<ThemeConfig>({
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          // 第三方库分割
-          if (id.includes('node_modules')) {
-            // Vue 核心库
-            if (id.includes('vue')) {
-              return 'vendor-vue'
-            }
-            // 动画库
-            if (id.includes('animejs')) {
-              return 'vendor-animation'
-            }
-            // 搜索库
-            if (id.includes('minisearch')) {
-              return 'vendor-search'
-            }
-            // 加密库
-            if (id.includes('md5')) {
-              return 'vendor-crypto'
-            }
-            // Markdown 相关
-            if (id.includes('markdown-it') || id.includes('marked')) {
-              return 'vendor-markdown'
-            }
-            // 其他第三方库
-            return 'vendor'
-          }
-          
-          // 主题组件分割
-          if (id.includes('.vitepress/theme/components')) {
-            if (id.includes('tools/')) {
-              return 'chunk-tools'
-            }
-            if (id.includes('Navbar/')) {
-              return 'chunk-navbar'
-            }
-            if (id.includes('Spine-Player')) {
-              return 'chunk-spine'
-            }
-            return 'chunk-components'
-          }
-          
-          // 工具函数分割
-          if (id.includes('.vitepress/theme/utils')) {
-            return 'chunk-utils'
-          }
-          
-          // Store 分割
-          if (id.includes('.vitepress/theme/store')) {
-            return 'chunk-store'
-          }
+        manualChunks: {
+          vendor: ['vue'],
+          crypto: ['md5'],
+          search: ['minisearch'],
+          animation: ['animejs']
         },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
@@ -194,54 +149,10 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
   // Vite 配置
   vite: {
-    plugins: [
-      viteImagemin({
-        gifsicle: {
-          optimizationLevel: 7,
-          interlaced: false,
-        },
-        optipng: {
-          optimizationLevel: 7,
-        },
-        mozjpeg: {
-          quality: 80,
-        },
-        pngquant: {
-          quality: [0.8, 0.9],
-        },
-        svgo: {
-          plugins: [
-            {
-              name: 'removeViewBox',
-            },
-            {
-              name: 'removeEmptyAttrs',
-              active: false,
-            },
-          ],
-        },
-      }),
-    ],
     build: {
       assetsInlineLimit: 4096,
       sourcemap: false,
-      cssMinify: true,
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: ['console.log', 'console.info', 'console.debug']
-        },
-        format: {
-          comments: false
-        }
-      },
-      rollupOptions: {
-        output: {
-          compact: true
-        }
-      }
+      cssMinify: true
     },
     optimizeDeps: {
       include: ['vue', 'md5', 'minisearch', 'animejs'],

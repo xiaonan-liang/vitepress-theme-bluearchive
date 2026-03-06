@@ -38,14 +38,19 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
+
+// 核心组件 - 首屏必需
 import Splash from './components/Splash.vue'
 import Navbar from './components/Navbar/index.vue'
 import Banner from './components/Banner.vue'
-import WelcomeBox from './components/Welcome-Box.vue'
-import PostsList from './components/Posts-List.vue'
-import ToTop from './components/ToTop.vue'
-import Footer from './components/Footer.vue'
 
+// 页面特定组件 - 懒加载
+const WelcomeBox = defineAsyncComponent(() => import('./components/Welcome-Box.vue'))
+const PostsList = defineAsyncComponent(() => import('./components/Posts-List.vue'))
+const Footer = defineAsyncComponent(() => import('./components/Footer.vue'))
+const ToTop = defineAsyncComponent(() => import('./components/ToTop.vue'))
+
+// 其他页面组件 - 懒加载
 const Tags = defineAsyncComponent(() => import('./components/Tags.vue'))
 const PostViewer = defineAsyncComponent(() => import('./components/Post-Viewer.vue'))
 const PostInnerBanner = defineAsyncComponent(() => import('./components/Post-InnerBanner.vue'))
@@ -101,30 +106,5 @@ body {
 
 :root[theme='dark'] {
   --theme-background-image: url('./assets/background_dark.svg');
-}
-
-ul {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 3px;
-  background: var(--color-blue);
-  cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .container {
-    width: 100vw;
-  }
 }
 </style>
