@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="js">
-import { onMounted, ref, watch, computed } from 'vue'
+import { onMounted, ref, watch, computed, onUnmounted } from 'vue'
 
 import { useStore } from '../../store'
 const { state } = useStore()
@@ -32,6 +32,67 @@ const themeConfig = useData().theme.value
 const spineVoiceLang = themeConfig.spineVoiceLang
 
 import { spine } from './spine-player.js'
+
+// Web Worker 实例
+let spineWorker = null
+
+// 初始化 Web Worker
+const initWorker = () => {
+  if (typeof Worker !== 'undefined' && !spineWorker) {
+    spineWorker = new Worker(new URL('./spine.worker.ts', import.meta.url), {
+      type: 'module'
+    })
+    
+    spineWorker.onmessage = (e) => {
+      const { type, id, buffer, url, fromCache, error } = e.data
+      
+      switch (type) {
+        case 'audioLoaded':
+          // 处理加载完成的音频
+          if (audioLoadCallbacks.has(id)) {
+            audioLoadCallbacks.get(id)({ buffer, url, fromCache })
+            audioLoadCallbacks.delete(id)
+          }
+          break
+        case 'audioError':
+          console.error('Worker 音频加载失败:', error)
+          if (audioLoadCallbacks.has(id)) {
+            audioLoadCallbacks.get(id)(null)
+            audioLoadCallbacks.delete(id)
+          }
+          break
+        case 'assetsPreloaded':
+          console.log(`Worker 预加载完成: ${e.data.successful}/${e.data.total}`)
+          break
+      }
+    }
+  }
+}
+
+// 音频加载回调映射
+const audioLoadCallbacks = new Map()
+
+// 使用 Worker 加载音频
+const loadAudioWithWorker = (url) => {
+  return new Promise((resolve) => {
+    if (!spineWorker) {
+      // Worker 不可用，回退到主线程
+      fetch(url)
+        .then(r => r.arrayBuffer())
+        .then(buffer => resolve({ buffer, url, fromCache: false }))
+        .catch(() => resolve(null))
+      return
+    }
+    
+    const id = `audio_${Date.now()}_${Math.random()}`
+    audioLoadCallbacks.set(id, resolve)
+    
+    spineWorker.postMessage({
+      type: 'loadAudio',
+      payload: { url, id }
+    })
+  })
+}
 
 // 定义两套spine资产信息
 const spineAssets = {
@@ -207,16 +268,26 @@ const AudioManager = {
   }
 }
 
-// 修改预加载音频函数
+// 修改预加载音频函数 - 优先加载前2个，其余延迟加载
 const preloadAudio = async () => {
   if (!currentAssets.value) return false
 
   AudioManager.initialize()
   AudioManager.gc() // 清理过期缓存
 
-  const loadPromises = currentAssets.value.voiceConfig.map(pair =>
+  // 只预加载前 2 个音频（优先级高）
+  const priorityConfig = currentAssets.value.voiceConfig.slice(0, 2)
+  const loadPromises = priorityConfig.map(pair =>
     AudioManager.loadAudioFile(pair.audio)
   )
+
+  // 其余音频延迟 5 秒加载，不阻塞首屏
+  setTimeout(() => {
+    const restConfig = currentAssets.value.voiceConfig.slice(2)
+    restConfig.forEach(pair => {
+      AudioManager.loadAudioFile(pair.audio)
+    })
+  }, 5000)
 
   return Promise.all(loadPromises).catch(error => {
     console.error('音频预加载失败:', error)
@@ -373,56 +444,72 @@ const initializeSpinePlayer = async (assets) => {
           }
         }
 
+        // 使用 requestAnimationFrame 节流，减少 CPU 占用
+        let rafId = null
+        let lastEvent = null
+        
         function moveBones(event) {
           // 如果眼睛控制被禁用，直接返回
           if (isEyeControlDisabled.value) return
+          
+          // 保存最新事件
+          lastEvent = event
+          
+          // 如果已有 raf 在队列中，不再添加
+          if (rafId) return
+          
+          rafId = requestAnimationFrame(() => {
+            rafId = null
+            const evt = lastEvent
+            if (!evt) return
 
-          const containerRect = playerContainer.value.getBoundingClientRect()
+            const containerRect = playerContainer.value.getBoundingClientRect()
 
-          const mouseX = event.clientX - (containerRect.right - containerRect.width / 2)
-          const mouseY = event.clientY - (containerRect.bottom - containerRect.height * 4 / 5)
+            const mouseX = evt.clientX - (containerRect.right - containerRect.width / 2)
+            const mouseY = evt.clientY - (containerRect.bottom - containerRect.height * 4 / 5)
 
-          // 将鼠标坐标偏移量进行逆旋转
-          const eyeRotation = assets.eyeRotationAngle * (Math.PI / 180) // 眼睛旋转角度
-          const rotatedMouse = rotateVector(mouseX, mouseY, -eyeRotation)
-          const offsetX = rotatedMouse.x
-          const offsetY = rotatedMouse.y
-          const distance = Math.sqrt(offsetX * offsetX + offsetY * offsetY)
+            // 将鼠标坐标偏移量进行逆旋转
+            const eyeRotation = assets.eyeRotationAngle * (Math.PI / 180) // 眼睛旋转角度
+            const rotatedMouse = rotateVector(mouseX, mouseY, -eyeRotation)
+            const offsetX = rotatedMouse.x
+            const offsetY = rotatedMouse.y
+            const distance = Math.sqrt(offsetX * offsetX + offsetY * offsetY)
 
-          const angle = Math.atan2(offsetY, offsetX)
-          const maxDistance = Math.min(distance, maxRadius)
-          const dx = -maxDistance * Math.cos(angle)
-          const dy = maxDistance * Math.sin(angle)
+            const angle = Math.atan2(offsetY, offsetX)
+            const maxDistance = Math.min(distance, maxRadius)
+            const dx = -maxDistance * Math.cos(angle)
+            const dy = maxDistance * Math.sin(angle)
 
-          // 眼睛移动
-          if (rightEyeBone) {
-            rightEyeBone.x = rightEyeCenterX + dx
-            rightEyeBone.y = rightEyeCenterY + dy
-          }
+            // 眼睛移动
+            if (rightEyeBone) {
+              rightEyeBone.x = rightEyeCenterX + dx
+              rightEyeBone.y = rightEyeCenterY + dy
+            }
 
-          if (leftEyeBone) {
-            leftEyeBone.x = leftEyeCenterX + dx
-            leftEyeBone.y = leftEyeCenterY + dy
-          }
+            if (leftEyeBone) {
+              leftEyeBone.x = leftEyeCenterX + dx
+              leftEyeBone.y = leftEyeCenterY + dy
+            }
 
-          // 头部轻微移动
-          const frontHeadDx = Math.min(distance, frontHeadMaxRadius) * Math.cos(angle)
-          const frontHeadDy = Math.min(distance, frontHeadMaxRadius) * Math.sin(angle)
+            // 头部轻微移动
+            const frontHeadDx = Math.min(distance, frontHeadMaxRadius) * Math.cos(angle)
+            const frontHeadDy = Math.min(distance, frontHeadMaxRadius) * Math.sin(angle)
 
-          const backHeadDx = Math.min(distance, backHeadMaxRadius) * Math.cos(angle)
-          const backHeadDy = Math.min(distance, backHeadMaxRadius) * Math.sin(angle)
+            const backHeadDx = Math.min(distance, backHeadMaxRadius) * Math.cos(angle)
+            const backHeadDy = Math.min(distance, backHeadMaxRadius) * Math.sin(angle)
 
-          if (frontHeadBone) {
-            frontHeadBone.x = frontHeadCenterX - frontHeadDx
-            frontHeadBone.y = frontHeadCenterY + frontHeadDy
-          }
+            if (frontHeadBone) {
+              frontHeadBone.x = frontHeadCenterX - frontHeadDx
+              frontHeadBone.y = frontHeadCenterY + frontHeadDy
+            }
 
-          if (backHeadBone) {
-            backHeadBone.x = backHeadCenterX + backHeadDx
-            backHeadBone.y = backHeadCenterY - backHeadDy
-          }
+            if (backHeadBone) {
+              backHeadBone.x = backHeadCenterX + backHeadDx
+              backHeadBone.y = backHeadCenterY - backHeadDy
+            }
 
-          skeleton.updateWorldTransform()
+            skeleton.updateWorldTransform()
+          })
         }
 
         function resetBones() {
@@ -496,7 +583,7 @@ const handleEvents = (event) => {
   }
 }
 
-// 统一的清理函数
+// 统一的清理函数 - 增强内存释放
 const cleanup = () => {
   if (blinkInterval) clearTimeout(blinkInterval)
   if (eyeControlTimer) clearTimeout(eyeControlTimer)
@@ -508,14 +595,36 @@ const cleanup = () => {
     moveBonesHandler = null
   }
 
+  // 停止所有动画并清理 WebGL
+  if (currentAnimationState) {
+    currentAnimationState.clearTracks()
+    currentAnimationState = null
+  }
+
+  // 清理 WebGL 上下文，释放 GPU 内存
+  if (player && player.canvas) {
+    const gl = player.canvas.getContext('webgl') || player.canvas.getContext('experimental-webgl')
+    if (gl) {
+      const loseContext = gl.getExtension('WEBGL_lose_context')
+      if (loseContext) {
+        loseContext.loseContext()
+      }
+    }
+    player.canvas.width = 0
+    player.canvas.height = 0
+  }
+
   if (playerContainer.value) {
     playerContainer.value.innerHTML = ''
   }
+
   if (player) {
     AudioManager.clear()
     player = null
-    currentAnimationState = null
   }
+
+  // 清理音频缓存
+  AudioManager.buffers.clear()
 
   // 使用 WeakRef 来管理音频资源
   if (clientReady.value && window.WeakRef) {
@@ -524,6 +633,19 @@ const cleanup = () => {
       return ref.deref() !== null
     })
   }
+
+  // 强制垃圾回收提示（浏览器可能忽略）
+  if (window.gc) {
+    window.gc()
+  }
+  
+  // 清理 Web Worker
+  if (spineWorker) {
+    spineWorker.postMessage({ type: 'clearCache' })
+    spineWorker.terminate()
+    spineWorker = null
+  }
+  audioLoadCallbacks.clear()
 }
 
 // 初始化函数
@@ -566,6 +688,9 @@ watch([isDarkMode, isEnabled], async ([dark, enabled], [prevDark, prevEnabled]) 
 onMounted(() => {
   // 设置客户端就绪状态
   clientReady.value = true
+  
+  // 初始化 Web Worker
+  initWorker()
 
   const options = { passive: true }
   window.addEventListener('scroll', handleEvents, options)
@@ -577,6 +702,10 @@ onMounted(() => {
   if (state.SpinePlayerEnabled) {
     debouncedInitialize()
   }
+})
+
+onUnmounted(() => {
+  cleanup()
 })
 </script>
 

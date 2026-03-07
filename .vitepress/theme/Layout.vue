@@ -22,7 +22,7 @@
     <Fireworks v-if="state.fireworksEnabled"></Fireworks>
     <ClientOnly>
       <Suspense>
-        <SpinePlayer></SpinePlayer>
+        <SpinePlayer v-if="showSpine"></SpinePlayer>
         <template #fallback>
           <div style="display: none;"></div>
         </template>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, ref, onMounted } from 'vue'
 
 // 核心组件 - 首屏必需
 import Splash from './components/Splash.vue'
@@ -64,6 +64,14 @@ const { page } = useData()
 
 import { useStore } from './store'
 const { state } = useStore()
+
+// Spine 懒加载 - 延迟 3 秒加载，优先其他资源
+const showSpine = ref(false)
+onMounted(() => {
+  setTimeout(() => {
+    showSpine.value = true
+  }, 3000)
+})
 </script>
 
 <style lang="less">

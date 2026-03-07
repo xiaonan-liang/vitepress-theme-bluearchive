@@ -157,6 +157,13 @@ export default defineConfigWithTheme<ThemeConfig>({
         format: {
           comments: false
         }
+      },
+      // 预渲染优化 - 关键 CSS 内联
+      ssr: {
+        noExternal: ['vue'],
+        optimizeDeps: {
+          include: ['vue', 'vue-router']
+        }
       }
     },
     optimizeDeps: {
@@ -184,6 +191,22 @@ export default defineConfigWithTheme<ThemeConfig>({
       drop: ['console', 'debugger'],
       legalComments: 'none'
     },
-    cacheDir: '.vite/cache'
+    cacheDir: '.vite/cache',
+    // 流式传输优化
+    server: {
+      headers: {
+        'Accept-CH': 'DPR, Width, Viewport-Width',
+        'Critical-CH': 'DPR'
+      }
+    }
+  },
+  // SSG 优化配置
+  ssgOptions: {
+    format: 'cjs',
+    concurrency: 4,
+    includedRoutes(paths, routes) {
+      // 排除不需要预渲染的路由
+      return routes.filter(i => !i.includes('dynamic'))
+    }
   }
 })
