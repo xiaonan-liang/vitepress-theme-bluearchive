@@ -142,34 +142,31 @@ export default defineConfigWithTheme<ThemeConfig>({
       chunkSizeWarningLimit: 1000,
       // Terser 压缩配置 - 只在 vite.build 中配置
       terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: ['console.log', 'console.info', 'console.warn'],
-          dead_code: true,
-          unused: true,
-          passes: 3,
-          hoist_funs: true,
-          hoist_vars: true,
-          if_return: true,
-          join_vars: true,
-          collapse_vars: true,
-          reduce_vars: true,
-          side_effects: true
-        },
-        mangle: {
-          safari10: true,
-          properties: {
-            regex: /^_/,
-            reserved: ['__proto__', 'constructor', 'prototype']
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+            pure_funcs: ['console.log', 'console.info', 'console.warn'],
+            dead_code: true,
+            unused: true,
+            passes: 1,
+            hoist_funs: false,
+            hoist_vars: false,
+            if_return: true,
+            join_vars: true,
+            collapse_vars: false,
+            reduce_vars: false,
+            side_effects: true
+          },
+          mangle: {
+            safari10: true,
+            properties: false
+          },
+          format: {
+            comments: false,
+            beautify: false,
+            ascii_only: true
           }
-        },
-        format: {
-          comments: false,
-          beautify: false,
-          ascii_only: true
         }
-      }
     },
     optimizeDeps: {
       include: ['vue', 'md5', 'minisearch', 'animejs'],

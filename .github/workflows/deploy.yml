@@ -33,29 +33,36 @@ jobs:
         with:
           fetch-depth: 0 # 如果未启用 lastUpdated，则不需要
       
-      # 使用 pnpm 进行构建
-      - uses: pnpm/action-setup@v3
+      # 使用 Bun 进行构建（比 pnpm/npm 更快）
+      # 如需切换回 pnpm，取消下面注释并注释掉 Bun 部分：
+      # - uses: pnpm/action-setup@v3
+      #   with:
+      #     version: 9
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+      #     cache: pnpm
+      # - run: pnpm install --no-frozen-lockfile
+      # - run: pnpm run build
+      
+      - uses: oven-sh/setup-bun@v1
         with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
+          bun-version: latest
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: bun install
       
       - name: Build with VitePress
-        run: pnpm run build
+        run: bun run build
       
       - name: Optimize SVG files
         run: |
           cd .vitepress/dist
           # 使用 SVGO 优化 SVG
-          find . -type f -name "*.svg" -exec pnpm exec svgo -f {} \;
+          find . -type f -name "*.svg" -exec npx svgo -f {} \;
       
       - name: Compress assets
         run: |
