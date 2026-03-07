@@ -6,6 +6,7 @@ import '@fontsource/jetbrains-mono'
 import './assets/icon/iconfont.css'
 import './styles/index.less'
 import './components/Spine-Player/spine-player.css'
+import './components/Spine-Player/spine-player.js'
 import { vLazy } from './utils/lazyLoad'
 
 export default {

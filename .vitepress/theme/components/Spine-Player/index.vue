@@ -31,7 +31,7 @@ import { useData } from 'vitepress'
 const themeConfig = useData().theme.value
 const spineVoiceLang = themeConfig.spineVoiceLang
 
-import { spine } from './spine-player.js'
+// spine-player.js 定义了全局 spine 对象
 
 // 定义两套spine资产信息
 const spineAssets = {
@@ -128,8 +128,7 @@ const preloadSpineAssets = async (character) => {
   try {
     // 预加载纹理
     const textureUrls = [
-      `${assets.textureUrlPrefix || `/spine_assets/${character}/`}atlas-0.png`,
-      `${assets.textureUrlPrefix || `/spine_assets/${character}/`}atlas-1.png`
+      `${assets.textureUrlPrefix || `/spine_assets/${character}/`}${character}_spr.png`
     ]
     
     await Promise.all(textureUrls.map(url => {
@@ -369,10 +368,8 @@ const debouncedInitialize = debounce(async (assets) => {
       playerContainer.value.innerHTML = '';
     }
 
-    // 动态加载 Spine 播放器（代码分割）
-    const { SpinePlayer } = await import('./spine-player.js')
-    
-    player = new SpinePlayer(playerContainer.value, {
+    // 使用全局 spine 对象
+    player = new spine.SpinePlayer(playerContainer.value, {
       skelUrl: assets.skelUrl,
       atlasUrl: assets.atlasUrl,
       premultipliedAlpha: true,
