@@ -520,7 +520,7 @@ const debouncedInitialize = debounce(async (assets) => {
   } catch(err) {
     console.error('Failed to initialize spine player:', err);
   }
-}
+}, 300)
 
 // 将需要监听的状态提取为响应式引用
 const isDarkMode = computed(() => state.darkMode === 'dark')
@@ -577,28 +577,26 @@ const initializeCharacter = async () => {
   try {
     await Promise.all([
       preloadAudio(),
-      debouncedInitialize(currentAssets.value)
+      debouncedInitialize(spineAssets[currentCharacter.value])
     ])
   } catch (err) {
     console.error('初始化失败:', err)
   }
 }
 
-const debouncedInitialize = debounce(initializeCharacter, 300)
-
 // 监听主题切换和spine开关
 watch([isDarkMode, isEnabled], async ([dark, enabled], [prevDark, prevEnabled]) => {
   if (enabled !== prevEnabled) {
     if (enabled) {
       // 启用时初始化
-      debouncedInitialize()
+      debouncedInitialize(currentAssets.value)
     } else {
       // 禁用时清理资源
       cleanup()
     }
   } else if (enabled && dark !== prevDark) {
     // 主题变更且启用状态下重新初始化
-    debouncedInitialize()
+    debouncedInitialize(currentAssets.value)
   }
 }, { immediate: true })
 
@@ -615,7 +613,7 @@ onMounted(() => {
 
   // 如果启用了Spine播放器，初始化
   if (state.SpinePlayerEnabled) {
-    debouncedInitialize()
+    debouncedInitialize(currentAssets.value)
   }
 })
 </script>
