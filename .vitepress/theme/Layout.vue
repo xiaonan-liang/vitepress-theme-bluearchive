@@ -22,7 +22,7 @@
     <Fireworks v-if="state.fireworksEnabled"></Fireworks>
     <ClientOnly>
       <Suspense>
-        <SpinePlayer v-if="showSpine"></SpinePlayer>
+        <SpinePlayer></SpinePlayer>
         <template #fallback>
           <div style="display: none;"></div>
         </template>
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref, onMounted } from 'vue'
+import { defineAsyncComponent } from 'vue'
 
 // 核心组件 - 首屏必需
 import Splash from './components/Splash.vue'
@@ -64,55 +64,107 @@ const { page } = useData()
 
 import { useStore } from './store'
 const { state } = useStore()
-
-// Spine 懒加载 - 延迟 3 秒加载，优先其他资源
-const showSpine = ref(false)
-onMounted(() => {
-  setTimeout(() => {
-    showSpine.value = true
-  }, 3000)
-})
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+/* 关键 CSS - 内联在首屏 */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 0.5s !important;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: smooth !important;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
 }
 
 body {
-  background-image: var(--theme-background-image);
-  background-color: var(--general-background-color);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  color: var(--font-color-grey);
-  font-family: 'Blueaka', sans-serif;
-  transition: background-image 0.5s, background-color 0.5s;
+  background-image: var(--theme-background-image) !important;
+  background-color: var(--general-background-color) !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  color: var(--font-color-grey) !important;
+  font-family: 'Blueaka', sans-serif !important;
+  transition: background-image 0.5s, background-color 0.5s !important;
 }
 
+/* 主题背景图片 */
 :root[theme='light'] {
-  --theme-background-image: url('./assets/background.svg');
+  --theme-background-image: url('./assets/background.svg') !important;
 }
 
 :root[theme='dark'] {
-  --theme-background-image: url('./assets/background_dark.svg');
+  --theme-background-image: url('./assets/background_dark.svg') !important;
+}
+
+/* 关键组件样式 */
+.splash {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #000 !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.navbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.banner {
+  position: relative !important;
+  height: 400px !important;
+  overflow: hidden !important;
+}
+
+.welcome-box {
+  padding: 2rem !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  border-radius: 10px !important;
+  margin: 2rem auto !important;
+  max-width: 800px !important;
+}
+
+.posts-list {
+  padding: 2rem !important;
+}
+
+.tools-list {
+  padding: 2rem !important;
+}
+
+.footer {
+  padding: 2rem !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  text-align: center !important;
 }
 </style>
+
+<!-- 非关键 CSS 异步加载 -->
+<link rel="preload" href="/font/Blueaka/Blueaka.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="/font/Blueaka_Bold/Blueaka_Bold.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link rel="stylesheet" href="/font/Blueaka/Blueaka.css">
+  <link rel="stylesheet" href="/font/Blueaka_Bold/Blueaka_Bold.css">
+</noscript>

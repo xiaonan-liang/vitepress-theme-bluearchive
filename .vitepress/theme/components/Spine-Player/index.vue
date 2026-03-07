@@ -118,6 +118,37 @@ const spineAssets = {
   }
 }
 
+// 预加载 Spine 资源
+const preloadSpineAssets = async (character) => {
+  if (!clientReady.value) return false
+  
+  const assets = spineAssets[character]
+  if (!assets) return false
+  
+  try {
+    // 预加载纹理
+    const textureUrls = [
+      `${assets.textureUrlPrefix || `/spine_assets/${character}/`}atlas-0.png`,
+      `${assets.textureUrlPrefix || `/spine_assets/${character}/`}atlas-1.png`
+    ]
+    
+    await Promise.all(textureUrls.map(url => {
+      return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = resolve
+        img.onerror = reject
+        img.src = url
+      })
+    }))
+    
+    console.log(`${character} 资源预加载完成`)
+    return true
+  } catch (error) {
+    console.error('Spine 资源预加载失败:', error)
+    return false
+  }
+}
+
 const playerContainer = ref(null)
 let player = null
 let blinkInterval = null
@@ -320,8 +351,14 @@ const handlePlayerClick = debounce(async (event) => {
 // 提升 moveBones 函数到组件作用域以便在其他地方使用
 let moveBonesHandler = null
 
-const initializeSpinePlayer = async (assets) => {
+// 防抖的 Spine 初始化
+const debouncedInitialize = debounce(async (assets) => {
+  if (!clientReady.value || !playerContainer.value) return
+  
   try {
+    // 预加载资源
+    await preloadSpineAssets(currentCharacter.value)
+    
     // 清理旧的实例
     if (blinkInterval) {
       clearTimeout(blinkInterval);
@@ -332,7 +369,10 @@ const initializeSpinePlayer = async (assets) => {
       playerContainer.value.innerHTML = '';
     }
 
-    player = new spine.SpinePlayer(playerContainer.value, {
+    // 动态加载 Spine 播放器（代码分割）
+    const { SpinePlayer } = await import('./spine-player.js')
+    
+    player = new SpinePlayer(playerContainer.value, {
       skelUrl: assets.skelUrl,
       atlasUrl: assets.atlasUrl,
       premultipliedAlpha: true,
@@ -537,7 +577,7 @@ const initializeCharacter = async () => {
   try {
     await Promise.all([
       preloadAudio(),
-      initializeSpinePlayer(currentAssets.value)
+      debouncedInitialize(currentAssets.value)
     ])
   } catch (err) {
     console.error('初始化失败:', err)

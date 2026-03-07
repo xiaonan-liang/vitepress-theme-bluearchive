@@ -157,13 +157,6 @@ export default defineConfigWithTheme<ThemeConfig>({
         format: {
           comments: false
         }
-      },
-      // 预渲染优化 - 关键 CSS 内联
-      ssr: {
-        noExternal: ['vue'],
-        optimizeDeps: {
-          include: ['vue', 'vue-router']
-        }
       }
     },
     optimizeDeps: {
@@ -172,6 +165,10 @@ export default defineConfigWithTheme<ThemeConfig>({
     },
     css: {
       devSourcemap: false,
+      // 关键 CSS 内联
+      modules: {
+        localsConvention: 'camelCase'
+      },
       postcss: {
         plugins: [
           {
@@ -183,6 +180,34 @@ export default defineConfigWithTheme<ThemeConfig>({
                 }
               }
             }
+          },
+          // 关键 CSS 提取（用于内联）
+          {
+            postcssPlugin: 'critical-css',
+            Once: (root) => {
+              // 提取关键 CSS（首屏可见内容）
+              const criticalSelectors = [
+                '.splash',
+                '.navbar',
+                '.banner',
+                '.welcome-box',
+                '.posts-list',
+                '.tools-list',
+                '.footer'
+              ]
+              
+              // 筛选关键 CSS 规则
+              root.walkRules((rule) => {
+                if (criticalSelectors.some(selector => rule.selector.includes(selector))) {
+                  // 标记为关键 CSS
+                  rule.nodes.forEach(node => {
+                    if (node.type === 'decl') {
+                      node.important = true
+                    }
+                  })
+                }
+              })
+            }
           }
         ]
       }
@@ -191,22 +216,14 @@ export default defineConfigWithTheme<ThemeConfig>({
       drop: ['console', 'debugger'],
       legalComments: 'none'
     },
-    cacheDir: '.vite/cache',
-    // 流式传输优化
-    server: {
-      headers: {
-        'Accept-CH': 'DPR, Width, Viewport-Width',
-        'Critical-CH': 'DPR'
+    // 资源优化
+    assetsInclude: ['**/*.skel', '**/*.atlas', '**/*.ogg'],
+    // 代码优化
+    resolve: {
+      alias: {
+        '@': '/.vitepress/theme'
       }
-    }
-  },
-  // SSG 优化配置
-  ssgOptions: {
-    format: 'cjs',
-    concurrency: 4,
-    includedRoutes(paths, routes) {
-      // 排除不需要预渲染的路由
-      return routes.filter(i => !i.includes('dynamic'))
-    }
+    },
+    cacheDir: '.vite/cache'
   }
 })
