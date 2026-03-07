@@ -119,15 +119,29 @@ export default defineConfigWithTheme<ThemeConfig>({
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['vue'],
-          crypto: ['md5'],
-          search: ['minisearch'],
-          animation: ['animejs']
-        },
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+        manualChunks: (id) => {
+          // 基于目录的自动代码分割
+          if (id.includes('node_modules')) {
+            if (id.includes('@fontsource')) {
+              return 'fonts';
+            } else if (id.includes('gray-matter') || id.includes('markdown-it')) {
+              return 'markdown';
+            } else if (id.includes('normalize.css')) {
+              return 'normalize';
+            } else if (id.includes('md5')) {
+              return 'crypto';
+            } else if (id.includes('minisearch')) {
+              return 'search';
+            } else if (id.includes('animejs')) {
+              return 'animation';
+            } else {
+              return 'vendor';
+            }
+          }
+        }
       }
     }
   },
@@ -145,16 +159,16 @@ export default defineConfigWithTheme<ThemeConfig>({
           compress: {
             drop_console: true,
             drop_debugger: true,
-            pure_funcs: ['console.log', 'console.info', 'console.warn'],
+            pure_funcs: ['console.log', 'console.info', 'console.warn', 'console.error'],
             dead_code: true,
             unused: true,
-            passes: 1,
+            passes: 2,
             hoist_funs: false,
             hoist_vars: false,
             if_return: true,
             join_vars: true,
-            collapse_vars: false,
-            reduce_vars: false,
+            collapse_vars: true,
+            reduce_vars: true,
             side_effects: true
           },
           mangle: {
@@ -191,7 +205,14 @@ export default defineConfigWithTheme<ThemeConfig>({
     },
     esbuild: {
       drop: ['console', 'debugger'],
-      legalComments: 'none'
+      legalComments: 'none',
+      minify: true,
+      minifyIdentifiers: true,
+      minifySyntax: true,
+      minifyWhitespace: true,
+      target: 'esnext',
+      treeShaking: true,
+      pure: ['console.log', 'console.info', 'console.warn', 'console.error', 'debugger']
     },
     cacheDir: '.vite/cache'
   }
