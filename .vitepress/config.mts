@@ -140,8 +140,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       reportCompressedSize: true,
       target: 'esnext',
       chunkSizeWarningLimit: 1000,
-      // Terser 压缩配置
-      minify: 'terser',
+      // Terser 压缩配置 - 只在 vite.build 中配置
       terserOptions: {
         compress: {
           drop_console: true,

@@ -31,7 +31,7 @@ import { useData } from 'vitepress'
 const themeConfig = useData().theme.value
 const spineVoiceLang = themeConfig.spineVoiceLang
 
-import { spine } from './spine-player.js'
+// spine-player.js 定义了全局 spine 对象
 
 // 定义两套spine资产信息
 const spineAssets = {
