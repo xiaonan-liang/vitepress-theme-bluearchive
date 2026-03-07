@@ -32,21 +32,32 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # 如果未启用 lastUpdated，则不需要
-      - uses: pnpm/action-setup@v3 # 如果使用 pnpm，请取消注释
+      
+      # 使用 Bun 进行构建（比 pnpm/npm 更快）
+      # 如需切换回 pnpm，取消下面注释并注释掉 Bun 部分：
+      # - uses: pnpm/action-setup@v3
+      #   with:
+      #     version: 9
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+      #     cache: pnpm
+      # - run: pnpm install --no-frozen-lockfile
+      # - run: pnpm run build
+      
+      - uses: oven-sh/setup-bun@v1
         with:
-          version: 9
-      # - uses: oven-sh/setup-bun@v1 # 如果使用 Bun，请取消注释
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm # 或 pnpm / yarn
+          bun-version: latest
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile # 允许更新 lock 文件
+        run: bun install
+      
       - name: Build with VitePress
-        run: pnpm run build # 或 pnpm build / yarn build / bun run build
+        run: bun run build
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
