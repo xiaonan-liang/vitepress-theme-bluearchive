@@ -139,17 +139,51 @@ export default defineConfigWithTheme<ThemeConfig>({
       cssMinify: true,
       reportCompressedSize: true,
       target: 'esnext',
-      chunkSizeWarningLimit: 1000
+      chunkSizeWarningLimit: 1000,
+      // Terser 压缩配置
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log', 'console.info', 'console.warn'],
+          dead_code: true,
+          unused: true,
+          passes: 2
+        },
+        mangle: {
+          safari10: true
+        },
+        format: {
+          comments: false
+        }
+      }
     },
     optimizeDeps: {
       include: ['vue', 'md5', 'minisearch', 'animejs'],
       exclude: ['vitepress']
     },
     css: {
-      devSourcemap: false
+      devSourcemap: false,
+      postcss: {
+        plugins: [
+          {
+            postcssPlugin: 'internal:charset-removal',
+            AtRule: {
+              charset: (atRule) => {
+                if (atRule.name === 'charset') {
+                  atRule.remove()
+                }
+              }
+            }
+          }
+        ]
+      }
     },
     esbuild: {
-      drop: ['console', 'debugger']
-    }
+      drop: ['console', 'debugger'],
+      legalComments: 'none'
+    },
+    cacheDir: '.vite/cache'
   }
 })
