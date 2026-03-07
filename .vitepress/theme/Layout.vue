@@ -65,8 +65,13 @@ const { page } = useData()
 import { useStore } from './store'
 const { state } = useStore()
 
-// Spine 立即加载（延迟会导致感知变慢）
-const showSpine = ref(true)
+// Spine 懒加载 - 延迟 3 秒加载，优先其他资源
+const showSpine = ref(false)
+onMounted(() => {
+  setTimeout(() => {
+    showSpine.value = true
+  }, 3000)
+})
 </script>
 
 <style lang="less">
