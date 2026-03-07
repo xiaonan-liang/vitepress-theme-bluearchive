@@ -18,9 +18,7 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview",
-    "build:analyze": "vitepress build --analyze",
-    "clean": "rimraf .vitepress/dist .vitepress/cache"
+    "preview": "vitepress preview"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
@@ -30,8 +28,5 @@
     "md5": "^2.3.0",
     "minisearch": "^7.1.1",
     "normalize.css": "^8.0.1"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }

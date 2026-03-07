@@ -74,42 +74,27 @@ export default defineConfigWithTheme<ThemeConfig>({
     ],
   ],
   ignoreDeadLinks: true,
-  // 生成站点地图
-  // sitemap: {
-  //   hostname: 'https://vitepress-theme-bluearchive.vercel.app',
-  // },
   title: "其实你们都是柔情猫娘吧QAQ",
   description: "其实你们都是柔情猫娘吧QAQ",
   themeConfig: {
-    // navBar
     menuList: [
       { name: '首页', url: '' },
       { name: '标签', url: 'tags/' },
       { name: '工具', url: 'tools/' },
     ],
-
-    //banner区配置
     videoBanner: true,
     name: "其实你们都是柔情猫娘吧QAQ",
     welcomeText: 'Hello World',
     social: [
       { icon: 'github', url: 'https://github.com/xiaonan-liang' },
       { icon: 'bilibili', url: 'https://space.bilibili.com/1896313821' },
-     // { icon: 'qq', url: 'https://im.qq.com/index/' },
-     //{ icon: 'wechat', url: 'https://weixin.qq.com/' },
     ],
-
-    //spine语音配置，可选zh/jp
     spineVoiceLang: 'zh',
-
-    //footer配置
     footerName: 'Sensei',
     poweredList: [
       { name: 'VitePress', url: 'https://github.com/vuejs/vitepress' },
       { name: 'GitHub Pages', url: 'https://docs.github.com/zh/pages' },
     ],
-
-    //gitalk配置
     clientID: 'Ov23lia9U9wFN3WMyoKK',
     clientSecret: 'b2418ab598c188c43a247c99e728dd2735d58c3b',
     repo: 'vitepress-theme-bluearchive',
@@ -121,7 +106,6 @@ export default defineConfigWithTheme<ThemeConfig>({
     lineNumbers: true,
     math: true,
     config: (md) => {
-      // use more markdown-it plugins!
       md.use(mdItCustomAttrs, 'image', {
         'data-fancybox': 'gallery',
         'loading': 'lazy',
@@ -131,7 +115,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
   // 构建优化配置
   build: {
-    minify: true,
+    minify: 'terser',
     cssCodeSplit: true,
     rollupOptions: {
       output: {
@@ -152,7 +136,10 @@ export default defineConfigWithTheme<ThemeConfig>({
     build: {
       assetsInlineLimit: 4096,
       sourcemap: false,
-      cssMinify: true
+      cssMinify: true,
+      reportCompressedSize: true,
+      target: 'esnext',
+      chunkSizeWarningLimit: 1000
     },
     optimizeDeps: {
       include: ['vue', 'md5', 'minisearch', 'animejs'],
@@ -160,6 +147,9 @@ export default defineConfigWithTheme<ThemeConfig>({
     },
     css: {
       devSourcemap: false
+    },
+    esbuild: {
+      drop: ['console', 'debugger']
     }
   }
 })

@@ -1,37 +1,28 @@
-# GitHub Pages缓存配置
+# GitHub Pages 缓存策略配置
 
-# 静态资源长期缓存（带哈希的文件）
+# 静态资源 - 长期缓存（1年）
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# 字体文件长期缓存
 /font/*
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
 
-# 图片长期缓存
-*.webp
+/spine_assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-*.png
-  Cache-Control: public, max-age=31536000, immutable
+/posts/*
+  Cache-Control: public, max-age=86400
 
-*.jpg
-  Cache-Control: public, max-age=31536000, immutable
-
-*.svg
-  Cache-Control: public, max-age=31536000, immutable
-
-# JS和CSS不缓存（确保内容更新）
-*.js
+# HTML 文件 - 不缓存（总是获取最新）
+/*.html
   Cache-Control: public, max-age=0, must-revalidate
 
-*.css
-  Cache-Control: public, max-age=0, must-revalidate
-
-# HTML文件不缓存（确保内容更新）
-*.html
-  Cache-Control: public, max-age=0, must-revalidate
-
-# 根路径不缓存
+# 根路径
 /
   Cache-Control: public, max-age=0, must-revalidate
+
+# Service Worker - 不缓存
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+  Service-Worker-Allowed: /
