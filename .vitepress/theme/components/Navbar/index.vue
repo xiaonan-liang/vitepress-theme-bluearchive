@@ -119,11 +119,13 @@ header {
           color: var(--font-color-grey);
           transition: all 0.5s;
           transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+          text-decoration: none;
 
           &:hover {
             color: var(--font-color-gold);
             background-color: var(--btn-background);
             transform: translateY(-2px);
+            text-decoration: none;
           }
         }
       }

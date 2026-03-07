@@ -388,9 +388,11 @@ watch(
     a {
       color: var(--font-color-grey);
       transition: text-shadow 0.5s, color 0.5s;
+      text-decoration: none;
 
       &:hover {
         text-shadow: 0 0 3px var(--font-color-grey);
+        text-decoration: none;
       }
     }
   }

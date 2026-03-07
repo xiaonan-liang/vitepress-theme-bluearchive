@@ -48,7 +48,7 @@ watch(
 
 const themeConfig = useData().theme.value
 </script>
-<style lang="less">
+<style scoped lang="less">
 .view-box {
   box-sizing: border-box;
   position: relative;
