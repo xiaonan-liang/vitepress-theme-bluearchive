@@ -1,6 +1,16 @@
 @import url(./vars.less);
 @import url(./icons.less);
 
+// 平滑滚动
+html {
+  scroll-behavior: smooth;
+}
+
+// 为锚点链接添加平滑滚动
+a[href^="#"] {
+  scroll-behavior: smooth;
+}
+
 // 懒加载图片样式
 .lazy-image {
   opacity: 0;
