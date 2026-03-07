@@ -67,7 +67,6 @@ const { state } = useStore()
 </script>
 
 <style lang="less">
-/* 关键 CSS - 内联在首屏 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
@@ -101,56 +100,11 @@ body {
   transition: background-image 0.5s, background-color 0.5s;
 }
 
-/* 主题背景图片 */
 :root[theme='light'] {
   --theme-background-image: url('./assets/background.svg');
 }
 
 :root[theme='dark'] {
   --theme-background-image: url('./assets/background_dark.svg');
-}
-
-/* 关键组件样式 */
-.splash {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-}
-
-.banner {
-  position: relative;
-  height: 400px;
-  overflow: hidden;
-}
-
-
-
-.posts-list {
-  padding: 2rem;
-}
-
-.tools-list {
-  padding: 2rem;
-}
-
-.footer {
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.8);
-  text-align: center;
 }
 </style>

@@ -149,13 +149,26 @@ export default defineConfigWithTheme<ThemeConfig>({
           pure_funcs: ['console.log', 'console.info', 'console.warn'],
           dead_code: true,
           unused: true,
-          passes: 2
+          passes: 3,
+          hoist_funs: true,
+          hoist_vars: true,
+          if_return: true,
+          join_vars: true,
+          collapse_vars: true,
+          reduce_vars: true,
+          side_effects: true
         },
         mangle: {
-          safari10: true
+          safari10: true,
+          properties: {
+            regex: /^_/,
+            reserved: ['__proto__', 'constructor', 'prototype']
+          }
         },
         format: {
-          comments: false
+          comments: false,
+          beautify: false,
+          ascii_only: true
         }
       }
     },
@@ -165,10 +178,6 @@ export default defineConfigWithTheme<ThemeConfig>({
     },
     css: {
       devSourcemap: false,
-      // 关键 CSS 内联
-      modules: {
-        localsConvention: 'camelCase'
-      },
       postcss: {
         plugins: [
           {
@@ -180,34 +189,6 @@ export default defineConfigWithTheme<ThemeConfig>({
                 }
               }
             }
-          },
-          // 关键 CSS 提取（用于内联）
-          {
-            postcssPlugin: 'critical-css',
-            Once: (root) => {
-              // 提取关键 CSS（首屏可见内容）
-              const criticalSelectors = [
-                '.splash',
-                '.navbar',
-                '.banner',
-                '.welcome-box',
-                '.posts-list',
-                '.tools-list',
-                '.footer'
-              ]
-              
-              // 筛选关键 CSS 规则
-              root.walkRules((rule) => {
-                if (criticalSelectors.some(selector => rule.selector.includes(selector))) {
-                  // 标记为关键 CSS
-                  rule.nodes.forEach(node => {
-                    if (node.type === 'decl') {
-                      node.important = true
-                    }
-                  })
-                }
-              })
-            }
           }
         ]
       }
@@ -215,14 +196,6 @@ export default defineConfigWithTheme<ThemeConfig>({
     esbuild: {
       drop: ['console', 'debugger'],
       legalComments: 'none'
-    },
-    // 资源优化
-    assetsInclude: ['**/*.skel', '**/*.atlas', '**/*.ogg'],
-    // 代码优化
-    resolve: {
-      alias: {
-        '@': '/.vitepress/theme'
-      }
     },
     cacheDir: '.vite/cache'
   }

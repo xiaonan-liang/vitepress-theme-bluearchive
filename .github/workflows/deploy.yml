@@ -58,6 +58,20 @@ jobs:
       - name: Build with VitePress
         run: bun run build
       
+      - name: Optimize SVG files
+        run: |
+          cd .vitepress/dist
+          # 使用 SVGO 优化 SVG
+          find . -type f -name "*.svg" -exec npx svgo -f {} \;
+      
+      - name: Compress assets
+        run: |
+          cd .vitepress/dist
+          # Gzip 压缩
+          find . -type f \( -name "*.js" -o -name "*.css" -o -name "*.html" -o -name "*.svg" \) -exec gzip -k {} \;
+          # Brotli 压缩
+          find . -type f \( -name "*.js" -o -name "*.css" -o -name "*.html" -o -name "*.svg" \) -exec brotli -k {} \;
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

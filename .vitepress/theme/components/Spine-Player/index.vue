@@ -31,7 +31,7 @@ import { useData } from 'vitepress'
 const themeConfig = useData().theme.value
 const spineVoiceLang = themeConfig.spineVoiceLang
 
-// spine-player.js 定义了全局 spine 对象
+import { spine } from './spine-player.js'
 
 // 定义两套spine资产信息
 const spineAssets = {
@@ -115,36 +115,6 @@ const spineAssets = {
         text: '等您很久了。'
       },
     ]
-  }
-}
-
-// 预加载 Spine 资源
-const preloadSpineAssets = async (character) => {
-  if (!clientReady.value) return false
-  
-  const assets = spineAssets[character]
-  if (!assets) return false
-  
-  try {
-    // 预加载纹理
-    const textureUrls = [
-      `${assets.textureUrlPrefix || `/spine_assets/${character}/`}${character}_spr.png`
-    ]
-    
-    await Promise.all(textureUrls.map(url => {
-      return new Promise((resolve, reject) => {
-        const img = new Image()
-        img.onload = resolve
-        img.onerror = reject
-        img.src = url
-      })
-    }))
-    
-    console.log(`${character} 资源预加载完成`)
-    return true
-  } catch (error) {
-    console.error('Spine 资源预加载失败:', error)
-    return false
   }
 }
 
@@ -350,14 +320,8 @@ const handlePlayerClick = debounce(async (event) => {
 // 提升 moveBones 函数到组件作用域以便在其他地方使用
 let moveBonesHandler = null
 
-// 防抖的 Spine 初始化
-const debouncedInitialize = debounce(async (assets) => {
-  if (!clientReady.value || !playerContainer.value) return
-  
+const initializeSpinePlayer = async (assets) => {
   try {
-    // 预加载资源
-    await preloadSpineAssets(currentCharacter.value)
-    
     // 清理旧的实例
     if (blinkInterval) {
       clearTimeout(blinkInterval);
@@ -368,7 +332,6 @@ const debouncedInitialize = debounce(async (assets) => {
       playerContainer.value.innerHTML = '';
     }
 
-    // 使用全局 spine 对象
     player = new spine.SpinePlayer(playerContainer.value, {
       skelUrl: assets.skelUrl,
       atlasUrl: assets.atlasUrl,
@@ -517,7 +480,7 @@ const debouncedInitialize = debounce(async (assets) => {
   } catch(err) {
     console.error('Failed to initialize spine player:', err);
   }
-}, 300)
+}
 
 // 将需要监听的状态提取为响应式引用
 const isDarkMode = computed(() => state.darkMode === 'dark')
@@ -574,26 +537,28 @@ const initializeCharacter = async () => {
   try {
     await Promise.all([
       preloadAudio(),
-      debouncedInitialize(spineAssets[currentCharacter.value])
+      initializeSpinePlayer(currentAssets.value)
     ])
   } catch (err) {
     console.error('初始化失败:', err)
   }
 }
 
+const debouncedInitialize = debounce(initializeCharacter, 300)
+
 // 监听主题切换和spine开关
 watch([isDarkMode, isEnabled], async ([dark, enabled], [prevDark, prevEnabled]) => {
   if (enabled !== prevEnabled) {
     if (enabled) {
       // 启用时初始化
-      debouncedInitialize(currentAssets.value)
+      debouncedInitialize()
     } else {
       // 禁用时清理资源
       cleanup()
     }
   } else if (enabled && dark !== prevDark) {
     // 主题变更且启用状态下重新初始化
-    debouncedInitialize(currentAssets.value)
+    debouncedInitialize()
   }
 }, { immediate: true })
 
@@ -610,7 +575,7 @@ onMounted(() => {
 
   // 如果启用了Spine播放器，初始化
   if (state.SpinePlayerEnabled) {
-    debouncedInitialize(currentAssets.value)
+    debouncedInitialize()
   }
 })
 </script>
