@@ -435,18 +435,20 @@ watch(
     margin-right: 16px;
 
     a {
-      color: var(--font-color-grey);
-      padding: 3px 5px;
-      color: var(--font-color-gold);
-      background-color: var(--btn-background);
-      border-radius: 5px;
-      transition: all 0.5s;
-
-      &:hover {
-        background-color: var(--btn-hover);
+        color: var(--font-color-grey);
+        padding: 3px 5px;
         color: var(--font-color-gold);
+        background-color: var(--btn-background);
+        border-radius: 5px;
+        transition: all 0.5s;
+        text-decoration: none;
+
+        &:hover {
+          background-color: var(--btn-hover);
+          color: var(--font-color-gold);
+          text-decoration: none;
+        }
       }
-    }
   }
 }
 

@@ -113,17 +113,19 @@ onUnmounted(() => {
     margin: 8px;
 
     a {
-      color: var(--font-color-grey);
-      padding: 3px 5px;
-      color: var(--font-color-gold);
-      background-color: var(--btn-background);
-      border-radius: 5px;
-      transition: background-color 0.5s;
+        color: var(--font-color-grey);
+        padding: 3px 5px;
+        color: var(--font-color-gold);
+        background-color: var(--btn-background);
+        border-radius: 5px;
+        transition: background-color 0.5s;
+        text-decoration: none;
 
-      &:hover {
-        background-color: var(--btn-hover);
+        &:hover {
+          background-color: var(--btn-hover);
+          text-decoration: none;
+        }
       }
-    }
   }
 }
 

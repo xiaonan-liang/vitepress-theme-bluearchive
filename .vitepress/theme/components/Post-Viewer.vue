@@ -130,6 +130,25 @@ const themeConfig = useData().theme.value
     position: relative;
     font-weight: 600;
     outline: none;
+    text-decoration: none;
+  }
+
+  h1 a,
+  h2 a,
+  h3 a,
+  h4 a,
+  h5 a,
+  h6 a {
+    text-decoration: none;
+  }
+
+  h1 a:hover,
+  h2 a:hover,
+  h3 a:hover,
+  h4 a:hover,
+  h5 a:hover,
+  h6 a:hover {
+    text-decoration: none;
   }
 
   h1 {
