@@ -218,6 +218,10 @@ onMounted(() => {
     width: 12vw;
     padding: 0;
 
+    a {
+      text-decoration: none;
+    }
+
     .social {
       font-size: 1.5vw;
       font-weight: 600;

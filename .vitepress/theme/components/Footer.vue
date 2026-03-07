@@ -45,6 +45,7 @@ footer {
 .footer-info {
   a {
     color: var(--color-blue);
+    text-decoration: none;
   }
 }
 
