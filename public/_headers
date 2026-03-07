@@ -26,3 +26,17 @@
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
   Service-Worker-Allowed: /
+
+# 安全头部
+/*
+  # 防止点击劫持
+  X-Frame-Options: DENY
+  
+  # 防止 MIME 嗅探
+  X-Content-Type-Options: nosniff
+  
+  # Referrer 策略 - 保护隐私
+  Referrer-Policy: strict-origin-when-cross-origin
+  
+  # 权限策略 - 禁用不需要的 API
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=()
