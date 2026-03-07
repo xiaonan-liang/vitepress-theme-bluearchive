@@ -33,67 +33,6 @@ const spineVoiceLang = themeConfig.spineVoiceLang
 
 import { spine } from './spine-player.js'
 
-// Web Worker 实例
-let spineWorker = null
-
-// 初始化 Web Worker
-const initWorker = () => {
-  if (typeof Worker !== 'undefined' && !spineWorker) {
-    spineWorker = new Worker(new URL('./spine.worker.ts', import.meta.url), {
-      type: 'module'
-    })
-    
-    spineWorker.onmessage = (e) => {
-      const { type, id, buffer, url, fromCache, error } = e.data
-      
-      switch (type) {
-        case 'audioLoaded':
-          // 处理加载完成的音频
-          if (audioLoadCallbacks.has(id)) {
-            audioLoadCallbacks.get(id)({ buffer, url, fromCache })
-            audioLoadCallbacks.delete(id)
-          }
-          break
-        case 'audioError':
-          console.error('Worker 音频加载失败:', error)
-          if (audioLoadCallbacks.has(id)) {
-            audioLoadCallbacks.get(id)(null)
-            audioLoadCallbacks.delete(id)
-          }
-          break
-        case 'assetsPreloaded':
-          console.log(`Worker 预加载完成: ${e.data.successful}/${e.data.total}`)
-          break
-      }
-    }
-  }
-}
-
-// 音频加载回调映射
-const audioLoadCallbacks = new Map()
-
-// 使用 Worker 加载音频
-const loadAudioWithWorker = (url) => {
-  return new Promise((resolve) => {
-    if (!spineWorker) {
-      // Worker 不可用，回退到主线程
-      fetch(url)
-        .then(r => r.arrayBuffer())
-        .then(buffer => resolve({ buffer, url, fromCache: false }))
-        .catch(() => resolve(null))
-      return
-    }
-    
-    const id = `audio_${Date.now()}_${Math.random()}`
-    audioLoadCallbacks.set(id, resolve)
-    
-    spineWorker.postMessage({
-      type: 'loadAudio',
-      payload: { url, id }
-    })
-  })
-}
-
 // 定义两套spine资产信息
 const spineAssets = {
   arona: {
@@ -638,14 +577,6 @@ const cleanup = () => {
   if (window.gc) {
     window.gc()
   }
-  
-  // 清理 Web Worker
-  if (spineWorker) {
-    spineWorker.postMessage({ type: 'clearCache' })
-    spineWorker.terminate()
-    spineWorker = null
-  }
-  audioLoadCallbacks.clear()
 }
 
 // 初始化函数
@@ -688,9 +619,6 @@ watch([isDarkMode, isEnabled], async ([dark, enabled], [prevDark, prevEnabled]) 
 onMounted(() => {
   // 设置客户端就绪状态
   clientReady.value = true
-  
-  // 初始化 Web Worker
-  initWorker()
 
   const options = { passive: true }
   window.addEventListener('scroll', handleEvents, options)
