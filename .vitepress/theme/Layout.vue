@@ -138,13 +138,7 @@ body {
   overflow: hidden;
 }
 
-.welcome-box {
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.7);
-  border-radius: 10px;
-  margin: 2rem auto;
-  max-width: 800px;
-}
+
 
 .posts-list {
   padding: 2rem;
