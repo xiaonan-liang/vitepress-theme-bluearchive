@@ -7,15 +7,6 @@ layout: page
 
 <div id="gpu-test-container">
   <canvas id="gpu-canvas"></canvas>
-  <div id="gpu-info">
-    <h2>GPU 信息</h2>
-    <div id="gpu-details"></div>
-  </div>
-  <div id="test-result">
-    <h2>测试结果</h2>
-    <div id="fps-counter">FPS: <span id="fps">0</span></div>
-    <div id="performance-rating"></div>
-  </div>
 </div>
 
 <script setup>
@@ -24,32 +15,13 @@ import { onMounted } from 'vue'
 onMounted(() => {
   const canvas = document.getElementById('gpu-canvas')
   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
-  const gpuDetails = document.getElementById('gpu-details')
-  const fpsElement = document.getElementById('fps')
-  const ratingElement = document.getElementById('performance-rating')
 
   if (!gl) {
-    gpuDetails.innerHTML = '<p style="color: red;">您的浏览器不支持 WebGL</p>'
     return
   }
 
-  const debugInfo = gl.getExtension('WEBGL_debug_renderer_info')
-  const renderer = debugInfo ? debugInfo.UNMASKED_RENDERER_WEBGL : gl.getParameter(gl.RENDERER)
-  const vendor = debugInfo ? debugInfo.UNMASKED_VENDOR_WEBGL : gl.getParameter(gl.VENDOR)
-
-  gpuDetails.innerHTML = `
-    <p><strong>渲染器:</strong> ${renderer}</p>
-    <p><strong>供应商:</strong> ${vendor}</p>
-    <p><strong>WebGL 版本:</strong> ${gl.getParameter(gl.VERSION)}</p>
-    <p><strong>着色器语言版本:</strong> ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}</p>
-  `
-
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
-
-  let lastTime = performance.now()
-  let frameCount = 0
-  let fps = 0
 
   function createMushroom() {
     const vertices = []
@@ -124,28 +96,6 @@ onMounted(() => {
   }
 
   function animate() {
-    const currentTime = performance.now()
-    frameCount++
-
-    if (currentTime - lastTime >= 1000) {
-      fps = Math.round((frameCount * 1000) / (currentTime - lastTime))
-      fpsElement.textContent = fps
-      frameCount = 0
-      lastTime = currentTime
-
-      let rating = ''
-      if (fps >= 60) {
-        rating = '<span style="color: #4CAF50;">性能极佳！您的显卡非常强大</span>'
-      } else if (fps >= 30) {
-        rating = '<span style="color: #2196F3;">性能良好</span>'
-      } else if (fps >= 15) {
-        rating = '<span style="color: #FF9800;">性能一般</span>'
-      } else {
-        rating = '<span style="color: #F44336;">性能较差</span>'
-      }
-      ratingElement.innerHTML = rating
-    }
-
     drawMushroom()
     requestAnimationFrame(animate)
   }
@@ -171,47 +121,11 @@ onMounted(() => {
     height: 500px;
     background: #000;
     border-radius: 10px;
-    margin-bottom: 20px;
-  }
-
-  #gpu-info, #test-result {
-    background: var(--infobox-background-initial);
-    border: 2px solid var(--foreground-color);
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-
-  #gpu-info h2, #test-result h2 {
-    margin-top: 0;
-    color: var(--font-color-grey);
-  }
-
-  #gpu-details p {
-    margin: 10px 0;
-    color: var(--font-color-grey);
-  }
-
-  #fps-counter {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 10px 0;
-    color: var(--font-color-grey);
-  }
-
-  #performance-rating {
-    font-size: 18px;
-    margin: 10px 0;
-    color: var(--font-color-grey);
   }
 
   @media (max-width: 768px) {
     #gpu-canvas {
       height: 300px;
-    }
-
-    #gpu-info, #test-result {
-      padding: 15px;
     }
   }
 </style>
