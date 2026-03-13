@@ -15,7 +15,7 @@ head:
 # test测试
 <iframe 
   class="bilibili-video"
-  src="//player.bilibili.com/player.html?isOutside=true&aid=80433022&bvid=BV1GJ411x7h7&cid=137649199&p=1" 
+  src="//player.bilibili.com/player.html?isOutside=true&aid=114902605765910&bvid=BV1e18wzsER6&cid=31259624417&p=1" 
   scrolling="no" 
   border="0" 
   frameborder="no" 
