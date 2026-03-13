@@ -217,6 +217,11 @@ onMounted(() => {
     margin-top: 3.5vh;
     width: 12vw;
     padding: 0;
+    list-style: none;
+
+    li {
+      list-style: none;
+    }
 
     a {
       text-decoration: none;
