@@ -107,9 +107,11 @@ header {
       justify-content: center;
       padding: 0;
       margin: 0;
+      list-style: none;
 
       li {
         margin: 0 64px;
+        list-style: none;
         a {
           display: block;
           padding: 10px 16px;

@@ -108,9 +108,11 @@ onUnmounted(() => {
   backdrop-filter: var(--blur-val);
   width: 768px;
   z-index: 100;
+  list-style: none;
 
   li {
     margin: 8px;
+    list-style: none;
 
     a {
         color: var(--font-color-grey);
