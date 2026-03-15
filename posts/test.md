@@ -1,6 +1,6 @@
 ---
 title: 测试
-date: 2026-01-18
+date: 2026-03-15
 tags: [测试, test]
 pinned: false
 head:
@@ -22,16 +22,14 @@ head:
   framespacing="0" 
   allowfullscreen="true"
 ></iframe>
-
-<!-- 样式部分 -->
 <style>
 .bilibili-video {
-  width: 100%;          /* 宽度占父容器100%，适配性更好 */
-  max-width: 1200px;    /* 最大宽度，避免屏幕太宽时视频过大 */
-  height: 675px;        /* 对应16:9的比例，和视频比例匹配 */
-  display: block;       /* 消除iframe默认的空隙 */
-  margin: 0 auto;       /* 居中显示（可选） */
+  width: 100%;
+  max-width: 1200px;
+  height: 675px;
+  display: block;
+  margin: 0 auto;
 }
 </style>
 
-[GPU测试](/test.html)
+[GPU测试](/test)
