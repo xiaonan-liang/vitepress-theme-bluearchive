@@ -1,15 +1,15 @@
 ---
-title: 请输入文本
+title: 测试
 date: 2026-01-18
-tags: [请输入文本, test]
+tags: [测试, test]
 pinned: false
 head:
   - - meta
     - name: description
-      content: 请输入文本
+      content: 测试
   - - meta
     - name: keywords
-      content: 请输入文本
+      content: 测试
 ---
 
 # test测试
