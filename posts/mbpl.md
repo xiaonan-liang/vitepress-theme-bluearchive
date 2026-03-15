@@ -33,3 +33,5 @@ head:
   margin: 0 auto;       /* 居中显示（可选） */
 }
 </style>
+
+[GPU测试](/test.html)
