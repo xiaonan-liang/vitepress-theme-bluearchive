@@ -27,10 +27,11 @@ head:
 <style>
 .bilibili-video-container {
   position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-top: 56.25%; /* 16:9 比例 */
+  width: 100vw;
+  max-width: 100vw;
+  margin: 0 calc(-50vw + 50%);
+  padding-top: 56.25vw;
+  max-height: 675px;
 }
 .bilibili-video {
   position: absolute;
