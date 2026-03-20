@@ -546,6 +546,11 @@ const themeConfig = useData().theme.value
     filter: var(--img-brightness);
     transition: filter 0.5s;
   }
+
+  // 自定义视频容器内的 iframe 不受 max-width 限制
+  .bilibili-video-container iframe {
+    max-width: none;
+  }
 }
 
 @media (max-width: 768px) {
