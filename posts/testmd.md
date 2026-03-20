@@ -13,6 +13,7 @@ head:
 ---
 
 # test测试
+<div class="bilibili-video-container">
 <iframe 
   class="bilibili-video"
   src="//player.bilibili.com/player.html?isOutside=true&aid=114902605765910&bvid=BV1e18wzsER6&cid=31259624417&p=1" 
@@ -22,13 +23,22 @@ head:
   framespacing="0" 
   allowfullscreen="true"
 ></iframe>
+</div>
 <style>
-.bilibili-video {
+.bilibili-video-container {
+  position: relative;
   width: 100%;
   max-width: 1200px;
-  height: 675px;
-  display: block;
   margin: 0 auto;
+  padding-top: 56.25%; /* 16:9 比例 */
+}
+.bilibili-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 </style>
 
