@@ -26,23 +26,25 @@ head:
 </div>
 <style>
 .bilibili-video-container {
-  position: relative;
-  width: 100vw;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  aspect-ratio: 16 / 9;
-  background: #000;
+  position: relative !important;
+  width: 100vw !important;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  aspect-ratio: 16 / 9 !important;
+  background: #000 !important;
+  max-width: none !important;
 }
 .bilibili-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  border: none;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  border: none !important;
+  max-width: none !important;
 }
 </style>
 
