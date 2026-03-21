@@ -27,9 +27,11 @@ head:
 <style>
 .bilibili-video-container {
   position: relative;
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   aspect-ratio: 16 / 9;
   background: #000;
 }
