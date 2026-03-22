@@ -53,7 +53,7 @@
       </div>
       <div class="ip-info-card">
         <div class="ip-header">
-          <div class="ip-address">{{ ipAddress }}</div>
+          <div class="ip-address">{{ queriedIpAddress }}</div>
           <div class="ip-tags">
             <span v-for="tag in ipTags" :key="tag" class="tag">{{ tag }}</span>
           </div>
@@ -74,14 +74,6 @@
           <div class="detail-item" v-if="ipInfo.continent">
             <span class="label">大洲</span>
             <span class="value">{{ ipInfo.continent }}</span>
-          </div>
-          <div class="detail-item" v-if="ipInfo.province">
-            <span class="label">省份</span>
-            <span class="value">{{ ipInfo.province }}</span>
-          </div>
-          <div class="detail-item" v-if="ipInfo.city">
-            <span class="label">城市</span>
-            <span class="value">{{ ipInfo.city }}</span>
           </div>
           <div class="detail-item" v-if="ipInfo.district">
             <span class="label">区县</span>
@@ -163,6 +155,7 @@
 import { ref, computed } from 'vue'
 
 const ipAddress = ref('')
+const queriedIpAddress = ref('')
 const results = ref([])
 const loading = ref(false)
 const ipInfo = ref(null)
@@ -186,6 +179,7 @@ const queryAll = async () => {
   results.value = []
   ipInfo.value = null
   locationData.value = []
+  queriedIpAddress.value = ipAddress.value
 
   try {
     const queries = [
@@ -339,60 +333,62 @@ const ipToDecimal = (ip) => {
 .ip-tool-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 12px;
+  font-size: 13px;
 }
 
 .section-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 12px;
 
   .icon-wrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     background: linear-gradient(135deg, var(--btn-background), var(--btn-hover));
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
     .icon {
-      width: 24px;
-      height: 24px;
+      width: 16px;
+      height: 16px;
       color: white;
     }
   }
 
   h3 {
     margin: 0;
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--font-color-grey);
   }
 }
 
 .input-section {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .input-group {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   align-items: stretch;
 }
 
 .input-wrapper {
   flex: 1;
   position: relative;
+  min-width: 0;
 
   .ip-input {
     width: 100%;
-    padding: 16px 20px 16px 56px;
+    padding: 8px 12px 8px 36px;
     border: 2px solid var(--btn-background);
-    border-radius: 12px;
-    font-size: 15px;
+    border-radius: 8px;
+    font-size: 13px;
     font-family: 'JetBrains Mono', monospace;
     background-color: var(--foreground-color);
     color: var(--font-color-grey);
@@ -401,21 +397,22 @@ const ipToDecimal = (ip) => {
     &:focus {
       outline: none;
       border-color: var(--color-blue);
-      box-shadow: 0 0 0 4px rgba(var(--blue-shadow-color), 0.1);
+      box-shadow: 0 0 0 3px rgba(var(--blue-shadow-color), 0.1);
     }
 
     &::placeholder {
       color: rgba(128, 128, 128, 0.6);
+      font-size: 12px;
     }
   }
 
   .input-icon {
     position: absolute;
-    left: 16px;
+    left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     color: var(--btn-background);
     pointer-events: none;
   }
@@ -424,26 +421,28 @@ const ipToDecimal = (ip) => {
 .query-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 16px 32px;
+  gap: 4px;
+  padding: 8px 16px;
   background: linear-gradient(135deg, var(--btn-background), var(--btn-hover));
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  flex-shrink: 0;
 
   .btn-icon {
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
   }
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   &:active {
@@ -453,36 +452,36 @@ const ipToDecimal = (ip) => {
 
 .ip-info-section,
 .location-section {
-  margin-bottom: 40px;
+  margin-bottom: 16px;
 }
 
 .ip-info-card {
   background-color: var(--foreground-color);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 2px solid var(--btn-background);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--btn-background);
 }
 
 .ip-header {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 
   .ip-address {
-    font-size: 24px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--font-color-grey);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-family: 'JetBrains Mono', monospace;
   }
 
   .ip-tags {
     display: flex;
-    gap: 8px;
+    gap: 4px;
 
     .tag {
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
       font-weight: 600;
       background-color: var(--btn-background);
       color: white;
@@ -492,25 +491,25 @@ const ipToDecimal = (ip) => {
 
 .ip-details {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6px;
 
   .detail-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 16px;
+    padding: 6px 10px;
     background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
+    border-radius: 4px;
 
     .label {
-      font-size: 14px;
+      font-size: 11px;
       color: rgba(128, 128, 128, 0.8);
       font-weight: 500;
     }
 
     .value {
-      font-size: 14px;
+      font-size: 11px;
       color: var(--font-color-grey);
       font-weight: 600;
       font-family: 'JetBrains Mono', monospace;
@@ -520,15 +519,15 @@ const ipToDecimal = (ip) => {
 
 .location-list {
   background-color: var(--foreground-color);
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 2px solid var(--btn-background);
+  border: 1px solid var(--btn-background);
 
   .location-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
+    padding: 8px 12px;
     border-bottom: 1px solid rgba(128, 128, 128, 0.1);
 
     &:last-child {
@@ -536,13 +535,13 @@ const ipToDecimal = (ip) => {
     }
 
     .source {
-      font-size: 14px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--btn-background);
     }
 
     .location {
-      font-size: 14px;
+      font-size: 11px;
       color: var(--font-color-grey);
       font-weight: 500;
     }
@@ -556,13 +555,13 @@ const ipToDecimal = (ip) => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  padding: 24px 12px;
 
   .spinner-container {
     position: relative;
-    width: 80px;
-    height: 80px;
-    margin-bottom: 20px;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
   }
 
   .spinner {
@@ -570,9 +569,9 @@ const ipToDecimal = (ip) => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
-    border: 4px solid transparent;
+    width: 30px;
+    height: 30px;
+    border: 2px solid transparent;
     border-top-color: var(--color-blue);
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -583,16 +582,16 @@ const ipToDecimal = (ip) => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80px;
-    height: 80px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
   }
 
   p {
     margin: 0;
     color: var(--font-color-grey);
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 500;
   }
 }
@@ -605,22 +604,22 @@ const ipToDecimal = (ip) => {
 
 @media (max-width: 768px) {
   .ip-tool-container {
-    padding: 16px;
+    padding: 8px;
   }
 
   .section-header {
     .icon-wrapper {
-      width: 40px;
-      height: 40px;
+      width: 28px;
+      height: 28px;
 
       .icon {
-        width: 20px;
-        height: 20px;
+        width: 14px;
+        height: 14px;
       }
     }
 
     h3 {
-      font-size: 20px;
+      font-size: 14px;
     }
   }
 
@@ -635,18 +634,6 @@ const ipToDecimal = (ip) => {
 
   .ip-details {
     grid-template-columns: 1fr;
-  }
-
-  .results-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .result-content {
-    max-height: 300px;
-
-    pre {
-      font-size: 11px;
-    }
   }
 }
 </style>
