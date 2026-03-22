@@ -584,7 +584,7 @@ onMounted(() => {
 .playerContainer {
   position: fixed;
   bottom: 25px;
-  left: 0%;
+  right: 0%;
   z-index: 100;
   width: 12vw;
   height: 24vw;
@@ -595,7 +595,7 @@ onMounted(() => {
 .chatdialog-container {
   position: fixed;
   bottom: 10vw;
-  left: 2vw;
+  right: 2vw;
   z-index: 101;
   transition: all 1s;
   pointer-events: none;
@@ -604,7 +604,7 @@ onMounted(() => {
 
 .chatdialog-triangle {
   position: absolute;
-  left: 2vw;
+  right: 2vw;
   top: -10px;
   width: 0;
   height: 0;
@@ -640,7 +640,7 @@ onMounted(() => {
 
 @media (max-width: 768px) {
   .chatdialog-container {
-    left: 2vh;
+    right: 2vh;
     bottom: 10vh;
   }
 
@@ -652,7 +652,7 @@ onMounted(() => {
   }
 
   .chatdialog-triangle {
-    left: 35px;
+    right: 35px;
     border-width: 8px;
     top: -8px;
   }
