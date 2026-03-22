@@ -69,6 +69,13 @@ const tools: Tool[] = [
     description: '将时间戳转换为日期，或将日期转换为时间戳',
     icon: 'icon-time',
     component: defineAsyncComponent(() => import('./tools/Timestamp-Tool.vue'))
+  },
+  {
+    id: 'ip',
+    name: 'IP地址查询工具',
+    description: '支持主机名查询、RDAP查询、百度IP查询、IP77查询',
+    icon: 'icon-location',
+    component: defineAsyncComponent(() => import('./tools/IP-Tool.vue'))
   }
 ]
 
