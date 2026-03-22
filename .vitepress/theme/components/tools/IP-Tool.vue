@@ -67,17 +67,61 @@
             <span class="label">国家/地区</span>
             <span class="value">{{ ipInfo.country }}</span>
           </div>
-          <div class="detail-item" v-if="ipInfo.asn">
-            <span class="label">ASN</span>
-            <span class="value">{{ ipInfo.asn }}</span>
+          <div class="detail-item" v-if="ipInfo.country_code">
+            <span class="label">国家代码</span>
+            <span class="value">{{ ipInfo.country_code }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.continent">
+            <span class="label">大洲</span>
+            <span class="value">{{ ipInfo.continent }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.province">
+            <span class="label">省份</span>
+            <span class="value">{{ ipInfo.province }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.city">
+            <span class="label">城市</span>
+            <span class="value">{{ ipInfo.city }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.district">
+            <span class="label">区县</span>
+            <span class="value">{{ ipInfo.district }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.street">
+            <span class="label">街道</span>
+            <span class="value">{{ ipInfo.street }}</span>
           </div>
           <div class="detail-item" v-if="ipInfo.organization">
-            <span class="label">企业</span>
+            <span class="label">运营商</span>
             <span class="value">{{ ipInfo.organization }}</span>
           </div>
-          <div class="detail-item" v-if="ipInfo.datacenter">
-            <span class="label">数据中心</span>
-            <span class="value">{{ ipInfo.datacenter }}</span>
+          <div class="detail-item" v-if="ipInfo.latitude && ipInfo.longitude">
+            <span class="label">经纬度</span>
+            <span class="value">{{ ipInfo.latitude }}, {{ ipInfo.longitude }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.area_code">
+            <span class="label">地区代码</span>
+            <span class="value">{{ ipInfo.area_code }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.zip_code">
+            <span class="label">邮编</span>
+            <span class="value">{{ ipInfo.zip_code }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.time_zone">
+            <span class="label">时区</span>
+            <span class="value">{{ ipInfo.time_zone }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.risk">
+            <span class="label">风险等级</span>
+            <span class="value">{{ ipInfo.risk.risk_level }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.risk">
+            <span class="label">风险评分</span>
+            <span class="value">{{ ipInfo.risk.risk_score }}/100</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.risk && ipInfo.risk.is_proxy">
+            <span class="label">是否代理</span>
+            <span class="value">{{ ipInfo.risk.is_proxy }}</span>
           </div>
         </div>
       </div>
@@ -102,43 +146,7 @@
       </div>
     </div>
 
-    <!-- 原始响应 -->
-    <div class="raw-response-section" v-if="results.length > 0">
-      <div class="section-header">
-        <div class="icon-wrapper">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="22 12 18 12 15 15 9 15 6 12 2 12 5 9 2 9 5 6 12 6 15 9 15 18 12 22 12 19 9 22 6 19 6 15 9 15 12 12 12 15 15 18 12 22"/>
-          </svg>
-        </div>
-        <h3>原始响应</h3>
-      </div>
-      <div class="results-grid">
-        <div class="result-card" v-for="(result, index) in results" :key="index" :class="result.status">
-          <div class="result-header">
-            <div class="result-info">
-              <div class="result-icon">
-                <svg v-if="result.status === 'success'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                  <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="15" y1="9" x2="9" y2="15"/>
-                  <line x1="9" y1="9" x2="15" y2="15"/>
-                </svg>
-              </div>
-              <span class="result-title">{{ result.title }}</span>
-            </div>
-            <div class="result-badge" :class="result.status">
-              {{ result.status === 'success' ? '成功' : '失败' }}
-            </div>
-          </div>
-          <div class="result-content">
-            <pre>{{ formatResult(result.data) }}</pre>
-          </div>
-        </div>
-      </div>
-    </div>
+
 
     <!-- 加载状态 -->
     <div class="loading-section" v-if="loading">
@@ -289,7 +297,19 @@ const parseIPInfo = (resultsData) => {
   if (ip77Result?.data) {
     if (ip77Result.data.country) info.country = ip77Result.data.country
     if (ip77Result.data.isp) info.organization = ip77Result.data.isp
-    if (ip77Result.data.usage) info.datacenter = ip77Result.data.usage === '数据中心' ? '是' : '否'
+    if (ip77Result.data.location) info.location = ip77Result.data.location
+    if (ip77Result.data.continent) info.continent = ip77Result.data.continent
+    if (ip77Result.data.country_code) info.country_code = ip77Result.data.country_code
+    if (ip77Result.data.province) info.province = ip77Result.data.province
+    if (ip77Result.data.city) info.city = ip77Result.data.city
+    if (ip77Result.data.district) info.district = ip77Result.data.district
+    if (ip77Result.data.street) info.street = ip77Result.data.street
+    if (ip77Result.data.latitude) info.latitude = ip77Result.data.latitude
+    if (ip77Result.data.longitude) info.longitude = ip77Result.data.longitude
+    if (ip77Result.data.area_code) info.area_code = ip77Result.data.area_code
+    if (ip77Result.data.zip_code) info.zip_code = ip77Result.data.zip_code
+    if (ip77Result.data.time_zone) info.time_zone = ip77Result.data.time_zone
+    if (ip77Result.data.risk) info.risk = ip77Result.data.risk
   }
 
   ipInfo.value = info
@@ -302,8 +322,8 @@ const parseIPInfo = (resultsData) => {
   if (baiduResult?.data?.[0]?.location) {
     locationData.value.push({ source: '百度', location: baiduResult.data[0].location })
   }
-  if (ip77Result?.data?.country) {
-    locationData.value.push({ source: 'IP77', location: ip77Result.data.country })
+  if (ip77Result?.data?.location) {
+    locationData.value.push({ source: 'IP77', location: ip77Result.data.location })
   }
 }
 
@@ -312,12 +332,7 @@ const ipToDecimal = (ip) => {
   return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0).toString()
 }
 
-const formatResult = (data) => {
-  if (typeof data === 'string') {
-    return data
-  }
-  return JSON.stringify(data, null, 2)
-}
+
 </script>
 
 <style scoped lang="less">
@@ -437,8 +452,7 @@ const formatResult = (data) => {
 }
 
 .ip-info-section,
-.location-section,
-.raw-response-section {
+.location-section {
   margin-bottom: 40px;
 }
 
@@ -535,127 +549,7 @@ const formatResult = (data) => {
   }
 }
 
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 20px;
-}
 
-.result-card {
-  background-color: var(--foreground-color);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-
-  &.success {
-    border-color: #52c41a;
-  }
-
-  &.error {
-    border-color: #ff4d4f;
-  }
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.result-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
-}
-
-.result-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.result-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .success & {
-    background-color: rgba(82, 196, 26, 0.1);
-    color: #52c41a;
-  }
-
-  .error & {
-    background-color: rgba(255, 77, 79, 0.1);
-    color: #ff4d4f;
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-.result-title {
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--font-color-grey);
-}
-
-.result-badge {
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-
-  &.success {
-    background-color: #52c41a;
-    color: white;
-  }
-
-  &.error {
-    background-color: #ff4d4f;
-    color: white;
-  }
-}
-
-.result-content {
-  padding: 20px;
-  max-height: 350px;
-  overflow-y: auto;
-
-  pre {
-    margin: 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    line-height: 1.6;
-    color: var(--font-color-grey);
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: rgba(128, 128, 128, 0.1);
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--btn-background);
-    border-radius: 4px;
-
-    &:hover {
-      background: var(--btn-hover);
-    }
-  }
-}
 
 .loading-section {
   display: flex;
