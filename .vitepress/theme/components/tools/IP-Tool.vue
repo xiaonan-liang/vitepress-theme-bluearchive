@@ -82,40 +82,30 @@ const queryAll = async () => {
   }
 }
 
-// 主机名查询
+// 主机名查询（使用JSONP绕过CORS）
 const queryHostname = async () => {
-  try {
-    // 尝试直接请求
-    const response = await fetch(`https://browserleaks.com/api/hostname/${ipAddress.value}`)
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+  return new Promise((resolve) => {
+    const script = document.createElement('script')
+    const callbackName = `hostnameCallback_${Date.now()}`
+    
+    window[callbackName] = (data) => {
+      resolve(data)
+      delete window[callbackName]
+      document.body.removeChild(script)
     }
-    return await response.json()
-  } catch (error) {
-    // 如果CORS失败，使用JSONP或备用方案
-    return new Promise((resolve) => {
-      const script = document.createElement('script')
-      const callbackName = `hostnameCallback_${Date.now()}`
-      
-      window[callbackName] = (data) => {
-        resolve(data)
-        delete window[callbackName]
-        document.body.removeChild(script)
-      }
-      
-      script.src = `https://browserleaks.com/api/hostname/${ipAddress.value}?callback=${callbackName}`
-      script.onerror = () => {
-        resolve({ error: 'CORS限制，无法直接访问' })
-        delete window[callbackName]
-        document.body.removeChild(script)
-      }
-      
-      document.body.appendChild(script)
-    })
-  }
+    
+    script.src = `https://browserleaks.com/api/hostname/${ipAddress.value}?callback=${callbackName}`
+    script.onerror = () => {
+      resolve({ error: '主机名查询失败' })
+      delete window[callbackName]
+      document.body.removeChild(script)
+    }
+    
+    document.body.appendChild(script)
+  })
 }
 
-// RDAP查询
+// RDAP查询（支持CORS，直接请求）
 const queryRDAP = async () => {
   try {
     const response = await fetch(`https://rdap.apnic.net/ip/${ipAddress.value}`)
@@ -128,21 +118,30 @@ const queryRDAP = async () => {
   }
 }
 
-// 百度IP查询
+// 百度IP查询（使用JSONP绕过CORS）
 const queryBaidu = async () => {
-  try {
-    const response = await fetch(`https://opendata.baidu.com/api.php?query=${ipAddress.value}&co=&resource_id=6006&oe=utf8`)
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+  return new Promise((resolve) => {
+    const script = document.createElement('script')
+    const callbackName = `baiduCallback_${Date.now()}`
+    
+    window[callbackName] = (data) => {
+      resolve(data)
+      delete window[callbackName]
+      document.body.removeChild(script)
     }
-    const data = await response.json()
-    return data
-  } catch (error) {
-    throw new Error(`百度查询失败: ${error.message}`)
-  }
+    
+    script.src = `https://opendata.baidu.com/api.php?query=${ipAddress.value}&co=&resource_id=6006&oe=utf8&cb=${callbackName}`
+    script.onerror = () => {
+      resolve({ error: '百度查询失败' })
+      delete window[callbackName]
+      document.body.removeChild(script)
+    }
+    
+    document.body.appendChild(script)
+  })
 }
 
-// IP77查询
+// IP77查询（支持CORS，直接请求）
 const queryIP77 = async () => {
   try {
     const response = await fetch('https://api.ip77.net/ip2/v4/', {
