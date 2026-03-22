@@ -376,12 +376,14 @@ const ipToDecimal = (ip) => {
   display: flex;
   gap: 8px;
   align-items: stretch;
+  flex-wrap: nowrap;
 }
 
 .input-wrapper {
   flex: 1;
   position: relative;
   min-width: 0;
+  max-width: calc(100% - 100px);
 
   .ip-input {
     width: 100%;
