@@ -82,71 +82,59 @@ const queryAll = async () => {
   }
 }
 
-// 主机名查询
+// 主机名查询（使用代理）
 const queryHostname = async () => {
   try {
-    // 直接尝试访问，CORS由服务器决定
-    const response = await fetch(`https://browserleaks.com/api/hostname/${ipAddress.value}`)
+    const response = await fetch(`/api/hostname/${ipAddress.value}`)
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
     return await response.json()
   } catch (error) {
-    // 如果CORS错误，返回友好提示
-    if (error.message.includes('CORS')) {
-      return {
-        error: 'CORS错误',
-        message: '该接口不支持跨域访问',
-        alternative: '可以尝试使用其他查询接口'
-      }
-    }
     throw new Error(`主机名查询失败: ${error.message}`)
   }
 }
 
-// RDAP查询
+// RDAP查询（使用代理）
 const queryRDAP = async () => {
   try {
-    const response = await fetch(`https://rdap.apnic.net/ip/${ipAddress.value}`)
+    const response = await fetch(`/api/rdap/${ipAddress.value}`)
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
     return await response.json()
   } catch (error) {
     throw new Error(`RDAP查询失败: ${error.message}`)
   }
 }
 
-// 百度IP查询
+// 百度IP查询（使用代理）
 const queryBaidu = async () => {
   try {
-    // 尝试使用百度开放API
-    const response = await fetch(`https://opendata.baidu.com/api.php?query=[${ipAddress.value}]&co=&resource_id=6006&oe=utf8`)
+    const response = await fetch(`/api/baidu?query=[${ipAddress.value}]&co=&resource_id=6006&oe=utf8`)
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
     const data = await response.json()
     return data
   } catch (error) {
-    // 如果被屏蔽，返回友好提示
-    if (error.message.includes('blocked') || error.message.includes('403')) {
-      return {
-        error: '接口被屏蔽',
-        message: '百度接口可能被屏蔽',
-        alternative: '可以尝试使用其他查询接口'
-      }
-    }
     throw new Error(`百度查询失败: ${error.message}`)
   }
 }
 
-// IP77查询
+// IP77查询（使用代理）
 const queryIP77 = async () => {
   try {
-    const response = await fetch('https://api.ip77.net/ip2/v4/', {
+    const response = await fetch('/api/ip77', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: `ip=${ipAddress.value}`
     })
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
     return await response.json()
   } catch (error) {
     throw new Error(`IP77查询失败: ${error.message}`)
