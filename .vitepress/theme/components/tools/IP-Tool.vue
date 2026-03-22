@@ -39,15 +39,78 @@
       </div>
     </div>
 
-    <!-- 查询结果 -->
-    <div class="results-section" v-if="results.length > 0">
+    <!-- IP基本信息 -->
+    <div class="ip-info-section" v-if="ipInfo">
       <div class="section-header">
         <div class="icon-wrapper">
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="22 12 18 12 15 15 9 15 6 12 2 12 5 9 2 9 5 6 12 6 15 9 15 18 12 22 12 19 9 22 6 19 6 15 9 15 12 12 15 15 9 18 6 18 9 15 9 12 12 12 15 15 18 12 22"/>
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+            <line x1="12" y1="22.08" x2="12" y2="12"/>
           </svg>
         </div>
-        <h3>查询结果</h3>
+        <h3>IP基本信息</h3>
+      </div>
+      <div class="ip-info-card">
+        <div class="ip-header">
+          <div class="ip-address">{{ ipAddress }}</div>
+          <div class="ip-tags">
+            <span v-for="tag in ipTags" :key="tag" class="tag">{{ tag }}</span>
+          </div>
+        </div>
+        <div class="ip-details">
+          <div class="detail-item">
+            <span class="label">数字地址</span>
+            <span class="value">{{ ipInfo.decimal }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.country">
+            <span class="label">国家/地区</span>
+            <span class="value">{{ ipInfo.country }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.asn">
+            <span class="label">ASN</span>
+            <span class="value">{{ ipInfo.asn }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.organization">
+            <span class="label">企业</span>
+            <span class="value">{{ ipInfo.organization }}</span>
+          </div>
+          <div class="detail-item" v-if="ipInfo.datacenter">
+            <span class="label">数据中心</span>
+            <span class="value">{{ ipInfo.datacenter }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 地理位置 -->
+    <div class="location-section" v-if="locationData.length > 0">
+      <div class="section-header">
+        <div class="icon-wrapper">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <h3>地理位置 (多源对比)</h3>
+      </div>
+      <div class="location-list">
+        <div v-for="(item, index) in locationData" :key="index" class="location-item">
+          <span class="source">{{ item.source }}</span>
+          <span class="location">{{ item.location }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 原始响应 -->
+    <div class="raw-response-section" v-if="results.length > 0">
+      <div class="section-header">
+        <div class="icon-wrapper">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 15 9 15 6 12 2 12 5 9 2 9 5 6 12 6 15 9 15 18 12 22 12 19 9 22 6 19 6 15 9 15 12 12 12 15 15 18 12 22"/>
+          </svg>
+        </div>
+        <h3>原始响应</h3>
       </div>
       <div class="results-grid">
         <div class="result-card" v-for="(result, index) in results" :key="index" :class="result.status">
@@ -89,11 +152,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const ipAddress = ref('')
 const results = ref([])
 const loading = ref(false)
+const ipInfo = ref(null)
+const locationData = ref([])
+
+// 计算IP标签
+const ipTags = computed(() => {
+  if (!ipInfo.value) return []
+  const tags = []
+  if (ipInfo.value.datacenter === '是') tags.push('数据中心')
+  return tags
+})
 
 const queryAll = async () => {
   if (!ipAddress.value.trim()) {
@@ -103,6 +176,8 @@ const queryAll = async () => {
 
   loading.value = true
   results.value = []
+  ipInfo.value = null
+  locationData.value = []
 
   try {
     const queries = [
@@ -119,6 +194,9 @@ const queryAll = async () => {
       status: item.status === 'fulfilled' ? 'success' : 'error',
       data: item.status === 'fulfilled' ? item.value : item.reason
     }))
+
+    // 解析和整合数据
+    parseIPInfo(resultsData)
   } catch (error) {
     console.error('查询失败:', error)
   } finally {
@@ -183,6 +261,55 @@ const queryIP77 = async () => {
   } catch (error) {
     throw new Error(`IP77查询失败: ${error.message}`)
   }
+}
+
+// 解析IP信息
+const parseIPInfo = (resultsData) => {
+  const info = {
+    decimal: ipToDecimal(ipAddress.value)
+  }
+
+  // 解析RDAP数据
+  const rdapResult = resultsData[1].status === 'fulfilled' ? resultsData[1].value : null
+  if (rdapResult) {
+    if (rdapResult.country) info.country = rdapResult.country
+    if (rdapResult.entities?.[0]?.vcardArray?.[1]?.[1]?.[3]) {
+      info.organization = rdapResult.entities[0].vcardArray[1][1][3]
+    }
+  }
+
+  // 解析百度数据
+  const baiduResult = resultsData[2].status === 'fulfilled' ? resultsData[2].value : null
+  if (baiduResult?.data?.[0]) {
+    if (baiduResult.data[0].location) info.country = baiduResult.data[0].location
+  }
+
+  // 解析IP77数据
+  const ip77Result = resultsData[3].status === 'fulfilled' ? resultsData[3].value : null
+  if (ip77Result?.data) {
+    if (ip77Result.data.country) info.country = ip77Result.data.country
+    if (ip77Result.data.isp) info.organization = ip77Result.data.isp
+    if (ip77Result.data.usage) info.datacenter = ip77Result.data.usage === '数据中心' ? '是' : '否'
+  }
+
+  ipInfo.value = info
+
+  // 构建地理位置数据
+  locationData.value = []
+  if (rdapResult?.country) {
+    locationData.value.push({ source: 'RDAP', location: rdapResult.country })
+  }
+  if (baiduResult?.data?.[0]?.location) {
+    locationData.value.push({ source: '百度', location: baiduResult.data[0].location })
+  }
+  if (ip77Result?.data?.country) {
+    locationData.value.push({ source: 'IP77', location: ip77Result.data.country })
+  }
+}
+
+// IP转十进制
+const ipToDecimal = (ip) => {
+  return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0).toString()
 }
 
 const formatResult = (data) => {
@@ -309,8 +436,103 @@ const formatResult = (data) => {
   }
 }
 
-.results-section {
+.ip-info-section,
+.location-section,
+.raw-response-section {
   margin-bottom: 40px;
+}
+
+.ip-info-card {
+  background-color: var(--foreground-color);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--btn-background);
+}
+
+.ip-header {
+  margin-bottom: 20px;
+
+  .ip-address {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--font-color-grey);
+    margin-bottom: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .ip-tags {
+    display: flex;
+    gap: 8px;
+
+    .tag {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background-color: var(--btn-background);
+      color: white;
+    }
+  }
+}
+
+.ip-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+
+    .label {
+      font-size: 14px;
+      color: rgba(128, 128, 128, 0.8);
+      font-weight: 500;
+    }
+
+    .value {
+      font-size: 14px;
+      color: var(--font-color-grey);
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  }
+}
+
+.location-list {
+  background-color: var(--foreground-color);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid var(--btn-background);
+
+  .location-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .source {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--btn-background);
+    }
+
+    .location {
+      font-size: 14px;
+      color: var(--font-color-grey);
+      font-weight: 500;
+    }
+  }
 }
 
 .results-grid {
@@ -515,6 +737,10 @@ const formatResult = (data) => {
       width: 100%;
       justify-content: center;
     }
+  }
+
+  .ip-details {
+    grid-template-columns: 1fr;
   }
 
   .results-grid {
