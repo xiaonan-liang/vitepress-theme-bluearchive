@@ -85,7 +85,15 @@ const queryAll = async () => {
 // 主机名查询
 const queryHostname = async () => {
   try {
-    const response = await fetch(`https://browserleaks.com/api/hostname/${ipAddress.value}`)
+    const response = await fetch(`https://browserleaks.com/api/hostname/${ipAddress.value}`, {
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
     return await response.json()
   } catch (error) {
     throw new Error(`主机名查询失败: ${error.message}`)
@@ -106,7 +114,14 @@ const queryRDAP = async () => {
 const queryBaidu = async () => {
   try {
     const response = await fetch(`https://opendata.baidu.com/api.php?query=[${ipAddress.value}]&co=&resource_id=6006&oe=utf8`)
-    return await response.json()
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
+    const data = await response.json()
+    if (data.status !== '0') {
+      throw new Error('百度接口返回错误')
+    }
+    return data
   } catch (error) {
     throw new Error(`百度查询失败: ${error.message}`)
   }
