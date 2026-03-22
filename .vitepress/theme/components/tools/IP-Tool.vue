@@ -439,13 +439,13 @@ const initMap = () => {
 
 .input-group {
   display: flex;
+  flex-direction: column;
   gap: 8px;
   align-items: stretch;
-  flex-wrap: nowrap;
 }
 
 .input-wrapper {
-  flex: 3;
+  flex: 1;
   position: relative;
   min-width: 0;
 
@@ -487,6 +487,7 @@ const initMap = () => {
 .query-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   padding: 8px 16px;
   background: linear-gradient(135deg, var(--btn-background), var(--btn-hover));
@@ -499,9 +500,7 @@ const initMap = () => {
   font-weight: 600;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   white-space: nowrap;
-  flex-shrink: 0;
-  flex: 1;
-  min-width: 80px;
+  width: 100%;
 
   .btn-icon {
     width: 14px;
