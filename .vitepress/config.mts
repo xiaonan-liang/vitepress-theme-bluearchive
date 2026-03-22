@@ -40,9 +40,6 @@ export default defineConfigWithTheme<ThemeConfig>({
     // 预加载关键资源
      ['link', { rel: 'preload', href: '/font/Blueaka/Blueaka-04963599723c63b7.woff2', as: 'font', type: 'font/woff2', crossorigin: '' }],
      ['link', { rel: 'preload', href: '/font/Blueaka_Bold/Blueaka_Bold-0719faaf51e6146e.woff2', as: 'font', type: 'font/woff2', crossorigin: '' }],
-    // gitalk
-    ['link', { rel: 'stylesheet', href: 'https://unpkg.com/gitalk/dist/gitalk.css' }],
-    ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js', defer: '' }],
     // bluearchive font
     [
       'link',
@@ -58,20 +55,12 @@ export default defineConfigWithTheme<ThemeConfig>({
         href: '/font/Blueaka_Bold/Blueaka_Bold.css',
       },
     ],
-    // 图片灯箱
-    [
-      'link',
-      {
-        rel: 'stylesheet',
-        href: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css',
-      },
-    ],
-    [
-      'script',
-      {
-        src: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js',
-      },
-    ],
+    // gitalk - 延迟加载
+    ['link', { rel: 'preload', href: 'https://unpkg.com/gitalk/dist/gitalk.css', as: 'style', onload: "this.onload=null;this.rel='stylesheet'" }],
+    ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js', defer: '', async: '' }],
+    // 图片灯箱 - 延迟加载
+    ['link', { rel: 'preload', href: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css', as: 'style', onload: "this.onload=null;this.rel='stylesheet'" }],
+    ['script', { src: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js', defer: '', async: '' }],
   ],
   ignoreDeadLinks: true,
   title: "其实你们都是柔情猫娘吧QAQ",
@@ -148,7 +137,7 @@ export default defineConfigWithTheme<ThemeConfig>({
   // Vite 配置
   vite: {
     build: {
-      assetsInlineLimit: 4096,
+      assetsInlineLimit: 8192, // 增加内联资源大小，减少请求数
       sourcemap: false,
       cssMinify: true,
       reportCompressedSize: true,

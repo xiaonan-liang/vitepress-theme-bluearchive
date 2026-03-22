@@ -2,7 +2,6 @@
   <div class="dropdown-menu" ref="dropdownMenu">
     <div class="menu-content">
       <div class="first-row">
-        <MusicControl></MusicControl>
         <SearchButton></SearchButton>
       </div>
       <ToggleSwitch></ToggleSwitch>
@@ -12,7 +11,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import MusicControl from './Music-Control.vue'
 import SearchButton from './Search-Button.vue'
 import ToggleSwitch from './ToggleSwitch.vue'
 import { useStore } from '../../store'

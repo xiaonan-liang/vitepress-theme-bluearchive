@@ -29,9 +29,6 @@
       </Suspense>
     </ClientOnly>
     <ToTop></ToTop>
-    <audio id="background-music" loop>
-      <source src="./assets/banner/bgm.mp3" type="audio/mpeg" />
-    </audio>
   </template>
   <NotFound v-else></NotFound>
 </template>
