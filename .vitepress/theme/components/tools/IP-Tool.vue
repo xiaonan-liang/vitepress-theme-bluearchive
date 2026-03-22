@@ -138,6 +138,22 @@
       </div>
     </div>
 
+    <!-- 地图嵌入 -->
+    <div class="map-section" v-if="ipInfo && ipInfo.latitude && ipInfo.longitude">
+      <div class="section-header">
+        <div class="icon-wrapper">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <h3>地图位置</h3>
+      </div>
+      <div class="map-container">
+        <div id="map" class="map"></div>
+      </div>
+    </div>
+
 
 
     <!-- 加载状态 -->
@@ -199,6 +215,8 @@ const queryAll = async () => {
 
     // 解析和整合数据
     parseIPInfo(resultsData)
+    // 初始化地图
+    setTimeout(initMap, 100)
   } catch (error) {
     console.error('查询失败:', error)
   } finally {
@@ -325,6 +343,53 @@ const parseIPInfo = (resultsData) => {
 const ipToDecimal = (ip) => {
   return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0).toString()
 }
+
+// 初始化地图
+const initMap = () => {
+  if (!ipInfo.value || !ipInfo.value.latitude || !ipInfo.value.longitude) return
+  
+  // 检查百度地图API是否加载
+  if (typeof BMap === 'undefined') {
+    // 动态加载百度地图API
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    // 注意：这里使用的是测试AK，实际使用时请替换为自己的AK
+    script.src = `https://api.map.baidu.com/api?v=3.0&ak=E4805d16520de693a3fe707cdc962045&callback=initMap`
+    script.async = true
+    document.head.appendChild(script)
+    return
+  }
+  
+  // 清除旧地图
+  const mapContainer = document.getElementById('map')
+  if (mapContainer) {
+    mapContainer.innerHTML = ''
+  }
+  
+  // 创建地图实例
+  const map = new BMap.Map('map')
+  // 设置中心点坐标
+  const point = new BMap.Point(ipInfo.value.longitude, ipInfo.value.latitude)
+  // 初始化地图，设置中心点坐标和地图级别
+  map.centerAndZoom(point, 15)
+  // 添加地图控件
+  map.addControl(new BMap.NavigationControl())
+  map.addControl(new BMap.ScaleControl())
+  map.addControl(new BMap.OverviewMapControl())
+  // 添加标记
+  const marker = new BMap.Marker(point)
+  map.addOverlay(marker)
+  // 添加信息窗口
+  const infoWindow = new BMap.InfoWindow(`<p style="margin:0;line-height:20px;">IP: ${queriedIpAddress.value}</p><p style="margin:0;line-height:20px;">位置: ${ipInfo.value.location || ipInfo.value.country}</p>`)
+  marker.addEventListener('click', function() {
+    this.openInfoWindow(infoWindow)
+  })
+  // 自动打开信息窗口
+  marker.openInfoWindow(infoWindow)
+}
+
+// 将initMap暴露给全局作用域，供百度地图API回调使用
+(window as any).initMap = initMap
 
 
 </script>
@@ -453,7 +518,8 @@ const ipToDecimal = (ip) => {
 }
 
 .ip-info-section,
-.location-section {
+.location-section,
+.map-section {
   margin-bottom: 16px;
 }
 
@@ -547,6 +613,19 @@ const ipToDecimal = (ip) => {
       color: var(--font-color-grey);
       font-weight: 500;
     }
+  }
+}
+
+.map-container {
+  background-color: var(--foreground-color);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--btn-background);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  .map {
+    width: 100%;
+    height: 300px;
   }
 }
 
