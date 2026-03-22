@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS测试</title>
+</head>
+<body>
+    <h1>CORS测试</h1>
+    <button onclick="testRDAP()">测试RDAP</button>
+    <button onclick="testBaidu()">测试百度</button>
+    <button onclick="testIP77()">测试IP77</button>
+    <button onclick="testHostname()">测试主机名</button>
+    <div id="result"></div>
+
+    <script>
+        function testRDAP() {
+            fetch('https://rdap.apnic.net/ip/1.1.1.1')
+                .then(response => {
+                    console.log('RDAP响应头:', response.headers);
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('result').innerHTML = '<h3>RDAP结果:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('result').innerHTML = '<h3>RDAP错误:</h3><pre>' + error.message + '</pre>';
+                });
+        }
+
+        function testBaidu() {
+            fetch('https://opendata.baidu.com/api.php?query=1.1.1.1&co=&resource_id=6006&oe=utf8')
+                .then(response => {
+                    console.log('百度响应头:', response.headers);
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('result').innerHTML = '<h3>百度结果:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('result').innerHTML = '<h3>百度错误:</h3><pre>' + error.message + '</pre>';
+                });
+        }
+
+        function testIP77() {
+            fetch('https://api.ip77.net/ip2/v4/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'ip=1.1.1.1'
+            })
+                .then(response => {
+                    console.log('IP77响应头:', response.headers);
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('result').innerHTML = '<h3>IP77结果:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('result').innerHTML = '<h3>IP77错误:</h3><pre>' + error.message + '</pre>';
+                });
+        }
+
+        function testHostname() {
+            fetch('https://browserleaks.com/api/hostname/1.1.1.1')
+                .then(response => {
+                    console.log('主机名响应头:', response.headers);
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('result').innerHTML = '<h3>主机名结果:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+                })
+                .catch(error => {
+                    document.getElementById('result').innerHTML = '<h3>主机名错误:</h3><pre>' + error.message + '</pre>';
+                });
+        }
+    </script>
+</body>
+</html>

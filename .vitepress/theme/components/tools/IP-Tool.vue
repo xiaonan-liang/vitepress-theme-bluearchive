@@ -82,23 +82,43 @@ const queryAll = async () => {
   }
 }
 
-// 主机名查询（使用代理）
+// 主机名查询
 const queryHostname = async () => {
   try {
-    const response = await fetch(`/api/hostname/${ipAddress.value}`)
+    // 尝试直接请求
+    const response = await fetch(`https://browserleaks.com/api/hostname/${ipAddress.value}`)
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
     return await response.json()
   } catch (error) {
-    throw new Error(`主机名查询失败: ${error.message}`)
+    // 如果CORS失败，使用JSONP或备用方案
+    return new Promise((resolve) => {
+      const script = document.createElement('script')
+      const callbackName = `hostnameCallback_${Date.now()}`
+      
+      window[callbackName] = (data) => {
+        resolve(data)
+        delete window[callbackName]
+        document.body.removeChild(script)
+      }
+      
+      script.src = `https://browserleaks.com/api/hostname/${ipAddress.value}?callback=${callbackName}`
+      script.onerror = () => {
+        resolve({ error: 'CORS限制，无法直接访问' })
+        delete window[callbackName]
+        document.body.removeChild(script)
+      }
+      
+      document.body.appendChild(script)
+    })
   }
 }
 
-// RDAP查询（使用代理）
+// RDAP查询
 const queryRDAP = async () => {
   try {
-    const response = await fetch(`/api/rdap/${ipAddress.value}`)
+    const response = await fetch(`https://rdap.apnic.net/ip/${ipAddress.value}`)
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
@@ -108,10 +128,10 @@ const queryRDAP = async () => {
   }
 }
 
-// 百度IP查询（使用代理）
+// 百度IP查询
 const queryBaidu = async () => {
   try {
-    const response = await fetch(`/api/baidu?query=[${ipAddress.value}]&co=&resource_id=6006&oe=utf8`)
+    const response = await fetch(`https://opendata.baidu.com/api.php?query=${ipAddress.value}&co=&resource_id=6006&oe=utf8`)
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
@@ -122,10 +142,10 @@ const queryBaidu = async () => {
   }
 }
 
-// IP77查询（使用代理）
+// IP77查询
 const queryIP77 = async () => {
   try {
-    const response = await fetch('/api/ip77', {
+    const response = await fetch('https://api.ip77.net/ip2/v4/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

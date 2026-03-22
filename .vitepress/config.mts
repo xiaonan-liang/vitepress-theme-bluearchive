@@ -147,35 +147,6 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
   // Vite 配置
   vite: {
-    // 开发服务器配置
-    server: {
-      proxy: {
-        // 代理 hostname 查询
-        '/api/hostname': {
-          target: 'https://browserleaks.com',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/hostname/, '/api/hostname')
-        },
-        // 代理百度IP查询
-        '/api/baidu': {
-          target: 'https://opendata.baidu.com',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/baidu/, '/api.php')
-        },
-        // 代理 RDAP 查询
-        '/api/rdap': {
-          target: 'https://rdap.apnic.net',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/rdap/, '/ip')
-        },
-        // 代理 IP77 查询
-        '/api/ip77': {
-          target: 'https://api.ip77.net',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/ip77/, '/ip2/v4/')
-        }
-      }
-    },
     build: {
       assetsInlineLimit: 4096,
       sourcemap: false,
