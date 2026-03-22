@@ -445,10 +445,9 @@ const initMap = () => {
 }
 
 .input-wrapper {
-  flex: 1;
+  flex: 3;
   position: relative;
   min-width: 0;
-  max-width: calc(100% - 100px);
 
   .ip-input {
     width: 100%;
@@ -501,6 +500,8 @@ const initMap = () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   white-space: nowrap;
   flex-shrink: 0;
+  flex: 1;
+  min-width: 80px;
 
   .btn-icon {
     width: 14px;
