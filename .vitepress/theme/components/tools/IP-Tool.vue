@@ -448,6 +448,7 @@ const initMap = () => {
   flex: 1;
   position: relative;
   min-width: 0;
+  max-width: 400px;
 
   .ip-input {
     width: 100%;

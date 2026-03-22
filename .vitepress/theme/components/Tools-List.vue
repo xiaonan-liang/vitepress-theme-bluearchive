@@ -73,7 +73,7 @@ const tools: Tool[] = [
   {
     id: 'ip',
     name: 'IP地址查询工具',
-    description: '支持主机名查询、RDAP查询、百度IP查询、IP77查询',
+    description: '查询IP地址的详细信息，包括地理位置、运营商、风险评估等相关信息，并提供地图定位',
     icon: 'icon-location',
     component: defineAsyncComponent(() => import('./tools/IP-Tool.vue'))
   }
