@@ -1,63 +1,8 @@
-# GitHub Pages 缓存策略配置
+# 安全头部配置
 
-# 静态资源 - 长期缓存（1年）
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
-  ETag: true
-
-/font/*
-  Cache-Control: public, max-age=31536000, immutable
-  Access-Control-Allow-Origin: *
-  ETag: true
-
-/spine_assets/*
-  Cache-Control: public, max-age=31536000, immutable
-  ETag: true
-
-/posts/*
-  Cache-Control: public, max-age=86400
-  ETag: true
-
-# 静态文件类型缓存
-/*.css
-/*.js
-/*.woff2
-/*.woff
-/*.ttf
-/*.svg
-/*.png
-/*.jpg
-/*.jpeg
-/*.webp
-  Cache-Control: public, max-age=31536000, immutable
-  ETag: true
-
-# HTML 文件 - 不缓存（总是获取最新）
-/*.html
-  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
-  Pragma: no-cache
-  Expires: 0
-  ETag: true
-
-# 根路径
-/
-  Cache-Control: no-cache, no-store, must-revalidate, max-age=0
-  Pragma: no-cache
-  Expires: 0
-  ETag: true
-
-# Service Worker - 不缓存
-/sw.js
-  Cache-Control: public, max-age=0, must-revalidate
-  Service-Worker-Allowed: /
-
-# 安全头部
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self'; connect-src 'self' https://v1.hitokoto.cn
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()
-  Content-Encoding: gzip, br
