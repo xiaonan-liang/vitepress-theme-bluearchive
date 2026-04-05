@@ -18,12 +18,11 @@ export interface ThemeConfig {
   footerName: string
   poweredList: { name: string; url: string }[]
 
-  //gitalk
-  clientID: string
-  clientSecret: string
-  repo: string
-  owner: string
-  admin: string[]
+  //giscus
+  giscusRepo: string
+  giscusRepoId: string
+  giscusCategory: string
+  giscusCategoryId: string
 }
 
 export default defineConfigWithTheme<ThemeConfig>({
@@ -55,9 +54,7 @@ export default defineConfigWithTheme<ThemeConfig>({
         href: '/font/Blueaka_Bold/Blueaka_Bold.css',
       },
     ],
-    // gitalk - 延迟加载
-    ['link', { rel: 'preload', href: 'https://unpkg.com/gitalk/dist/gitalk.css', as: 'style', onload: "this.onload=null;this.rel='stylesheet'" }],
-    ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js', defer: '', async: '' }],
+
     // 图片灯箱 - 延迟加载
     ['link', { rel: 'preload', href: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css', as: 'style', onload: "this.onload=null;this.rel='stylesheet'" }],
     ['script', { src: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js', defer: '', async: '' }],
@@ -84,11 +81,11 @@ export default defineConfigWithTheme<ThemeConfig>({
       { name: 'VitePress', url: 'https://github.com/vuejs/vitepress' },
       { name: 'GitHub Pages', url: 'https://docs.github.com/zh/pages' },
     ],
-    clientID: 'Ov23lia9U9wFN3WMyoKK',
-    clientSecret: 'b2418ab598c188c43a247c99e728dd2735d58c3b',
-    repo: 'vitepress-theme-bluearchive',
-    owner: 'Alittfre',
-    admin: ['Alittfre'],
+    // Giscus配置
+    giscusRepo: 'xiaonan-liang/Blog-comment-storage',
+    giscusRepoId: 'R_kgDOR6Qx3w',
+    giscusCategory: 'Show and tell',
+    giscusCategoryId: 'DIC_kwDOR6Qx384C6Gp4',
   },
   markdown: {
     theme: 'solarized-dark',
