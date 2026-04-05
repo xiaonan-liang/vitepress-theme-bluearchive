@@ -18,12 +18,8 @@ export interface ThemeConfig {
   footerName: string
   poweredList: { name: string; url: string }[]
 
-  //gitalk
-  clientID: string
-  clientSecret: string
-  repo: string
-  owner: string
-  admin: string[]
+  //utterances
+  utterancesRepo: string
 }
 
 export default defineConfigWithTheme<ThemeConfig>({
@@ -55,9 +51,7 @@ export default defineConfigWithTheme<ThemeConfig>({
         href: '/font/Blueaka_Bold/Blueaka_Bold.css',
       },
     ],
-    // gitalk - 延迟加载
-    ['link', { rel: 'preload', href: 'https://unpkg.com/gitalk/dist/gitalk.css', as: 'style', onload: "this.onload=null;this.rel='stylesheet'" }],
-    ['script', { src: 'https://unpkg.com/gitalk/dist/gitalk.min.js', defer: '', async: '' }],
+
     // 图片灯箱 - 延迟加载
     ['link', { rel: 'preload', href: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css', as: 'style', onload: "this.onload=null;this.rel='stylesheet'" }],
     ['script', { src: 'https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js', defer: '', async: '' }],
@@ -84,11 +78,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       { name: 'VitePress', url: 'https://github.com/vuejs/vitepress' },
       { name: 'GitHub Pages', url: 'https://docs.github.com/zh/pages' },
     ],
-    clientID: 'Ov23li4iDPvmns5Yw4fX',
-    clientSecret: 'e45226fbb8338943b77db8c5e96f2c57561fe39b',
-    repo: 'Blog-comment-storage',
-    owner: 'xiaonan-liang',
-    admin: ['xiaonan-liang'],
+    utterancesRepo: 'xiaonan-liang/Blog-comment-storage',
   },
   markdown: {
     theme: 'solarized-dark',

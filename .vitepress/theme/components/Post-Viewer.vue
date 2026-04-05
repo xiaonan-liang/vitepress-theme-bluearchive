@@ -1,11 +1,11 @@
 <template>
   <div class="view-box container">
     <content class="content" />
-    <Gitalk v-if="themeConfig.clientID"></Gitalk>
+    <Utterances v-if="themeConfig.utterancesRepo"></Utterances>
   </div>
 </template>
 <script setup lang="ts">
-import Gitalk from './Gitalk.vue'
+import Utterances from './Utterances.vue'
 import { data as posts } from '../utils/posts.data'
 import { useData, useRoute } from 'vitepress'
 import { useStore } from '../store'
