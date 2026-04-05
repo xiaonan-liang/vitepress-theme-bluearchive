@@ -19,6 +19,7 @@ onMounted(() => {
   script.setAttribute('issue-term', 'pathname')
   script.setAttribute('label', 'comment')
   script.setAttribute('theme', 'github-dark')
+  script.setAttribute('lang', 'zh-CN')
   
   // 清除容器内容
   const container = document.getElementById('utterances-container')
