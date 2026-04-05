@@ -18,8 +18,11 @@ export interface ThemeConfig {
   footerName: string
   poweredList: { name: string; url: string }[]
 
-  //utterances
-  utterancesRepo: string
+  //giscus
+  giscusRepo: string
+  giscusRepoId: string
+  giscusCategory: string
+  giscusCategoryId: string
 }
 
 export default defineConfigWithTheme<ThemeConfig>({
@@ -78,7 +81,11 @@ export default defineConfigWithTheme<ThemeConfig>({
       { name: 'VitePress', url: 'https://github.com/vuejs/vitepress' },
       { name: 'GitHub Pages', url: 'https://docs.github.com/zh/pages' },
     ],
-    utterancesRepo: 'xiaonan-liang/Blog-comment-storage',
+    // Giscus配置 - 需要在 https://giscus.app/ 生成
+    giscusRepo: '你的GitHub用户名/你的仓库名',
+    giscusRepoId: '你的仓库ID',
+    giscusCategory: 'Comments',
+    giscusCategoryId: '你的分类ID',
   },
   markdown: {
     theme: 'solarized-dark',

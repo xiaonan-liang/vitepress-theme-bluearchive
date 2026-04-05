@@ -1,11 +1,11 @@
 <template>
   <div class="view-box container">
     <content class="content" />
-    <Utterances v-if="themeConfig.utterancesRepo"></Utterances>
+    <Giscus v-if="themeConfig.giscusRepo"></Giscus>
   </div>
 </template>
 <script setup lang="ts">
-import Utterances from './Utterances.vue'
+import Giscus from './Giscus.vue'
 import { data as posts } from '../utils/posts.data'
 import { useData, useRoute } from 'vitepress'
 import { useStore } from '../store'
