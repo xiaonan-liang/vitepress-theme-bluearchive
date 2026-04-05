@@ -81,11 +81,11 @@ export default defineConfigWithTheme<ThemeConfig>({
       { name: 'VitePress', url: 'https://github.com/vuejs/vitepress' },
       { name: 'GitHub Pages', url: 'https://docs.github.com/zh/pages' },
     ],
-    // Giscus配置 - 需要在 https://giscus.app/ 生成
-    giscusRepo: '你的GitHub用户名/你的仓库名',
-    giscusRepoId: '你的仓库ID',
-    giscusCategory: 'Comments',
-    giscusCategoryId: '你的分类ID',
+    // Giscus配置
+    giscusRepo: 'xiaonan-liang/Blog-comment-storage',
+    giscusRepoId: 'R_kgDOR6Qx3w',
+    giscusCategory: 'Show and tell',
+    giscusCategoryId: 'DIC_kwDOR6Qx384C6Gp4',
   },
   markdown: {
     theme: 'solarized-dark',
