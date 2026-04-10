@@ -17,8 +17,9 @@
   },
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "build": "vitepress build && npx wrangler deploy --site .vitepress/dist",
+    "preview": "vitepress preview",
+    "deploy": "vitepress build && npx wrangler deploy --site .vitepress/dist"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
