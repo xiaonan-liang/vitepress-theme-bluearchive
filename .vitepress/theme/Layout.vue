@@ -28,14 +28,6 @@
         </template>
       </Suspense>
     </ClientOnly>
-    <ClientOnly>
-      <Suspense>
-        <Player></Player>
-        <template #fallback>
-          <div style="display: none;"></div>
-        </template>
-      </Suspense>
-    </ClientOnly>
     <ToTop></ToTop>
   </template>
   <NotFound v-else></NotFound>
@@ -63,7 +55,6 @@ const NotFound = defineAsyncComponent(() => import('./components/NotFound.vue'))
 const Fireworks = defineAsyncComponent(() => import('./components/Fireworks.vue'))
 const ToolsList = defineAsyncComponent(() => import('./components/Tools-List.vue'))
 const SpinePlayer = defineAsyncComponent(() => import('./components/Spine-Player/index.vue'))
-const Player = defineAsyncComponent(() => import('./components/Player.vue'))
 
 import { useData } from 'vitepress'
 const { page } = useData()
