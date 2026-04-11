@@ -7,7 +7,7 @@
       marginheight="0"
       width="330"
       height="86"
-      :src="playerSrc"
+      src="https://music.163.com/outchain/player?type=2&id=2721832331&auto=1&height=66"
       class="player-iframe"
       allow="autoplay; encrypted-media"
       allowfullscreen
@@ -16,42 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-
-// 播放器源地址
-const playerSrc = ref('https://music.163.com/outchain/player?type=2&id=2721832331&auto=1&height=66')
-
-// 全局播放状态管理
-let playerState = {
-  currentTime: 0,
-  isPlaying: true
-}
-
-// 监听页面可见性变化，保持播放状态
-onMounted(() => {
-  // 从localStorage恢复播放状态
-  const savedState = localStorage.getItem('playerState')
-  if (savedState) {
-    playerState = JSON.parse(savedState)
-  }
-  
-  // 监听页面可见性变化
-  document.addEventListener('visibilitychange', handleVisibilityChange)
-})
-
-onUnmounted(() => {
-  // 保存播放状态到localStorage
-  localStorage.setItem('playerState', JSON.stringify(playerState))
-  document.removeEventListener('visibilitychange', handleVisibilityChange)
-})
-
-// 处理页面可见性变化
-const handleVisibilityChange = () => {
-  // 页面可见时，保持播放状态
-  if (!document.hidden) {
-    // 可以在这里添加逻辑来同步播放状态
-  }
-}
+// 简单的播放器组件
 </script>
 
 <style scoped>
