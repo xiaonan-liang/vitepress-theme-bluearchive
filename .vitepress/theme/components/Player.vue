@@ -9,6 +9,8 @@
       height="86"
       :src="playerSrc"
       class="player-iframe"
+      allow="autoplay; encrypted-media"
+      allowfullscreen
     ></iframe>
   </div>
 </template>
@@ -17,7 +19,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 // 播放器源地址
-const playerSrc = ref('//music.163.com/outchain/player?type=2&id=2721832331&auto=1&height=66')
+const playerSrc = ref('https://music.163.com/outchain/player?type=2&id=2721832331&auto=1&height=66')
 
 // 全局播放状态管理
 let playerState = {
