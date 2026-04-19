@@ -30,3 +30,5 @@ head:
 <a href="/test" target="_blank" rel="noopener noreferrer">GPU测试</a>
 
 <a href="/Pixel_generator/index" target="_blank" rel="noopener noreferrer">像素生成器</a>
+
+<a href="/lua/index" target="_blank" rel="noopener noreferrer">在线lua</a>
