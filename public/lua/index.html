@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>开发者代码编辑器 - 迷你世界</title>
+<link href="./css/app.css" rel="stylesheet"></head>
+
+<body>
+  <div id="app">
+    <div class="menu-wrapper">
+      <ul class="menu-list clearfix">
+        <!--文件-->
+        <li class="menu-item">
+          <div class="file-wrapper menu-item-wrapper" id="fileWrapper">
+            <button class="file-btn menu-item-btn" id="fileBtn">文件</button>
+            <div class="file-inner menu-item-inner" id="fileInner">
+              <ul class="file-list">
+                <li class="file-item" data-action="new">新建</li>
+                <li class="file-item" data-action="import">导入</li>
+                <li class="file-item" data-action="export">导出</li>
+                <li class="file-item" data-action="save">保存</li>
+                <li class="file-item" data-action="clear">清空</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <!--运行-->
+        <li class="menu-item">
+          <div class="run-wrapper menu-item-wrapper" id="runWrapper">
+            <button class="run-btn menu-item-btn" id="runBtn">运行</button>
+          </div>
+        </li>
+        <!--文件名和文件列表-->
+        <li class="menu-item file-name-item" id="fileNameItem">
+          <div class="file-tabs-wrapper" id="fileTabsWrapper">
+            <!-- 文件标签将通过JavaScript动态生成 -->
+          </div>
+          <input type="text" class="file-rename-input" id="fileNameInput" placeholder="输入文件名..." />
+        </li>
+        <!--选择主题-->
+        <li class="menu-item">
+          <div class="theme-wrapper menu-item-wrapper" id="themeWrapper">
+            <button class="theme-btn menu-item-btn" id="themeBtn">主题</button>
+            <div class="theme-inner menu-item-inner" id="themeInner">
+              <ul class="theme-list">
+                <li class="theme-item" data-theme="textmate">textmate</li>
+                <li class="theme-item" data-theme="monokai">monokai</li>
+                <li class="theme-item" data-theme="eclipse">eclipse</li>
+                <li class="theme-item" data-theme="ambiance">ambiance</li>
+                <li class="theme-item" data-theme="sqlserver">sqlserver</li>
+                <li class="theme-item" data-theme="github">github</li>
+                <li class="theme-item" data-theme="solarized_light">solarized_light</li>
+                <li class="theme-item" data-theme="solarized_dark">solarized_dark</li>
+                <li class="theme-item" data-theme="tomorrow_night_bright">tomorrow_night_bright</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <!--代码插入-->
+        <li class="menu-item">
+          <div class="insert-wrapper menu-item-wrapper" id="insertWrapper">
+            <button class="insert-btn menu-item-btn" id="insertBtn">插入</button>
+            <div class="insert-inner menu-item-inner not-focus-hide" id="insertInner">
+              <div class="insert-inner-top" id="insertInnerTop"><i class="close-icon"></i></div>
+              <div class="insert-inner-content">
+                <!--父菜单-->
+                <ul class="insert-list parent">
+                  <li class="insert-item" data-insert-type="variable">创建变量</li>
+                  <li class="insert-item" data-insert-type="func">创建函数</li>
+                  <li class="insert-item" data-insert-type="assert">创建流程语句</li>
+                  <li class="insert-item" data-insert-type="loop">创建循环语句</li>
+                  <li class="insert-item" data-insert-type="table">创建table</li>
+                </ul>
+                <!--子菜单-->
+                <ul class="insert-list child" data-parent-type="variable" style="display: none;">
+                  <li class="insert-item" data-insert-type="variable-global">全局变量</li>
+                  <li class="insert-item" data-insert-type="variable-local">局部变量</li>
+                </ul>
+                <ul class="insert-list child" data-parent-type="func" style="display: none;">
+                  <li class="insert-item" data-insert-type="func-global">全局函数</li>
+                  <li class="insert-item" data-insert-type="func-local">局部函数</li>
+                </ul>
+                <ul class="insert-list child" data-parent-type="assert" style="display: none;">
+                  <li class="insert-item" data-insert-type="assert-if">if语句</li>
+                  <li class="insert-item" data-insert-type="assert-ifelse">if……else语句</li>
+                  <li class="insert-item" data-insert-type="assert-ifelseif">if……elseif语句</li>
+                </ul>
+                <ul class="insert-list child" data-parent-type="loop" style="display: none;">
+                  <li class="insert-item" data-insert-type="loop-for">for循环</li>
+                  <li class="insert-item" data-insert-type="loop-while">while循环</li>
+                  <li class="insert-item" data-insert-type="loop-repeatUntil">repeat……until循环</li>
+                </ul>
+                <ul class="insert-list child" data-parent-type="table" style="display: none;">
+                  <li class="insert-item" data-insert-type="table-global">全局table</li>
+                  <li class="insert-item" data-insert-type="table-local">局部table</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <!--字体-->
+        <li class="menu-item">
+          <div class="font-wrapper menu-item-wrapper" id="fontWrapper">
+            <button class="font-btn menu-item-btn" id="fontBtn">字体</button>
+            <div class="font-inner menu-item-inner" id="fontInner">
+              <ul class="font-list">
+                <li class="font-item" data-size="12px">12px</li>
+                <li class="font-item" data-size="13px">13px</li>
+                <li class="font-item" data-size="14px">14px</li>
+                <li class="font-item" data-size="15px">15px</li>
+                <li class="font-item" data-size="16px">16px</li>
+                <li class="font-item" data-size="18px">18px</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <!-- id 库-->
+        <li class="menu-item">
+          <div class="idlib-wrapper menu-item-wrapper" id="idlibWrapper">
+            <button class="idlib-btn menu-item-btn" id="idlibBtn">ID库</button>
+            <div class="idlib-inner menu-item-inner" id="idlibInner">
+              <ul class="idlib-list">
+                <li class="idlib-item" data-type="1" draggable="true">方块</li>
+                <li class="idlib-item" data-type="2" draggable="true">道具</li>
+                <li class="idlib-item" data-type="3" draggable="true">生物</li>
+                <li class="idlib-item" data-type="4" draggable="true">特效</li>
+                <li class="idlib-item" data-type="5" draggable="true">音效</li>
+                <li class="idlib-item" data-type="6" draggable="true">状态</li>
+                <!-- <li class="idlib-item" data-type="7">镶嵌</li> -->
+                <li class="idlib-item" data-type="8" draggable="true">动作</li>
+                <li class="idlib-item" data-type="9" draggable="true">商品</li>
+                <li class="idlib-item" data-type="10" draggable="true">模型</li>
+                <li class="idlib-item" data-type="11" draggable="true">图片</li>
+                <li class="idlib-item" data-type="12" draggable="true">界面</li>
+                <li class="idlib-item" data-type="13" draggable="true">元件</li>
+                <li class="idlib-item" data-type="14" draggable="true">页面状态</li>
+				<li class="idlib-item" data-type="15" draggable="true">显示板</li>
+				<li class="idlib-item" data-type="16" draggable="true">蓝图</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!--编辑器-->
+    <div id="codeEditor" class="code-editor"></div>
+    <!--wiki拖动时的遮罩-->
+    <div id="devWikiMask" class="dev-wiki-mask"></div>
+    <!--搜索id-->
+    <div id="searchIdWrapper" class="search-id-wrapper">
+      <div id="searchIdTitle" class="search-id-title">
+        <span>ID搜索工具</span>
+        <i class="close-icon" id="searchIdCloseIcon"></i>
+      </div>
+      <div class="search-id-inner">
+        <div id="searchIdInpWrapper" class="search-id-inpwrapper">
+          <input type="text" class="search-id-input" placeholder="请输入方块 ID 或 名称" id="searchIdInput">
+          <div class="history-list" id="searchIdHistoryList"></div>
+        </div>
+        <div id="searchIdListContainer" class="search-id-container">
+          <!-- id 列表 -->
+          <dl id="searchIdList">
+          </dl>
+        </div>
+      </div>
+    </div>
+    <!--执行结果-->
+    <div id="runResult" class="run-result">
+      <div class="run-result-header">
+        <span>执行结果</span>
+        <button type="button" id="clearResultBtn" class="btn clear-result-btn">清空</button>
+      </div>
+      <div class="run-result-content" id="runResultContent"></div>
+    </div>
+    <!--wiki模块-->
+    <div id="devWiki" class="dev-wiki">
+      <div id="devWikiBar" class="dev-wiki-bar"></div>
+      <iframe src="https://developers.mini1.cn/wiki/API.html" frameborder="0"></iframe>
+      <button type="button" id="toggleWikiBtn" class="btn toggle-wiki-btn">Wiki</button>
+    </div>
+  </div>
+  <script src="./js/datapack.js"></script>
+  <script src="./js/insertCodeConfig.js"></script>
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script src="./fengari-web.js"></script>
+  <script type="text/javascript">
+    // 文件管理功能
+    document.addEventListener('DOMContentLoaded', function() {
+      // 文件列表存储
+      var files = [
+        { id: 1, name: '未命名.lua', content: '' }
+      ];
+      var currentFileId = 1;
+      var nextFileId = 2;
+      
+      // DOM元素
+      var fileWrapper = document.getElementById('fileWrapper');
+      var fileInner = document.getElementById('fileInner');
+      var fileBtn = document.getElementById('fileBtn');
+      var fileTabsWrapper = document.getElementById('fileTabsWrapper');
+      
+      // 更新文件标签列表
+        function updateFileTabs() {
+          fileTabsWrapper.innerHTML = '';
+          files.forEach(file => {
+            var tab = document.createElement('div');
+            tab.className = 'file-tab' + (file.id === currentFileId ? ' active' : '');
+            tab.dataset.fileId = file.id;
+            
+            var nameSpan = document.createElement('span');
+            nameSpan.className = 'file-tab-name';
+            nameSpan.textContent = file.name;
+            tab.appendChild(nameSpan);
+            
+            var closeSpan = document.createElement('span');
+            closeSpan.className = 'file-tab-close';
+            closeSpan.textContent = '×';
+            closeSpan.dataset.fileId = file.id;
+            tab.appendChild(closeSpan);
+            
+            fileTabsWrapper.appendChild(tab);
+          });
+        }
+      
+      // 切换文件
+      function switchFile(fileId) {
+        // 保存当前文件内容
+        var currentFile = files.find(file => file.id === currentFileId);
+        if (currentFile) {
+          currentFile.content = window.aceEditor.getValue();
+        }
+        
+        // 切换到新文件
+        currentFileId = fileId;
+        var newFile = files.find(file => file.id === fileId);
+        if (newFile) {
+          window.aceEditor.setValue(newFile.content);
+          // 更新输入框的值
+          var fileNameInput = document.getElementById('fileNameInput');
+          fileNameInput.value = newFile.name.replace('.lua', '');
+          updateFileTabs();
+        }
+      }
+      
+      // 新建文件
+      function createNewFile() {
+        // 保存当前文件内容
+        var currentFile = files.find(file => file.id === currentFileId);
+        if (currentFile) {
+          currentFile.content = window.aceEditor.getValue();
+        }
+        
+        // 创建新文件
+        var newFile = {
+          id: nextFileId++,
+          name: '未命名.lua',
+          content: ''
+        };
+        files.push(newFile);
+        currentFileId = newFile.id;
+        
+        // 更新编辑器内容和UI
+        window.aceEditor.setValue('');
+        
+        // 更新输入框
+        var fileNameInput = document.getElementById('fileNameInput');
+        fileNameInput.value = '未命名';
+        
+        // 更新文件标签
+        updateFileTabs();
+      }
+      
+      // 关闭文件
+      function closeFile(fileId) {
+        var targetId = fileId || currentFileId;
+        
+        if (files.length === 1) {
+          // 如果是最后一个文件，清空内容
+          window.aceEditor.setValue('');
+          var currentFile = files.find(file => file.id === targetId);
+          if (currentFile) {
+            currentFile.content = '';
+            currentFile.name = '未命名.lua';
+          }
+          updateFileTabs();
+        } else {
+          // 保存当前文件内容
+          var currentFile = files.find(file => file.id === targetId);
+          if (currentFile) {
+            currentFile.content = window.aceEditor.getValue();
+          }
+          
+          // 找到下一个要显示的文件
+          var nextFileToShow = files.find(file => file.id !== targetId);
+          
+          // 移除当前文件
+          files = files.filter(file => file.id !== targetId);
+          
+          // 切换到下一个文件
+          switchFile(nextFileToShow.id);
+        }
+      }
+      
+      // 切换文件菜单显示/隐藏
+      fileBtn.addEventListener('click', function() {
+        fileInner.classList.toggle('show');
+      });
+      
+      // 鼠标离开时隐藏菜单
+      fileWrapper.addEventListener('mouseleave', function() {
+        fileInner.classList.remove('show');
+      });
+      
+      // 处理文件标签点击事件
+        fileTabsWrapper.addEventListener('click', function(e) {
+          var target = e.target;
+          
+          // 点击关闭按钮
+          if (target.classList.contains('file-tab-close')) {
+            var fileId = parseInt(target.dataset.fileId);
+            closeFile(fileId);
+            e.stopPropagation();
+            return;
+          }
+          
+          // 点击文件标签（切换文件）
+          if (target.classList.contains('file-tab') || target.classList.contains('file-tab-name')) {
+            var tab = target.classList.contains('file-tab') ? target : target.parentElement;
+            var fileId = parseInt(tab.dataset.fileId);
+            switchFile(fileId);
+          }
+        });
+        
+        // 处理输入框事件
+        var fileNameInput = document.getElementById('fileNameInput');
+        
+        // 当输入框内容改变时更新文件名
+        fileNameInput.addEventListener('change', function() {
+          var file = files.find(file => file.id === currentFileId);
+          if (file) {
+            var newName = this.value.trim() || '未命名';
+            file.name = newName + '.lua';
+            updateFileTabs();
+          }
+        });
+        
+        // 当输入框按下Enter键时更新文件名
+        fileNameInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            var file = files.find(file => file.id === currentFileId);
+            if (file) {
+              var newName = this.value.trim() || '未命名';
+              file.name = newName + '.lua';
+              updateFileTabs();
+            }
+          }
+        });
+      
+      // 处理文件菜单点击事件
+      fileInner.addEventListener('click', function(e) {
+        var target = e.target;
+        fileInner.classList.remove('show');
+        
+        var action = target.dataset.action;
+        switch (action) {
+          case 'new':
+            createNewFile();
+            break;
+          case 'import':
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.lua,.txt';
+            input.onchange = function(e) {
+              var file = e.target.files[0];
+              if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                  // 保存当前文件内容
+                  var currentFile = files.find(file => file.id === currentFileId);
+                  if (currentFile) {
+                    currentFile.content = window.aceEditor.getValue();
+                    currentFile.name = file.name;
+                  }
+                  
+                  // 加载新文件内容
+                  window.aceEditor.setValue(e.target.result);
+                  updateFileName();
+                  updateFileList();
+                };
+                reader.readAsText(file);
+              }
+            };
+            input.click();
+            break;
+          case 'export':
+            var content = window.aceEditor.getValue();
+            var blob = new Blob([content], {type: 'text/plain'});
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'script.lua';
+            link.click();
+            break;
+          case 'save':
+            alert('文件已保存');
+            break;
+          case 'clear':
+            if (confirm('确定要清空文件吗？当前内容将丢失。')) {
+              window.aceEditor.setValue('');
+              // 更新当前文件内容
+              var currentFile = files.find(file => file.id === currentFileId);
+              if (currentFile) {
+                currentFile.content = '';
+              }
+            }
+            break;
+        }
+      });
+      
+      // 初始化
+      updateFileTabs();
+      
+      // 设置输入框初始值
+      var fileNameInput = document.getElementById('fileNameInput');
+      var currentFile = files.find(file => file.id === currentFileId);
+      if (currentFile) {
+        fileNameInput.value = currentFile.name.replace('.lua', '');
+      }
+      
+      // 实现元件横向拖动功能
+      var idlibList = document.querySelector('.idlib-list');
+      var draggedItem = null;
+      
+      // 为所有idlib-item添加拖动事件
+      document.querySelectorAll('.idlib-item').forEach(item => {
+        // 拖动开始
+        item.addEventListener('dragstart', function(e) {
+          draggedItem = this;
+          this.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        
+        // 拖动结束
+        item.addEventListener('dragend', function() {
+          this.classList.remove('dragging');
+          draggedItem = null;
+        });
+      });
+      
+      // 处理dragover事件，限制横向拖动
+      idlibList.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        
+        // 计算放置位置
+        var rect = this.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var items = this.children;
+        var closestItem = null;
+        var closestDistance = Infinity;
+        
+        // 找到最近的元素
+        for (var i = 0; i < items.length; i++) {
+          var itemRect = items[i].getBoundingClientRect();
+          var itemCenter = itemRect.left - rect.left + itemRect.width / 2;
+          var distance = Math.abs(x - itemCenter);
+          
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestItem = items[i];
+          }
+        }
+        
+        // 确定插入位置
+        if (closestItem) {
+          var closestRect = closestItem.getBoundingClientRect();
+          var closestCenter = closestRect.left - rect.left + closestRect.width / 2;
+          
+          if (x < closestCenter) {
+            this.insertBefore(draggedItem, closestItem);
+          } else {
+            this.insertBefore(draggedItem, closestItem.nextSibling);
+          }
+        }
+      });
+      
+      // 处理drop事件
+      idlibList.addEventListener('drop', function(e) {
+        e.preventDefault();
+        if (draggedItem) {
+          // 确保元素在正确的位置
+          var rect = this.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var items = this.children;
+          var closestItem = null;
+          var closestDistance = Infinity;
+          
+          for (var i = 0; i < items.length; i++) {
+            if (items[i] !== draggedItem) {
+              var itemRect = items[i].getBoundingClientRect();
+              var itemCenter = itemRect.left - rect.left + itemRect.width / 2;
+              var distance = Math.abs(x - itemCenter);
+              
+              if (distance < closestDistance) {
+                closestDistance = distance;
+                closestItem = items[i];
+              }
+            }
+          }
+          
+          if (closestItem) {
+            var closestRect = closestItem.getBoundingClientRect();
+            var closestCenter = closestRect.left - rect.left + closestRect.width / 2;
+            
+            if (x < closestCenter) {
+              this.insertBefore(draggedItem, closestItem);
+            } else {
+              this.insertBefore(draggedItem, closestItem.nextSibling);
+            }
+          }
+        }
+      });
+      
+      // 实现Lua代码执行功能
+      var runBtn = document.getElementById('runBtn');
+      var runResult = document.getElementById('runResult');
+      var runResultContent = document.getElementById('runResultContent');
+      var clearResultBtn = document.getElementById('clearResultBtn');
+      
+      // 创建一个全局函数来显示输出
+      window.showOutput = function(output) {
+        runResultContent.textContent += output;
+      };
+      
+      // 运行按钮点击事件
+      runBtn.addEventListener('click', function() {
+        // 获取编辑器内容
+        var code = window.aceEditor.getValue();
+        
+        // 显示执行结果区域
+        runResult.classList.add('show');
+        
+        try {
+          // 重置输出
+          runResultContent.textContent = '';
+          
+          // 定义print重定向代码
+          const printWrapper = "print = function(...)\n" +
+            "  local args = {...}\n" +
+            "  local output = \"\"\n" +
+            "  for i, v in ipairs(args) do\n" +
+            "    if i > 1 then output = output .. \" \" end\n" +
+            "    output = output .. tostring(v)\n" +
+            "  end\n" +
+            "  output = output .. \"\\n\"\n" +
+            "  js.global.runResultContent.textContent = js.global.runResultContent.textContent .. output\n" +
+            "end\n";
+          
+          // 执行print重定义代码
+          fengari.load(printWrapper)();
+          
+          // 执行用户代码
+          fengari.load(code)();
+        } catch (error) {
+          // 显示错误信息
+          runResultContent.textContent = '错误: ' + error.message + '\n';
+        }
+      });
+      
+      // 清空结果按钮点击事件
+      clearResultBtn.addEventListener('click', function() {
+        runResultContent.textContent = '';
+      });
+    });
+  </script>
+</body>
+
+</html>
