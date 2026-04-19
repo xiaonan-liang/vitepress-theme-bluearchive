@@ -25,4 +25,8 @@ head:
 ></iframe>
 </div>
 
-[GPU测试](/test)
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2721832331&auto=1&height=66"></iframe>
+
+<a href="/test" target="_blank" rel="noopener noreferrer">GPU测试</a>
+
+<a href="/Pixel_generator/index" target="_blank" rel="noopener noreferrer">像素生成器</a>
