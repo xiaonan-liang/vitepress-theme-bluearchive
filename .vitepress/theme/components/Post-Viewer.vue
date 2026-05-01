@@ -545,11 +545,19 @@ const themeConfig = useData().theme.value
     border-radius: 8px;
     filter: var(--img-brightness);
     transition: filter 0.5s;
+    display: block;
   }
 
   // 自定义视频容器内的 iframe 不受 max-width 限制
   .bilibili-video-container iframe {
     max-width: none;
+  }
+
+  // 防止外部播放器控件过大
+  iframe[src*="player.bilibili.com"],
+  iframe[src*="music.163.com"] {
+    max-height: 500px;
+    object-fit: contain;
   }
 }
 
