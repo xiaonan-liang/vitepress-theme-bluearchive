@@ -581,7 +581,17 @@ const themeConfig = useData().theme.value
  * -------------------------------------------------------------------------- */
 
   img,
-  svg,
+  svg {
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    border-radius: 8px;
+    filter: var(--img-brightness);
+    transition: filter 0.5s;
+    display: block;
+    margin: 16px auto;
+  }
+
   video,
   iframe {
     max-width: 100%;
@@ -592,7 +602,7 @@ const themeConfig = useData().theme.value
     filter: var(--img-brightness);
     transition: filter 0.5s;
     display: block;
-    margin: 0 auto;
+    margin: 16px auto;
     object-fit: contain;
   }
 
