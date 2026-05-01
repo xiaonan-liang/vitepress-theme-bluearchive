@@ -584,14 +584,14 @@ const themeConfig = useData().theme.value
 
   img,
   svg {
-    max-width: 25%;
+    width: 25%;
     height: auto;
-    width: auto;
     border-radius: 8px;
     filter: var(--img-brightness);
     transition: filter 0.5s;
     display: block;
     margin: 16px auto;
+    box-sizing: border-box;
   }
 
   video,
