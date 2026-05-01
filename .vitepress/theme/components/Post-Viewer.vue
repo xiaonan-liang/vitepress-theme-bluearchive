@@ -102,9 +102,48 @@ const themeConfig = useData().theme.value
   a {
     font-weight: 500;
     color: var(--color-blue);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    transition: color 0.25s, opacity 0.25s;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    padding-bottom: 2px;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-blue), #ff6b9d);
+      transition: width 0.3s ease;
+    }
+    
+    &:hover {
+      color: #ff6b9d;
+      
+      &::after {
+        width: 100%;
+      }
+    }
+    
+    &:visited {
+      color: var(--color-blue);
+    }
+    
+    // 外部链接图标
+    &[target="_blank"] {
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        margin-right: 4px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpath d='M15 3h6v6'/%3E%3Cpath d='M10 14L21 3'/%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        vertical-align: middle;
+      }
+    }
   }
 
   strong {
