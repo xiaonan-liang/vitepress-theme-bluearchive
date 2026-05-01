@@ -66,7 +66,6 @@ export default defineConfigWithTheme<ThemeConfig>({
     menuList: [
       { name: '首页', url: '' },
       { name: '标签', url: 'tags/' },
-      { name: '工具', url: 'tools/' },
     ],
     videoBanner: true,
     name: "其实你们都是柔情猫娘吧QAQ",
