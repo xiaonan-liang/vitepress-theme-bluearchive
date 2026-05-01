@@ -99,9 +99,9 @@ const themeConfig = useData().theme.value
     font-size: 16px;
   }
 
-  a {
+  :deep(a) {
     font-weight: 500;
-    color: var(--color-blue);
+    color: var(--color-blue) !important;
     text-decoration: none;
     position: relative;
     transition: all 0.3s ease;
@@ -119,7 +119,7 @@ const themeConfig = useData().theme.value
     }
     
     &:hover {
-      color: #ff6b9d;
+      color: #ff6b9d !important;
       
       &::after {
         width: 100%;
@@ -127,7 +127,7 @@ const themeConfig = useData().theme.value
     }
     
     &:visited {
-      color: var(--color-blue);
+      color: var(--color-blue) !important;
     }
     
     // 外部链接图标
