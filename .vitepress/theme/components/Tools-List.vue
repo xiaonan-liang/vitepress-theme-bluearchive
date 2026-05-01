@@ -94,13 +94,16 @@ const closeTool = () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   margin-top: 32px;
+  width: 100%;
 }
 
 .tool-card {
@@ -118,6 +121,7 @@ const closeTool = () => {
   display: flex;
   align-items: center;
   gap: 20px;
+  box-sizing: border-box;
 
   &:hover {
     transform: translateY(-4px);
