@@ -59,6 +59,7 @@ const themeConfig = useData().theme.value
   box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
   transition: opacity 0.5s ease-out, transform 1s cubic-bezier(0.61, 0.15, 0.26, 1), border 0.5s,
     background 0.5s, box-shadow 0.5s;
+  overflow-x: hidden;
 }
 
 .content {
@@ -309,6 +310,9 @@ const themeConfig = useData().theme.value
     width: 100%;
     border-collapse: collapse;
     border: 2px solid #cad4d5;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
     html[theme='dark'] & {
       border: 2px solid #383852; // 更改表格边框颜色
     }
@@ -581,10 +585,15 @@ const themeConfig = useData().theme.value
   video,
   iframe {
     max-width: 100%;
+    max-height: 80vh;
+    height: auto;
+    width: auto;
     border-radius: 8px;
     filter: var(--img-brightness);
     transition: filter 0.5s;
     display: block;
+    margin: 0 auto;
+    object-fit: contain;
   }
 
   // 自定义视频容器内的 iframe 不受 max-width 限制
