@@ -584,14 +584,14 @@ const themeConfig = useData().theme.value
 
   :deep(img),
   :deep(svg) {
-    width: 25% !important;
-    max-width: 25% !important;
+    width: 50% !important;
+    max-width: 50% !important;
     height: auto !important;
     border-radius: 8px;
     filter: var(--img-brightness);
     transition: filter 0.5s;
     display: block !important;
-    margin: 16px auto;
+    margin: 16px 0;
     box-sizing: border-box;
   }
 
