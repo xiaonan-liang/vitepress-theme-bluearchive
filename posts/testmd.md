@@ -1,7 +1,7 @@
 ---
 title: 测试
 date: 2026-03-15
-tags: [测试, test]
+tags: [测试,test]
 pinned: false
 head:
   - - meta
@@ -28,7 +28,5 @@ head:
 <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=2721832331&auto=1&height=66"></iframe>
 
 <a href="/test" target="_blank" rel="noopener noreferrer">GPU测试</a>
-
-<a href="/Pixel_generator/index" target="_blank" rel="noopener noreferrer">像素生成器</a>
 
 <a href="/lua/index" target="_blank" rel="noopener noreferrer">在线lua</a>
