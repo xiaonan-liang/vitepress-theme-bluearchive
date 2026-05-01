@@ -15,11 +15,11 @@ head:
 
 <a href="/Pixel_generator/index" target="_blank" rel="noopener noreferrer">像素画生成器</a>
 
-![效果图](public/posts/tools/Pixel_generator.png)
+![效果图](/posts/tools/Pixel_generator.png)
 
 ## 在线lua
 
 <a href="/lua/index" target="_blank" rel="noopener noreferrer">在线lua</a>
 
-![效果图](public/posts/tools/lua.png)
+![效果图](/posts/tools/lua.png)
 
