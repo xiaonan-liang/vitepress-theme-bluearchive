@@ -63,6 +63,8 @@ const themeConfig = useData().theme.value
 }
 
 .content {
+  box-sizing: border-box;
+  width: 100%;
   background-image: linear-gradient(90deg, rgba(159, 219, 252, 0.15) 3%, transparent 0),
     linear-gradient(1turn, rgba(159, 219, 252, 0.15) 3%, transparent 0);
   background-size: 20px 20px;
