@@ -582,7 +582,7 @@ const themeConfig = useData().theme.value
 
   img,
   svg {
-    max-width: 50%;
+    max-width: 25%;
     height: auto;
     width: auto;
     border-radius: 8px;
