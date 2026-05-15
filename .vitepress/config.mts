@@ -74,7 +74,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       { icon: 'github', url: 'https://github.com/xiaonan-liang' },
       { icon: 'bilibili', url: 'https://space.bilibili.com/1896313821' },
     ],
-    spineVoiceLang: 'zh',
+    spineVoiceLang: 'jp',
     footerName: 'Sensei',
     poweredList: [
       { name: 'VitePress', url: 'https://github.com/vuejs/vitepress' },
