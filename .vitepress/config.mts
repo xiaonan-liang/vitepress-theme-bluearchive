@@ -1,5 +1,6 @@
 import { defineConfigWithTheme } from 'vitepress'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import viteCompression from 'vite-plugin-compression'
 // @ts-ignore
 import mdItCustomAttrs from 'markdown-it-custom-attrs'
 export interface ThemeConfig {
@@ -151,6 +152,30 @@ export default defineConfigWithTheme<ThemeConfig>({
           useShortDoctype: true,
           minifyCss: true,
           minifyJs: true,
+        },
+      }),
+      // Gzip 压缩
+      viteCompression({
+        algorithm: 'gzip',
+        ext: '.gz',
+        threshold: 1024,
+        deleteOriginFile: false,
+      }),
+      // Brotli 压缩
+      viteCompression({
+        algorithm: 'brotliCompress',
+        ext: '.br',
+        threshold: 1024,
+        deleteOriginFile: false,
+      }),
+      // Zstd 压缩
+      viteCompression({
+        algorithm: 'zstd',
+        ext: '.zst',
+        threshold: 1024,
+        deleteOriginFile: false,
+        compressionOptions: {
+          level: 19,
         },
       }),
     ],
