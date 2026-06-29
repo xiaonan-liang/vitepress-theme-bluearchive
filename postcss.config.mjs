@@ -3,15 +3,35 @@ import cssnano from 'cssnano'
 
 export default {
   plugins: [
-    // CSSNano - 压缩 CSS
+    // CSSNano - 最强 CSS 压缩
     cssnano({
-      preset: ['default', {
+      preset: ['advanced', {
         discardComments: { removeAll: true },
         normalizeWhitespace: true,
         minifyFontValues: true,
         minifySelectors: true,
+        minifyParams: true,
+        convertValues: true,
+        discardDuplicates: true,
+        discardEmpty: true,
+        mergeRules: true,
+        colormin: true,
+        reduceInitial: true,
+        reduceTransforms: true,
+        svgo: true,
+        autoprefixer: {
+          add: true,
+          remove: true,
+          flexbox: true,
+          grid: true
+        },
         reduceIdents: false,
         zindex: false,
+        calc: true,
+        orderedValues: true,
+        mergeLonghand: true,
+        uniqueSelectors: true,
+        declarations: true,
       }],
     }),
     // PurgeCSS - 仅在生产环境移除未使用的 CSS
