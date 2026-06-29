@@ -137,10 +137,15 @@ export default defineConfigWithTheme<ThemeConfig>({
       createHtmlPlugin({
         minify: {
           collapseWhitespace: true,
+          preserveLineBreaks: false,
           removeComments: true,
           removeRedundantAttributes: true,
           removeScriptTypeAttributes: true,
           removeStyleLinkTypeAttributes: true,
+          removeEmptyAttributes: true,
+          removeEmptyElements: false,
+          removeAttributeQuotes: false,
+          collapseBooleanAttributes: true,
           useShortDoctype: true,
           minifyCss: true,
           minifyJs: true,
