@@ -1,98 +1,101 @@
 <template>
   <div class="container posts-content">
-    <TransitionGroup class="posts-list" name="list" tag="div">
-      <article class="post" v-for="post in postsList" :key="post.href">
-        <span v-if="post.pinned" class="pinned"></span>
-        <header class="post-header">
-          <div v-if="post.cover" class="cover-container">
-            <img
-              :src="post.cover"
-              class="cover-image"
-              :alt="post.title + '-cover'"
-              loading="lazy"
-            />
-          </div>
-          <div class="header-content">
-            <div class="title">
-              <div class="title-dot" v-if="!post.cover"></div>
-              <h1 class="name">
-                <a :href="base + post.href">{{ post.title }}</a>
-              </h1>
+    <Skeleton v-if="loading" :count="pageSize" />
+    <template v-else>
+      <TransitionGroup class="posts-list" name="list" tag="div">
+        <article class="post" v-for="post in postsList" :key="post.href">
+          <span v-if="post.pinned" class="pinned"></span>
+          <header class="post-header">
+            <div v-if="post.cover" class="cover-container">
+              <img
+                :src="post.cover"
+                class="cover-image"
+                :alt="post.title + '-cover'"
+                loading="lazy"
+              />
             </div>
-            <div class="meta-info-bar">
-              <span class="iconfont icon-time time"></span>
-              <div class="time-info">
-                <time datetime="">{{ formatDate(post.create) }}</time>
+            <div class="header-content">
+              <div class="title">
+                <div class="title-dot" v-if="!post.cover"></div>
+                <h1 class="name">
+                  <a :href="base + post.href">{{ post.title }}</a>
+                </h1>
               </div>
-              <div class="wordcount seperator">约{{ post.wordCount }}字</div>
+              <div class="meta-info-bar">
+                <span class="iconfont icon-time time"></span>
+                <div class="time-info">
+                  <time datetime="">{{ formatDate(post.create) }}</time>
+                </div>
+                <div class="wordcount seperator">约{{ post.wordCount }}字</div>
+              </div>
+              <ul class="tags">
+                <li v-for="tag in post.tags">
+                  <a :href="`${base}tags/`" @click="state.currTag = tag"
+                    ><i class="iconfont icon-tag"></i> {{ tag }}</a
+                  >
+                </li>
+              </ul>
+              <div class="excerpt">
+                <p>{{ post.excerpt }}</p>
+              </div>
             </div>
-            <ul class="tags">
-              <li v-for="tag in post.tags">
-                <a :href="`${base}tags/`" @click="state.currTag = tag"
-                  ><i class="iconfont icon-tag"></i> {{ tag }}</a
-                >
-              </li>
-            </ul>
-            <div class="excerpt">
-              <p>{{ post.excerpt }}</p>
-            </div>
-          </div>
-        </header>
-      </article>
-    </TransitionGroup>
-    <div v-if="totalPage != 1" class="pagination">
-      <button
-        :disabled="currPage === 1"
-        :class="{ hide: currPage === 1 }"
-        id="up"
-        @click="goToPage(currPage - 1)"
-      >
-        <i class="iconfont icon-arrow"></i>
-      </button>
-
-      <div class="page-numbers">
-        <!-- 第一页 -->
-        <button class="page-number" :class="{ active: currPage === 1 }" @click="goToPage(1)">
-          1
+          </header>
+        </article>
+      </TransitionGroup>
+      <div v-if="totalPage != 1" class="pagination">
+        <button
+          :disabled="currPage === 1"
+          :class="{ hide: currPage === 1 }"
+          id="up"
+          @click="goToPage(currPage - 1)"
+        >
+          <i class="iconfont icon-arrow"></i>
         </button>
 
-        <!-- 页码省略号 -->
-        <span v-if="showLeftEllipsis" class="ellipsis">...</span>
+        <div class="page-numbers">
+          <!-- 第一页 -->
+          <button class="page-number" :class="{ active: currPage === 1 }" @click="goToPage(1)">
+            1
+          </button>
 
-        <!-- 当前页码 -->
+          <!-- 页码省略号 -->
+          <span v-if="showLeftEllipsis" class="ellipsis">...</span>
+
+          <!-- 当前页码 -->
+          <button
+            v-for="page in visiblePageNumbers"
+            :key="page"
+            class="page-number"
+            :class="{ active: currPage === page }"
+            @click="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+
+          <!-- 页码省略号 -->
+          <span v-if="showRightEllipsis" class="ellipsis">...</span>
+
+          <!-- 尾页 -->
+          <button
+            v-if="totalPage > 1"
+            class="page-number"
+            :class="{ active: currPage === totalPage }"
+            @click="goToPage(totalPage)"
+          >
+            {{ totalPage }}
+          </button>
+        </div>
+
         <button
-          v-for="page in visiblePageNumbers"
-          :key="page"
-          class="page-number"
-          :class="{ active: currPage === page }"
-          @click="goToPage(page)"
+          :disabled="currPage >= totalPage"
+          :class="{ hide: currPage >= totalPage }"
+          id="next"
+          @click="goToPage(currPage + 1)"
         >
-          {{ page }}
-        </button>
-
-        <!-- 页码省略号 -->
-        <span v-if="showRightEllipsis" class="ellipsis">...</span>
-
-        <!-- 尾页 -->
-        <button
-          v-if="totalPage > 1"
-          class="page-number"
-          :class="{ active: currPage === totalPage }"
-          @click="goToPage(totalPage)"
-        >
-          {{ totalPage }}
+          <i class="iconfont icon-arrow"></i>
         </button>
       </div>
-
-      <button
-        :disabled="currPage >= totalPage"
-        :class="{ hide: currPage >= totalPage }"
-        id="next"
-        @click="goToPage(currPage + 1)"
-      >
-        <i class="iconfont icon-arrow"></i>
-      </button>
-    </div>
+    </template>
   </div>
 </template>
 <script setup lang="ts">
@@ -100,9 +103,13 @@ import { useData } from 'vitepress'
 import { ref, computed, onMounted, watch } from 'vue'
 import { data as posts } from '../utils/posts.data'
 import { useStore } from '../store'
+import Skeleton from './Skeleton.vue'
+
 const { state } = useStore()
 const { page } = useData()
 const base = useData().site.value.base
+
+const loading = ref(true)
 
 // 日期格式化
 function formatDate(timestamp: number): string {
@@ -140,6 +147,10 @@ onMounted(() => {
   window.addEventListener('popstate', () => {
     updatePageFromUrl()
   })
+  // 模拟加载延迟，显示骨架屏
+  setTimeout(() => {
+    loading.value = false
+  }, 300)
 })
 function updatePageFromUrl() {
   const urlParams = new URLSearchParams(window.location.search)
