@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, watch } from 'vue'
 import { PostData } from '../utils/posts.data'
 
 interface StoreState {
@@ -13,6 +13,22 @@ interface StoreState {
   showDropdownMenu: boolean
   darkMode: 'light' | 'dark' | 'system'
 }
+
+const STORAGE_KEY = 'vitepress-theme-state'
+
+const loadPersistedState = () => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      return JSON.parse(stored)
+    }
+  } catch (e) {
+    console.error('Failed to load persisted state:', e)
+  }
+  return null
+}
+
+const persistedState = loadPersistedState()
 
 const state: StoreState = reactive({
   selectedPosts: [],
@@ -30,14 +46,41 @@ const state: StoreState = reactive({
     excerpt: '',
     pinned: false
   },
-  currPage: 1,
+  currPage: persistedState?.currPage || 1,
   searchDialog: false,
   splashLoading: true,
-  fireworksEnabled: true,
-  SpinePlayerEnabled: true,
+  fireworksEnabled: persistedState?.fireworksEnabled ?? true,
+  SpinePlayerEnabled: persistedState?.SpinePlayerEnabled ?? true,
   showDropdownMenu: false,
-  darkMode: 'system',
+  darkMode: persistedState?.darkMode || 'system',
 })
+
+const persistState = () => {
+  try {
+    const toPersist = {
+      currPage: state.currPage,
+      fireworksEnabled: state.fireworksEnabled,
+      SpinePlayerEnabled: state.SpinePlayerEnabled,
+      darkMode: state.darkMode,
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toPersist))
+  } catch (e) {
+    console.error('Failed to persist state:', e)
+  }
+}
+
+watch(
+  () => ({
+    currPage: state.currPage,
+    fireworksEnabled: state.fireworksEnabled,
+    SpinePlayerEnabled: state.SpinePlayerEnabled,
+    darkMode: state.darkMode,
+  }),
+  () => {
+    persistState()
+  },
+  { deep: true }
+)
 
 export function useStore() {
   return { state }

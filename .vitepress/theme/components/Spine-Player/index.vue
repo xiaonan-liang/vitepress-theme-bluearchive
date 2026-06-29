@@ -207,21 +207,21 @@ const AudioManager = {
   }
 }
 
-// 修改预加载音频函数
-const preloadAudio = async () => {
-  if (!currentAssets.value) return false
-
+const preloadNextAudio = async () => {
+  if (!currentAssets.value) return
+  
   AudioManager.initialize()
-  AudioManager.gc() // 清理过期缓存
-
-  const loadPromises = currentAssets.value.voiceConfig.map(pair =>
-    AudioManager.loadAudioFile(pair.audio)
-  )
-
-  return Promise.all(loadPromises).catch(error => {
-    console.error('音频预加载失败:', error)
-    return false
-  })
+  AudioManager.gc()
+  
+  const currentConfig = currentAssets.value.voiceConfig
+  if (currentConfig.length === 0) return
+  
+  const randomIndex = Math.floor(Math.random() * currentConfig.length)
+  const nextAudio = currentConfig[randomIndex].audio
+  
+  if (!AudioManager.buffers.has(nextAudio)) {
+    AudioManager.loadAudioFile(nextAudio).catch(() => {})
+  }
 }
 
 const handleScroll = () => {
@@ -313,12 +313,15 @@ const handlePlayerClick = debounce(async (event) => {
       isPlaying = false;
       isEyeControlDisabled.value = false;
       showDialog.value = false;
+      preloadNextAudio()
     }
   }
 }, 300)
 
 // 提升 moveBones 函数到组件作用域以便在其他地方使用
 let moveBonesHandler = null
+let rafId = null
+let pendingEvent = null
 
 const initializeSpinePlayer = async (assets) => {
   try {
@@ -374,55 +377,59 @@ const initializeSpinePlayer = async (assets) => {
         }
 
         function moveBones(event) {
-          // 如果眼睛控制被禁用，直接返回
           if (isEyeControlDisabled.value) return
 
-          const containerRect = playerContainer.value.getBoundingClientRect()
+          pendingEvent = event
+          if (rafId) return
 
-          const mouseX = event.clientX - (containerRect.right - containerRect.width / 2)
-          const mouseY = event.clientY - (containerRect.bottom - containerRect.height * 4 / 5)
+          rafId = requestAnimationFrame(() => {
+            rafId = null
+            if (!pendingEvent) return
 
-          // 将鼠标坐标偏移量进行逆旋转
-          const eyeRotation = assets.eyeRotationAngle * (Math.PI / 180) // 眼睛旋转角度
-          const rotatedMouse = rotateVector(mouseX, mouseY, -eyeRotation)
-          const offsetX = rotatedMouse.x
-          const offsetY = rotatedMouse.y
-          const distance = Math.sqrt(offsetX * offsetX + offsetY * offsetY)
+            const containerRect = playerContainer.value.getBoundingClientRect()
 
-          const angle = Math.atan2(offsetY, offsetX)
-          const maxDistance = Math.min(distance, maxRadius)
-          const dx = -maxDistance * Math.cos(angle)
-          const dy = maxDistance * Math.sin(angle)
+            const mouseX = pendingEvent.clientX - (containerRect.right - containerRect.width / 2)
+            const mouseY = pendingEvent.clientY - (containerRect.bottom - containerRect.height * 4 / 5)
 
-          // 眼睛移动
-          if (rightEyeBone) {
-            rightEyeBone.x = rightEyeCenterX + dx
-            rightEyeBone.y = rightEyeCenterY + dy
-          }
+            const eyeRotation = assets.eyeRotationAngle * (Math.PI / 180)
+            const rotatedMouse = rotateVector(mouseX, mouseY, -eyeRotation)
+            const offsetX = rotatedMouse.x
+            const offsetY = rotatedMouse.y
+            const distance = Math.sqrt(offsetX * offsetX + offsetY * offsetY)
 
-          if (leftEyeBone) {
-            leftEyeBone.x = leftEyeCenterX + dx
-            leftEyeBone.y = leftEyeCenterY + dy
-          }
+            const angle = Math.atan2(offsetY, offsetX)
+            const maxDistance = Math.min(distance, maxRadius)
+            const dx = -maxDistance * Math.cos(angle)
+            const dy = maxDistance * Math.sin(angle)
 
-          // 头部轻微移动
-          const frontHeadDx = Math.min(distance, frontHeadMaxRadius) * Math.cos(angle)
-          const frontHeadDy = Math.min(distance, frontHeadMaxRadius) * Math.sin(angle)
+            if (rightEyeBone) {
+              rightEyeBone.x = rightEyeCenterX + dx
+              rightEyeBone.y = rightEyeCenterY + dy
+            }
 
-          const backHeadDx = Math.min(distance, backHeadMaxRadius) * Math.cos(angle)
-          const backHeadDy = Math.min(distance, backHeadMaxRadius) * Math.sin(angle)
+            if (leftEyeBone) {
+              leftEyeBone.x = leftEyeCenterX + dx
+              leftEyeBone.y = leftEyeCenterY + dy
+            }
 
-          if (frontHeadBone) {
-            frontHeadBone.x = frontHeadCenterX - frontHeadDx
-            frontHeadBone.y = frontHeadCenterY + frontHeadDy
-          }
+            const frontHeadDx = Math.min(distance, frontHeadMaxRadius) * Math.cos(angle)
+            const frontHeadDy = Math.min(distance, frontHeadMaxRadius) * Math.sin(angle)
 
-          if (backHeadBone) {
-            backHeadBone.x = backHeadCenterX + backHeadDx
-            backHeadBone.y = backHeadCenterY - backHeadDy
-          }
+            const backHeadDx = Math.min(distance, backHeadMaxRadius) * Math.cos(angle)
+            const backHeadDy = Math.min(distance, backHeadMaxRadius) * Math.sin(angle)
 
-          skeleton.updateWorldTransform()
+            if (frontHeadBone) {
+              frontHeadBone.x = frontHeadCenterX - frontHeadDx
+              frontHeadBone.y = frontHeadCenterY + frontHeadDy
+            }
+
+            if (backHeadBone) {
+              backHeadBone.x = backHeadCenterX + backHeadDx
+              backHeadBone.y = backHeadCenterY - backHeadDy
+            }
+
+            skeleton.updateWorldTransform()
+          })
         }
 
         function resetBones() {
@@ -500,6 +507,7 @@ const handleEvents = (event) => {
 const cleanup = () => {
   if (blinkInterval) clearTimeout(blinkInterval)
   if (eyeControlTimer) clearTimeout(eyeControlTimer)
+  if (rafId) cancelAnimationFrame(rafId)
 
   // 清理监听事件
   window.removeEventListener('scroll', handleEvents)
@@ -535,10 +543,8 @@ const initializeCharacter = async () => {
   currentCharacter.value = isDarkMode.value ? 'plana' : 'arona'
 
   try {
-    await Promise.all([
-      preloadAudio(),
-      initializeSpinePlayer(currentAssets.value)
-    ])
+    await initializeSpinePlayer(currentAssets.value)
+    preloadNextAudio()
   } catch (err) {
     console.error('初始化失败:', err)
   }

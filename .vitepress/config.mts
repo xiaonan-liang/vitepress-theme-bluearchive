@@ -1,4 +1,5 @@
 import { defineConfigWithTheme } from 'vitepress'
+import { createHtmlPlugin } from 'vite-plugin-html'
 // @ts-ignore
 import mdItCustomAttrs from 'markdown-it-custom-attrs'
 export interface ThemeConfig {
@@ -132,6 +133,20 @@ export default defineConfigWithTheme<ThemeConfig>({
   },
   // Vite 配置
   vite: {
+    plugins: [
+      createHtmlPlugin({
+        minify: {
+          collapseWhitespace: true,
+          removeComments: true,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          useShortDoctype: true,
+          minifyCss: true,
+          minifyJs: true,
+        },
+      }),
+    ],
     build: {
       assetsInlineLimit: 8192, // 增加内联资源大小，减少请求数
       sourcemap: false,

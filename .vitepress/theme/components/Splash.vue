@@ -86,7 +86,7 @@ onMounted(() => {
     fadeOutSplash()
     // 启用滚轮事件
     window.removeEventListener('wheel', preventDefault)
-  }, Math.floor(Math.random() * 300) + 1200) // 随机等待时间
+  }, Math.floor(Math.random() * 300) + 500) // 随机等待时间
 })
 
 onUnmounted(() => {
