@@ -10,15 +10,20 @@
     "@types/animejs": "^3.1.12",
     "@types/md5": "^2.3.5",
     "@types/node": "^22.13.1",
+    "cssnano-preset-advanced": "^7.0.0",
+    "fontmin": "^1.0.2",
     "less": "^4.2.2",
     "markdown-it-mathjax3": "^4.3.2",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-html": "^3.2.2",
     "vitepress": "^1.6.3",
     "vue": "^3.5.13"
   },
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "font:subset": "node scripts/font-subset.mjs"
   },
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",

@@ -59,9 +59,12 @@ const themeConfig = useData().theme.value
   box-shadow: 0px 0px 8px rgb(var(--blue-shadow-color), 0.8);
   transition: opacity 0.5s ease-out, transform 1s cubic-bezier(0.61, 0.15, 0.26, 1), border 0.5s,
     background 0.5s, box-shadow 0.5s;
+  overflow-x: hidden;
 }
 
 .content {
+  box-sizing: border-box;
+  width: 100%;
   background-image: linear-gradient(90deg, rgba(159, 219, 252, 0.15) 3%, transparent 0),
     linear-gradient(1turn, rgba(159, 219, 252, 0.15) 3%, transparent 0);
   background-size: 20px 20px;
@@ -99,12 +102,51 @@ const themeConfig = useData().theme.value
     font-size: 16px;
   }
 
-  a {
+  :deep(a) {
     font-weight: 500;
-    color: var(--color-blue);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    transition: color 0.25s, opacity 0.25s;
+    color: var(--color-blue) !important;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    padding-bottom: 2px;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-blue), #ff6b9d);
+      transition: width 0.3s ease;
+    }
+    
+    &:hover {
+      color: #ff6b9d !important;
+      
+      &::after {
+        width: 100%;
+      }
+    }
+    
+    &:visited {
+      color: var(--color-blue) !important;
+    }
+    
+    // 外部链接图标
+    &[target="_blank"] {
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        margin-right: 4px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpath d='M15 3h6v6'/%3E%3Cpath d='M10 14L21 3'/%3E%3C/svg%3E");
+        background-size: contain;
+        background-repeat: no-repeat;
+        vertical-align: middle;
+      }
+    }
   }
 
   strong {
@@ -270,6 +312,9 @@ const themeConfig = useData().theme.value
     width: 100%;
     border-collapse: collapse;
     border: 2px solid #cad4d5;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
     html[theme='dark'] & {
       border: 2px solid #383852; // 更改表格边框颜色
     }
@@ -537,19 +582,43 @@ const themeConfig = useData().theme.value
  * others
  * -------------------------------------------------------------------------- */
 
-  img,
-  svg,
-  video,
-  iframe {
-    max-width: 100%;
+  :deep(img),
+  :deep(svg) {
+    width: 50% !important;
+    max-width: 50% !important;
+    height: auto !important;
     border-radius: 8px;
     filter: var(--img-brightness);
     transition: filter 0.5s;
+    display: block !important;
+    margin: 16px 0;
+    box-sizing: border-box;
+  }
+
+  video,
+  iframe {
+    max-width: 100%;
+    max-height: 80vh;
+    height: auto;
+    width: auto;
+    border-radius: 8px;
+    filter: var(--img-brightness);
+    transition: filter 0.5s;
+    display: block;
+    margin: 16px auto;
+    object-fit: contain;
   }
 
   // 自定义视频容器内的 iframe 不受 max-width 限制
   .bilibili-video-container iframe {
     max-width: none;
+  }
+
+  // 防止外部播放器控件过大
+  iframe[src*="player.bilibili.com"],
+  iframe[src*="music.163.com"] {
+    max-height: 500px;
+    object-fit: contain;
   }
 }
 

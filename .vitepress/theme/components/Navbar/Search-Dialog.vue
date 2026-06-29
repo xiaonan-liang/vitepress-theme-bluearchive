@@ -42,14 +42,22 @@ import MiniSearch, { SearchResult } from 'minisearch'
 import { useData } from 'vitepress'
 
 const base = useData().site.value.base
-const miniSearch = new MiniSearch({
-  fields: ['title', 'content'],
-  storeFields: ['title', 'href'],
-  searchOptions: {
-    fuzzy: 0.3,
-  },
-})
-miniSearch.addAll(posts)
+let miniSearch: MiniSearch | null = null
+let isIndexLoaded = false
+
+const initSearchIndex = () => {
+  if (isIndexLoaded) return
+  
+  miniSearch = new MiniSearch({
+    fields: ['title', 'content'],
+    storeFields: ['title', 'href'],
+    searchOptions: {
+      fuzzy: 0.3,
+    },
+  })
+  miniSearch.addAll(posts)
+  isIndexLoaded = true
+}
 
 const searchStr = defineModel<string>()
 const resultList = ref<SearchResult[]>([])
@@ -62,11 +70,14 @@ function search(): void {
     clearTimeout(timerId)
   }
   timerId = setTimeout(() => {
-    resultList.value = miniSearch.search(searchStr.value || '').slice(0, 5)
-    if (resultList.value.length) {
-      status.value = '搜到了~'
-    } else {
-      status.value = '这里空空的'
+    initSearchIndex()
+    if (miniSearch) {
+      resultList.value = miniSearch.search(searchStr.value || '').slice(0, 5)
+      if (resultList.value.length) {
+        status.value = '搜到了~'
+      } else {
+        status.value = '这里空空的'
+      }
     }
   }, 500)
 }

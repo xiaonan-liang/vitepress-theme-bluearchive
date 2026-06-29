@@ -14,7 +14,6 @@
         <PostsList
           v-if="page.filePath === 'index.md' || page.filePath === 'tags/index.md'"
         ></PostsList>
-        <ToolsList v-else-if="page.filePath === 'tools/index.md'"></ToolsList>
         <PostViewer v-else-if="page.filePath.startsWith('posts/')"></PostViewer>
       </transition>
     </main>
@@ -53,7 +52,6 @@ const PostViewer = defineAsyncComponent(() => import('./components/Post-Viewer.v
 const PostInnerBanner = defineAsyncComponent(() => import('./components/Post-InnerBanner.vue'))
 const NotFound = defineAsyncComponent(() => import('./components/NotFound.vue'))
 const Fireworks = defineAsyncComponent(() => import('./components/Fireworks.vue'))
-const ToolsList = defineAsyncComponent(() => import('./components/Tools-List.vue'))
 const SpinePlayer = defineAsyncComponent(() => import('./components/Spine-Player/index.vue'))
 
 import { useData } from 'vitepress'
