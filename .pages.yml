@@ -36,7 +36,7 @@ content:
       - name: pinned
         label: 置顶文章
         type: switch
-        default: false
+        default: "false"
       - name: excerpt
         label: 文章摘要
         type: string
