@@ -1,8 +1,7 @@
 ---
 title: 构建自己的Cheat Engine
 date: 2026-07-04
-update: 2026-07-04
-tags: [1,2]
+tags: Cheat Engine,教程
 pinned: "false"
 excerpt: "1112"
 ---
@@ -260,7 +259,7 @@ Leledumbo 提供此方法：
 
 只修改lazarus\lcl\interfaces\win32\win32int.pp中的ClsName和ClsNameW即可。  
 
-```
+```markdown
   BOOL_RESULT: array[Boolean] of String = ('False', 'True');
   ClsName: array[0..6] of char = 'Window'#0;
   ClsHintName: array[0..10] of char = 'HintWindow'#0;
@@ -274,7 +273,7 @@ Leledumbo 提供此方法：
 
 还要修改：CE源代码中的cheat-engine-master\Cheat Engine\frmDriverLoadedUnit.pas
 
-```
+```markdown
 b [0]:=IsWindowVisible(FindWindow('Window',pchar(s)));  
 b [1]:=IsWindowVisible(FindWindow('Window',pchar(s2)));
 ```
