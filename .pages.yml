@@ -33,7 +33,7 @@ content:
         type: list
         of: string
       - name: pinned
-        label: 置顶文章
+        label: 置顶文章(true是置顶)
         type: switch
       - name: excerpt
         label: 文章摘要
