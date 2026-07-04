@@ -35,6 +35,7 @@ content:
       - name: pinned
         label: 置顶文章
         type: boolean
+        default: false
       - name: head
         label: SEO配置
         type: object
