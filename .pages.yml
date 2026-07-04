@@ -29,7 +29,7 @@ content:
         default: ""
       - name: tags
         label: 标签(用,分隔)
-        type: string
+        type: list
         default: []
       - name: pinned
         label: 置顶文章(true和false)
