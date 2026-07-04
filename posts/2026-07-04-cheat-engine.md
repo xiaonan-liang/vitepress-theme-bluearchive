@@ -1,8 +1,8 @@
 ---
-title: Cheat Engine过检测
+title: "# 构建自己的Cheat Engine"
 date: 2026-07-04
 update: 2026-07-04
-tags: 构建自己的Cheat Engine
+tags: Cheat Engine
 ---
 # 构建自己的Cheat Engine
 
