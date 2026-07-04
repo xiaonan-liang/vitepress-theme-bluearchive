@@ -1,7 +1,7 @@
 # 图片上传配置（VitePress public标准路径）
 media:
-  input: /public
-  output: /public
+  input: /public/posts
+  output: /posts
 
 # 内容集合
 content:
