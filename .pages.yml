@@ -1,0 +1,41 @@
+# 图片上传配置（VitePress public标准路径）
+media:
+  input: ./public/images
+  output: /images
+
+# 内容集合
+content:
+  # 1. BA主题博客文章（核心）
+  - name: posts
+    label: 博客文章
+    type: collection
+    path: ./posts
+    filename: "{year}-{month}-{day}-{slug}.md"
+    view:
+      fields: [title, date, cover, tags]
+    fields:
+      # BA主题文章所需全部frontmatter字段
+      - name: title
+        label: 文章标题
+        type: string
+        required: true
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+      - name: cover
+        label: 封面图
+        type: image
+      - name: tags
+        label: 标签
+        type: list
+        of: string
+      - name: desc
+        label: 简介摘要
+        type: string
+      - name: top
+        label: 置顶文章
+        type: switch
+      - name: body
+        label: 正文内容
+        type: rich-text
