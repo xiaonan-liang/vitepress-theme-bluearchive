@@ -1,7 +1,7 @@
 ---
 title: 构建自己的Cheat Engine
 date: 2026-07-04
-tags: [CheatEngine,教程]
+tags: CheatEngine
 pinned: false
 ---
 ---
@@ -16,7 +16,7 @@ pinned: false
 
 ---
 
-我对不必要的操作进行移除和对某些资源附上链接
+++*我仅对不必要的操作进行移除和对某些资源附上链接*++
 
 原文链接:[https://www.unknowncheats.me/forum/anti-cheat-bypass/504191-undetected-cheat-engine-driver-2022-bypass-anticheats-eac.html](https://www.unknowncheats.me/forum/anti-cheat-bypass/504191-undetected-cheat-engine-driver-2022-bypass-anticheats-eac.html)  
 视频教程  
@@ -25,13 +25,13 @@ pinned: false
 
 ---
 
-**步骤 1：下载 Cheat Engine 源代码**  
+- **步骤 1：下载 Cheat Engine 源代码**  
 在本网站上下载 Cheat Engine 源代码： [https://github.com/cheat-engine/cheat-engine](https://github.com/cheat-engine/cheat-engine)  
 只需点击绿色的"Code"按钮，然后点击"Download Zip"即可下载最新源代码。
 
 ---
 
-#### 第二步：下载 Lazarus 编译器
+- #### 第二步：下载 Lazarus 编译器
 
 为了将 Cheat Engine 的源代码编译成.exe 文件，你需要 Lazarus。  
 你可以从这里下载： [https://www.lazarus-ide.org/index.php?page=downloads](https://www.lazarus-ide.org/index.php?page=downloads)
@@ -43,7 +43,7 @@ pinned: false
 
 ---
 
-**步骤 3：更改驱动程序名称**  
+- **步骤 3：更改驱动程序名称**  
 许多反作弊系统仅仅因为黑名单中的驱动程序名称 "dbk64.sys" 就会阻止 Cheat Engine 驱动程序运行，因此在我们编译 Cheat Engine 之前，您需要将驱动程序名称更改为其他名称。  
 为了完成这一操作，请打开下载的 Cheat Engine 源代码文件夹，并进入 "Cheat Engine -> dbk32"，在那里您将找到 "DBK32function.pas" 文件。  
 使用您选择的任何编辑器打开此文件，例如 Notepad++.  
@@ -54,7 +54,7 @@ pinned: false
 
 ---
 
-**步骤 4：修改并编译 Cheat Engine**  
+- **步骤 4：修改并编译 Cheat Engine**  
 回到"Cheat Engine"文件夹内，向下滚动直到找到"cheatengine.lpi"文件。  
 双击打开它，Lazarus 应该会启动。  
 在左侧你应该能看到"对象检查器"窗口，里面包含名为"Cheat Engine"的"标题"选项。  
@@ -77,7 +77,8 @@ pinned: false
 
 ---
 
-**步骤 5：使用 HxD 修改 Cheat Engine 字符串**  
+- **步骤 5：使用 HxD 修改 Cheat Engine 字符串**
+
 编译完 Cheat Engine 后，你可以在"Cheat Engine" -> "bin"中找到它。  
 打开它后，你会发现所有的"Cheat Engine"字符串仍然命名为"Cheat Engine"。  
 由于某些反作弊系统可能会通过特征检测到"Cheat Engine"字符串，因此你需要将其更改为其他名称。  
@@ -102,11 +103,11 @@ pinned: false
 
 ---
 
-**步骤 6：VMProtect**  
-为了使 Cheat Engine 在一定程度上更安全地抵抗一些签名检查，你可以使用"VMProtect"。  
-据我记忆，它还能使 Cheat Engine 对 FiveM 反作弊系统"无法检测"。  
-"VMProtect"是一款付费软件，但如果你在 Google 上搜索一下，可能会找到免费的版本
+- **步骤 6：VMProtect**  
+为了使 Cheat Engine 在一定程度上更安全地抵抗一些签名检查，你可以使用"VMProtect"。
 
+据我记忆，它还能使 Cheat Engine 对 FiveM 反作弊系统"无法检测"。  
+"VMProtect"是一款付费软件，但如果你在 Google 上搜索一下，可能会找到免费的版本  
 附下载链接[https://wwi.lanzouy.com/irlsT06ul16f](https://wwi.lanzouy.com/irlsT06ul16f) 密码:6666 解压密码:52pojie  
 如果你下载并安装了它，只需打开它并将 Cheat Engine 拖放到 VMProtect 程序中。  
 然后点击“添加函数”并点击“入口点”。  
@@ -121,8 +122,8 @@ pinned: false
 
 ---
 
-**步骤 8：安装 Visual Studio 2019 + SDK + WDK**  
-为了从带有内核或驱动程序反作弊机制的游戏内存中读写数据，我们也至少需要一个驱动程序。  
+- **步骤 8：安装 Visual Studio 2019 + SDK + WDK**  
+为了从带有内核或驱动程序反作弊机制的游戏内存中读写数据，我们也至少需要一个驱动程序。
 
 你可能会问“驱动程序是什么”，这里有一个“简单”的解释：  
 假设你需要编写一个能够访问核心操作系统数据结构的工具（带有反作弊机制的游戏），这些数据结构只能由在内核模式下运行的代码访问。  
@@ -164,7 +165,8 @@ pinned: false
 
 ---
 
-**步骤 9：修改并编译 CE 驱动程序（DBK）**  
+- **步骤 9：修改并编译 CE 驱动程序（DBK）**
+
 现在要编译 Cheat Engine 驱动程序，请进入您下载的"Cheat Engine"文件夹中的"DBKKernel"文件夹。  
 在那里您会找到"DBKKernel.sln"文件，可以通过双击打开它。  
 一旦 Visual Studio 打开，您会在右侧看到项目资源管理器。  
@@ -188,8 +190,8 @@ pinned: false
 
 ---
 
-**步骤 12：DBVM 虚拟机**  
-如果你还想调试游戏并想找出访问或写入某个地址的内容，你可能需要 Cheat Engine 虚拟机（DBVM）。  
+- **步骤 12：DBVM 虚拟机**  
+如果你还想调试游戏并想找出访问或写入某个地址的内容，你可能需要 Cheat Engine 虚拟机（DBVM）。
 
 警告：DBVM 虚拟机可能会被 EAC 游戏检测到，请自行承担风险！如果你只想从内存中读取和写入，则不需要这一步。  
 
@@ -216,7 +218,8 @@ Cheat Engines 虚拟机管理程序的好处是，我们不必自己编译它。
 
 ---
 
-**第 13 步：隐藏 OutputDebugString     (这个7.5源码好像已经把相关代码注释了)**  
+第 13 步：隐藏 OutputDebugString   
+ ***(这个7.5源码好像已经把相关代码注释了)***  
 这一步对于像英雄联盟和 Valorant 这样的游戏很重要。  
 
 OutputDebugString() API 函数允许你的程序与调试器通信，通常用于调试。  
@@ -230,7 +233,13 @@ Cheatengine 利用这个函数并显示调试信息。
 
 ---
 
-**步骤 14：签名驱动程序和.exe 文件** 如果你有一个有效的证书，或者从 Unknowncheats 上找到一个可用的证书（例如这个： [Codesigning Certificate](https://www.unknowncheats.me/forum/anti-cheat-bypass/563922-codesigning-certificate.html)），你可以使用该证书对你的驱动程序和 CheatEngine.exe 进行签名。 这可以让它们看起来更“合法”，从而欺骗某些反作弊系统，甚至可以绕过一些反作弊系统，比如“xigncode3”。 阅读这个帖子了解如何做到这一点：Bypassing Xigncode3 |
+**步骤 14：签名驱动程序和.exe 文件** 
+
+如果你有一个有效的证书，或者从 Unknowncheats 上找到一个可用的证书（例如这个： [Codesigning Certificate](https://www.unknowncheats.me/forum/anti-cheat-bypass/563922-codesigning-certificate.html)），你可以使用该证书对你的驱动程序和 CheatEngine.exe 进行签名。 这可以让它们看起来更“合法”，从而欺骗某些反作弊系统，甚至可以绕过一些反作弊系统，比如“xigncode3”。 阅读这个帖子了解如何做到这一点：Bypassing Xigncode3 |
+
+++*也可以使用吾爱大佬的工具*++
+
+[https://www.52pojie.cn/forum.php?mod=viewthread&tid=1027420&highlight=%CA%FD%D7%D6%C7%A9%C3%FB%B9%A4%BE%DF](https://www.52pojie.cn/forum.php?mod=viewthread&tid=1027420&highlight=%CA%FD%D7%D6%C7%A9%C3%FB%B9%A4%BE%DF)
 
 ---
 
@@ -260,7 +269,7 @@ Leledumbo 提供此方法：
 
 只修改lazarus\lcl\interfaces\win32\win32int.pp中的ClsName和ClsNameW即可。  
 
-```markdown
+```
   BOOL_RESULT: array[Boolean] of String = ('False', 'True');
   ClsName: array[0..6] of char = 'Window'#0;
   ClsHintName: array[0..10] of char = 'HintWindow'#0;
@@ -274,7 +283,7 @@ Leledumbo 提供此方法：
 
 还要修改：CE源代码中的cheat-engine-master\Cheat Engine\frmDriverLoadedUnit.pas
 
-```markdown
+```
 b [0]:=IsWindowVisible(FindWindow('Window',pchar(s)));  
 b [1]:=IsWindowVisible(FindWindow('Window',pchar(s2)));
 ```
@@ -282,6 +291,41 @@ b [1]:=IsWindowVisible(FindWindow('Window',pchar(s2)));
 把上面的两个Window改成自己的名字。  
 不然你设置DBVM后，主窗口会加载不出来。
 
-- veh调试器  
+# 随机窗口名
+
+到mainunit2单元翻到最底下找到
+
+```
+procedure initcetitle;
+begin
+  CEnorm;=cename+BETA;
+```
+
+在procedure initcetitle;上面一行粘贴如下代码
+
+```
+function GetRandomStr :string;  
+const  
+  Chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*=[]{}:"<>?/\|._-~';  
+var  
+  S: string;  
+  i, N: integer;  
+begin  
+  Randomize;  
+  S := '';  
+  for i := 1 to 10 do begin  
+    N := Random(Length(Chars)) + 1;  
+    S := S + Chars【N】;  
+  end;  
+  result := S;  
+end;  
+```
+
+之后把cename+BETA替换成GetRandomStr
+
+
+
+## veh调试器
+
 如果还需要veh调试器的话去/Cheat Engine/VEHDebug/vehdebug.lpi构建
 
