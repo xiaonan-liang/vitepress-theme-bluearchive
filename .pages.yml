@@ -18,6 +18,7 @@ content:
         label: 文章标题
         type: string
         required: true
+        default: ""
       - name: date
         label: 发布日期
         type: date
@@ -28,6 +29,7 @@ content:
       - name: cover
         label: 封面图
         type: image
+        default: ""
       - name: tags
         label: 标签
         type: list
@@ -36,10 +38,10 @@ content:
       - name: pinned
         label: 置顶文章
         type: switch
-        default: "false"
       - name: excerpt
         label: 文章摘要
         type: string
+        default: ""
       - name: head
         label: SEO配置
         type: object
@@ -47,9 +49,11 @@ content:
           - name: metaDesc
             label: 页面描述(description)
             type: string
+            default: ""
           - name: metaKeywords
             label: 页面关键词(keywords)
             type: string
+            default: ""
       - name: body
         label: 正文内容
         type: rich-text
