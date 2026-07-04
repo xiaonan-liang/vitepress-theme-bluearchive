@@ -35,10 +35,6 @@ content:
       - name: pinned
         label: 置顶文章(true和false)
         type: switch
-        default: "false"
-      - name: excerpt
-        label: 文章摘要
-        type: string
         default: ""
       - name: head
         label: SEO配置
