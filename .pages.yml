@@ -57,3 +57,4 @@ content:
         type: rich-text
         formats:
           - markdown
+        default: "\n\n---\n"
