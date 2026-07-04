@@ -1,17 +1,15 @@
 ---
 title: 测试
-date: 2026-03-15 00:00:00 Z
-tags:
-- 测试
-- test
+date: 2026-03-15
+tags: [测试,test]
 pinned: false
 head:
-- - meta
-  - name: description
-    content: 测试
-- - meta
-  - name: keywords
-    content: 测试
+  - - meta
+    - name: description
+      content: 测试
+  - - meta
+    - name: keywords
+      content: 测试
 ---
 
 # test测试
