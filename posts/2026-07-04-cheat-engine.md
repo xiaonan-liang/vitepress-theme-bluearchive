@@ -1,10 +1,9 @@
 ---
 title: 构建自己的Cheat Engine
 date: 2026-07-04
-tags: Cheat Engine,教程
-pinned: "false"
+tags: CheatEngine
+pinned: true
 ---
-
 ---
 
 # 构建自己的Cheat Engine
