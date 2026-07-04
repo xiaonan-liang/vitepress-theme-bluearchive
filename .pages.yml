@@ -30,10 +30,10 @@ content:
       - name: tags
         label: 标签
         type: list
-        widget: string
+        of: string
         default: []
       - name: pinned
-        label: 置顶文章(true和false)
+        label: 置顶文章
         type: switch
         default: "false"
       - name: head
