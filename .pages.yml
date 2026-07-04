@@ -1,6 +1,6 @@
 # 图片上传配置（VitePress public标准路径）
 media:
-  input: /public/posts
+  input: public/posts
   output: /posts
 
 # 内容集合
@@ -14,7 +14,6 @@ content:
     view:
       fields: [title, date, cover, tags, pinned]
     fields:
-      # BA主题文章所需全部frontmatter字段
       - name: title
         label: 文章标题
         type: string
@@ -23,6 +22,9 @@ content:
         label: 发布日期
         type: date
         required: true
+      - name: update
+        label: 更新日期
+        type: date
       - name: cover
         label: 封面图
         type: image
@@ -33,8 +35,11 @@ content:
       - name: pinned
         label: 置顶文章
         type: switch
+      - name: excerpt
+        label: 文章摘要
+        type: string
       - name: head
-        label: SEO头部Meta配置
+        label: SEO配置
         type: object
         fields:
           - name: metaDesc
@@ -42,6 +47,7 @@ content:
             type: string
           - name: metaKeywords
             label: 页面关键词(keywords)
+            type: string
       - name: body
         label: 正文内容
-        type: rich-text
+        type: markdown
