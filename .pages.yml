@@ -28,7 +28,7 @@ content:
         type: image
         default: ""
       - name: tags
-        label: 标签(用,分隔)
+        label: 标签
         type: list
         widget: string
         default: []
