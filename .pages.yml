@@ -23,18 +23,15 @@ content:
         label: 发布日期
         type: date
         required: true
-      - name: update
-        label: 更新日期
-        type: date
       - name: cover
         label: 封面图
         type: image
         default: ""
       - name: tags
-        label: 标签
+        label: 标签(用,分隔)
         type: list
         of: string
-        default: "[]"
+        default: []
       - name: pinned
         label: 置顶文章(true和false)
         type: switch
