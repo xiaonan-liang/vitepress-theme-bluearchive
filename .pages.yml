@@ -30,6 +30,7 @@ content:
       - name: tags
         label: 标签
         type: list
+        of: string
         default: [[]]
       - name: pinned
         label: 置顶文章
