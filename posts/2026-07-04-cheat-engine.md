@@ -2,8 +2,9 @@
 title: Cheat Engine过检测
 date: 2026-07-04
 update: 2026-07-04
-tags: CheatEngine
+tags: 构建自己的Cheat Engine
 ---
+# 构建自己的Cheat Engine
 
 原作者标注：  
 请记住，这个教程几乎是在三年前发布的。  
