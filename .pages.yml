@@ -1,6 +1,6 @@
 # 图片上传配置（VitePress public标准路径）
 media:
-  input: docs/public/images
+  input: ./public/images
   output: /images
 
 # 内容集合
@@ -9,7 +9,7 @@ content:
   - name: posts
     label: 博客文章
     type: collection
-    path: docs/posts
+    path: ./posts
     filename: "{year}-{month}-{day}-{slug}.md"
     view:
       fields: [title, date, cover, tags]
