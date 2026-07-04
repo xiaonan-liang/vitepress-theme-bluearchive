@@ -31,7 +31,7 @@ content:
         label: 标签(用,分隔)
         type: list
         of: string
-        default: "[]"
+        default: []
       - name: pinned
         label: 置顶文章(true和false)
         type: switch
