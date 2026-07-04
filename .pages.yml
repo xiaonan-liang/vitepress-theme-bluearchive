@@ -12,7 +12,7 @@ content:
     path: /posts
     filename: "{year}-{month}-{day}-{slug}.md"
     view:
-      fields: [title, date, cover, tags]
+      fields: [title, date, cover, tags, pinned]
     fields:
       # BA主题文章所需全部frontmatter字段
       - name: title
@@ -30,12 +30,18 @@ content:
         label: 标签
         type: list
         of: string
-      - name: desc
-        label: 简介摘要
-        type: string
-      - name: top
+      - name: pinned
         label: 置顶文章
         type: switch
+      - name: head
+        label: SEO头部Meta配置
+        type: object
+        fields:
+          - name: metaDesc
+            label: 页面描述(description)
+            type: string
+          - name: metaKeywords
+            label: 页面关键词(keywords)
       - name: body
         label: 正文内容
         type: rich-text
