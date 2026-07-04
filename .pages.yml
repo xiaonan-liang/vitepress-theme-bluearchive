@@ -33,7 +33,7 @@ content:
         type: list
         of: string
       - name: pinned
-        label: 置顶文章(true是置顶)
+        label: 置顶文章
         type: switch
       - name: excerpt
         label: 文章摘要
@@ -50,4 +50,6 @@ content:
             type: string
       - name: body
         label: 正文内容
-        type: markdown
+        type: rich-text
+        formats:
+          - markdown
