@@ -29,8 +29,10 @@ content:
         label: 封面图
         type: image
       - name: tags
-        label: 标签（逗号分隔）
-        type: string
+        label: 标签
+        type: list
+        of: string
+        itemLabel: 标签名
       - name: pinned
         label: 置顶文章
         type: switch
